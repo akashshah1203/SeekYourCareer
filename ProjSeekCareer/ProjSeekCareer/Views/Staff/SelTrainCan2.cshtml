@@ -1,0 +1,10 @@
+﻿@{
+    ViewBag.Title = "SelTrainCan2";
+}
+
+<h2>SelTrainCan2</h2>
+
+<fieldset>
+    Training Id
+    @Html.DropDownList("MyList",new SelectList(@ViewBag.MyList),"--Select--")
+</fieldset>

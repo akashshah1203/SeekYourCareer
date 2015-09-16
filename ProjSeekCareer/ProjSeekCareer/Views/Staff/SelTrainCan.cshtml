@@ -1,0 +1,83 @@
+﻿@model ProjSeekCareer.ViewModels.SelTCanViewModel
+
+
+@{
+    ViewBag.Title = "SelTrainCan";
+}
+<script>
+    function RowId() 
+    {
+        alert($(this).closest('tr').index());
+    }
+</script>
+
+<h2>SelTrainCan</h2>
+
+<table>
+
+@foreach (var item in Model.TrainApplications) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AppDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ApplicantId)
+        </td>
+        <td>
+          <button onclick="RowId()">Details</button>
+        </td>
+    </tr>
+}
+</table>
+
+<table>
+    <tr>
+        <td>
+            @Html.DisplayNameFor(modelItem => Model.TrainApplications[0].ApplicantId)
+        </td>
+        <td>
+            @Html.DisplayFor(model => Model.TrainApplications[0].ApplicantId)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.DisplayNameFor(model => Model.TrainApplications[0].TrainingId)
+        </td>
+        <td>
+            @Html.DisplayFor(model => Model.TrainApplications[0].TrainingId)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.DisplayNameFor(model => Model.TrainApplications[0].AppDate)
+        </td>
+        <td>
+            @Html.DisplayFor(model => Model.TrainApplications[0].AppDate)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.DisplayNameFor(model => Model.TrainApplications[0].CorrAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(model => Model.TrainApplications[0].CorrAddress)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.DisplayNameFor(model => Model.TrainApplications[0].ContactNo)
+        </td>
+        <td>
+            @Html.DisplayFor(model => Model.TrainApplications[0].ContactNo)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.DisplayNameFor(model => Model.TrainApplications[0].SelectionStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(model => Model.TrainApplications[0].SelectionStatus)
+        </td>
+    </tr>
+</table>
+
