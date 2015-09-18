@@ -14,7 +14,8 @@ namespace SeekYourCareer.Controllers
             string usertype=(string)Session["Typeof"];
             if (usertype.CompareTo("Admin") == 0)
             {
-                return View("AdminLoginPage");
+                //return View("AdminLoginPage");
+                return RedirectToAction("Index","Admin");
             }
             else if (usertype.CompareTo("Applicant") == 0)
             {

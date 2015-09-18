@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeekYourCareer", "SeekYourCareer\SeekYourCareer.csproj", "{4A250ACD-890C-45B5-8D58-4E207AB50278}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjSeekCareer", "..\ProjSeekCareer\ProjSeekCareer\ProjSeekCareer.csproj", "{32823420-4B93-4A8B-A504-39733C8138FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,9 @@ Global
 		{4A250ACD-890C-45B5-8D58-4E207AB50278}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A250ACD-890C-45B5-8D58-4E207AB50278}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A250ACD-890C-45B5-8D58-4E207AB50278}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32823420-4B93-4A8B-A504-39733C8138FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32823420-4B93-4A8B-A504-39733C8138FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32823420-4B93-4A8B-A504-39733C8138FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

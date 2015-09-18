@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Configuration;
 
 namespace SeekYourCareer.DataAccess
 {
@@ -14,6 +15,7 @@ namespace SeekYourCareer.DataAccess
         {
 
             string connectionString = "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;" + "Integrated Security=True";
+            connectionString = ConfigurationManager.ConnectionStrings["ConnectToDb"].ToString();
             return connectionString;
         }
 
@@ -69,14 +71,23 @@ namespace SeekYourCareer.DataAccess
 
 
             string connectionString = Connstr();
-
+            int num=0;
 
             SqlConnection connection = new SqlConnection(connectionString);
             string queryString = null;
             connection.Open();
             if (Type.CompareTo("Admin") == 0)
                 {
-                    queryString = "Select count(UserName) from UserDetails where UserName=@usern and Password=@Pass";
+                    //queryString = "Select count(UserName) from UserDetails where UserName=@usern and Password=@Pass";
+                    String adminUser, adminpass;
+                    adminUser = ConfigurationManager.AppSettings["Username"];
+                    adminpass = ConfigurationManager.AppSettings["Password"];
+                    if (Username.CompareTo(adminUser) == 0 && Password.CompareTo(adminpass) == 0)
+                    {
+                        
+                        return true;
+                    }
+                    return false;
                 }
                 if (Type.CompareTo("Applicant") == 0)
                 {
@@ -89,7 +100,7 @@ namespace SeekYourCareer.DataAccess
             SqlCommand command = new SqlCommand(queryString, connection);
             command.Parameters.AddWithValue("@usern",Username);
             command.Parameters.AddWithValue("@Pass", Password);
-            int num = (int)command.ExecuteScalar();
+            num = (int)command.ExecuteScalar();
             connection.Close();
 
             if (num == 1)
