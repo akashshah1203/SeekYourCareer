@@ -24,7 +24,8 @@ namespace ProjSeekCareer.Controllers
             return View();
         }
 
-        public ActionResult SelTrainCan2()
+        
+        public ActionResult DDTrainingId()
         {
             List<string> TrainingIds = new List<string>();
             
@@ -47,14 +48,44 @@ namespace ProjSeekCareer.Controllers
                 }
                 reader.Close();
             }
+            ViewBag.MyList = TrainingIds;
+            return Json(TrainingIds);
+        }
 
+        [HttpGet]
+        public ActionResult SelTrainCan()
+        {
+
+            List<string> TrainingIds = new List<string>();
+
+            string connectionString =
+                "Data Source=(localdb)\\Projects;Initial Catalog=Bank;"
+                + "Integrated Security=True";
+
+            string queryString =
+                "SELECT distinct TrainingId from dbo.TrainingAppln;";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    TrainingIds.Add(Convert.ToString(reader[0]));
+                }
+                reader.Close();
+            }
             ViewBag.MyList = TrainingIds;
             return View();
         }
 
-        public ActionResult SelTrainCan()
+
+        [HttpPost]
+        public ActionResult SelTrainCan(string trainid)
         {
-            //TrainApplication trainingappln = new TrainApplication();
+            
             SelTCanViewModel trainingapplns = new SelTCanViewModel();
             trainingapplns.TrainApplications = new List<TrainApplication>();
             
@@ -63,12 +94,13 @@ namespace ProjSeekCareer.Controllers
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT * from dbo.TrainingAppln;";
+                "SELECT * from dbo.TrainingAppln WHERE TrainingId = @filtervalue;";
                 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
-            
+                command.Parameters.AddWithValue("@filtervalue", trainid);
+
                     connection.Open();
                     SqlDataReader reader = command.ExecuteReader();
                     while (reader.Read())
@@ -89,45 +121,9 @@ namespace ProjSeekCareer.Controllers
                     reader.Close();
              }
 
-            return View(trainingapplns);
+            return Json(trainingapplns);
         }
 
-        public ActionResult SelTrainCan1(string id)
-        {
-            TrainApplication trainingappln = new TrainApplication();
-            //string paramValue = 'AT101';
-
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=Bank;"
-                + "Integrated Security=True";
-
-            string queryString =
-                //"SELECT * from dbo.TrainingAppln WHERE ApplicantId='@filtervalue'";
-                "SELECT * from dbo.TrainingAppln WHERE ApplicantId='AT101'";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(queryString, connection);
-                //command.Parameters.AddWithValue("@filtervalue", paramValue);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    trainingappln.ApplicantId = Convert.ToString(reader[0]);
-                    trainingappln.UserID = Convert.ToInt32(reader[1]);
-                    trainingappln.Name = Convert.ToString(reader[2]);
-                    trainingappln.TrainingId = Convert.ToString(reader[3]);
-                    trainingappln.AppDate = Convert.ToDateTime(reader[4]);
-                    trainingappln.CorrAddress = Convert.ToString(reader[5]);
-                    trainingappln.ContactNo = Convert.ToString(reader[6]);
-                    trainingappln.SelectionStatus = Convert.ToString(reader[7]);                                        
-                }
-                reader.Close();
-            }
-            return PartialView(trainingappln);
-        }
-        
         //
         // GET: /Staff/Details/5
 
