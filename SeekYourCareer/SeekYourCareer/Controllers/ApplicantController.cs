@@ -47,7 +47,7 @@ namespace SeekYourCareer.Controllers
         {
             string username=(string)Session["Username"];
             List<Job> jobdetails = new List<Job>();
-            
+            username = "akasha";
             jobdetails = new DataAccess.ApplicantDAL().JobDescription(stream,company,username);
             return Json(jobdetails);
         }

@@ -28,8 +28,7 @@
                 html = "Stream ";
                 for (var i = 0; i < data.length; i++)
                 {
-                    html+="<input class=\"stream\" id=\""+data[i]+"\" type=\"radio\" onclick=\"func1(\""+data[i]+"\",\""+companyname+"\")\" name=\"stream\" value=\""+data[i]+"\">"+data[i] ;                   
-                    
+                    html+="<input class=\"stream\" id=\""+data[i]+"\" type=\"radio\" onclick=\"func1('"+data[i]+"','"+companyname+"')\" name=\"stream\" value=\""+data[i]+"\">"+data[i] ;
 
                 }
                 //alert("appending");
@@ -64,7 +63,7 @@
                     html += "<tr> <td>" + data[i].JobType + "</td> <td> " + data[i].MinSSCPercent + "</td> <td> " + data[i].MinHSCPercent + "</td> <td> " + data[i].MinGradAvg + "</td> <td> " + data[i].MinPGAvg + "</td> <td> " + data[i].SalPerMonth + "</td> <td> " + data[i].Experience + "</td> <td> " + data[i].AppLastDate + "</td> <td> <input type=\"button\" value=\"Select Job Offer\" /> </td> </tr>";
 
                 }
-
+                alert("almost");
                 $('#showtable tbody > tr').remove();
                 $('#showtable').append(html);
 

@@ -67,8 +67,8 @@ namespace SeekYourCareer.DataAccess
             List<Job> job1 = new List<Job>();
             string queryString = null;
             Job j1 = new Job();
-            queryString = "SELECT T2.JobType,T2.MinSSCPercent,T2.MinHSCPercent,T2.MinGradAvg,T2.MinPGAvg,T2.SalPerMonth,T2.Experience,T2.AppLastDate" 
-                               + "from dbo.RepDetails T1, dbo.JobDetails T2,dbo.UserDetails T3" 
+            queryString = "SELECT T2.JobType,T2.MinSSCPercent,T2.MinHSCPercent,T2.MinGradAvg,T2.MinPGAvg,T2.SalPerMonth,T2.Experience,T2.AppLastDate " 
+                               + "from dbo.RepDetails T1, dbo.JobDetails T2,dbo.UserDetails T3 " 
                                + "Where T1.RepId=T2.RepId and T1.CompanyName=@company and T2.StreamCode=@stream and T3.UserName=@username and T3.SSCPercent>=T2.MinSSCPercent and T3.HSCPercent>=T2.MinHSCPercent and T3.GradPercent>=T2.MinGradAvg and T3.PGPercent>=T2.MinPGAvg";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
