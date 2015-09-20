@@ -1,0 +1,168 @@
+﻿@{
+    ViewBag.Title = "SearchForTraining";
+}
+
+
+
+<script>
+    function LocationDropdown(domainname)
+    {
+
+        $('#showtable').html("");
+        $('#SearchButton').html("");
+        $("#Location").html("");
+
+        if (domainname == "")
+        {//if the user has selected an empty list
+            str = "Select a Domain Name From The List!!!!!!";
+            $("#errormessage").html("");
+            $("#errormessage").append(str);
+
+            //$('#correspAddr').html("");
+           
+        }
+        else
+        {
+            $("#errormessage").html("");
+            var url = "/Applicant/GetLocationNames";
+            $.ajax({
+                url: url,
+                data: { domain: domainname },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    //console.log(data);
+                    var html;
+                    html = "<br/><br/>Location  <br/> <select onchange =\"DomainNameSelected(this.value,'"+domainname+"')\" id =\"DomainList\" style=\"width:200px\">";
+                    for (var i = 0; i < data.length; i++) {
+                        html += "<option  value =\"" + data[i] + "\">" + data[i] + "</option>";
+                    }
+                    html += "</select><br/>";
+
+                    $('#Location').html("");
+                    $('#Location').append(html);
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
+                }
+            });
+        }
+    }
+    function DomainNameSelected(locationname,domainname)
+    {
+        $('#showtable').html("");
+
+        html = "<input type=\"button\" value=\"SEARCH\"onclick=\"Search('" + locationname + "','" + domainname + "')\">";
+        $('#SearchButton').html("");
+        $('#SearchButton').append(html);
+    }
+
+    function Search(locationname, domainname)
+    {
+        var url = "/Applicant/GetTrainingTable";
+        $.ajax({
+            url: url,
+            data: { Domain: domainname,Location: locationname },
+            cache: false,
+            type: "POST",
+            success: function (data)
+            {
+                var html;
+                html = "  <tr><th>Training ID</th><th>Company </th><th>Description</th></tr> ";
+                for (var i = 0; i < data.length; i++)
+                {
+                    html += "<tr> <td>" + data[i].TrainingID + "</td> <td> " + data[i].Company + "</td> <td> " + data[i].Description + " </td> " +
+                  " <td><input type=\"button\" name=\"DetailsButton\" onclick=\"CompanyDetails('" + data[i].Company + "','" + data[i].TrainingID
+                  + "')\" value=\"Get Details\" > </td>"
+                  + " <td><input type=\"button\" name=\"ApplyButton\"  value=\"Apply\"onclick=\"ApplyClick('" + data[i].Company + "','" + data[i].TrainingID+ "')\""
+                  + "\" ></td></tr>";
+                }
+
+
+                $('#showtable  tr').remove();
+                $('#showtable').append(html);
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+
+    }
+
+    function CompanyDetails(company, trainingid)
+    {
+        var url = "/Applicant/GetDetailsTable";
+        $.ajax({
+            url: url,
+            data: { TrainingID: trainingid, Company: company },
+            cache: false,
+            type: "POST",
+            success: function (data)
+            {
+                var html;
+                html = "  <tr><td>Training ID</td><td>Company </td></tr> ";
+
+                
+            },
+            error: function (reponse)
+            {
+                alert("error : " + reponse);
+            }
+        });
+    }
+    function ApplyClick(company, trainingid)
+    {
+        var url = "/Applicant/GetDetailsTable";
+        $.ajax({
+            url: url,
+            data: { Domain: domainname, Location: locationname },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+    }
+</script>
+
+
+<form action="/Applicant/AddJobToDb">
+<h2>Search Training Offers</h2>
+
+    
+<div>
+    <p>Select Domain Name</p> 
+    
+    @Html.DropDownList("DomainName", new SelectList(@ViewBag.List), "--Select--", new { @id = "DomainName", @style = "width:200px;" , @onchange = "javascript:LocationDropdown(this.value);" }) 
+      
+</div>
+
+
+<div id="Location" class="editor-field">
+      
+</div>
+
+<div id="SearchButton">
+</div>
+
+<table id="showtable" class="display">
+
+<tbody>
+</tbody>
+
+</table>
+    
+<div id="CompanyDetails">
+</div>
+<div id="TrainingDetails">
+</div>
+
+
+<div id="errormessage">
+</div>
+</form> 
