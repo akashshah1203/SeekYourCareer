@@ -199,6 +199,7 @@
     <Compile Include="MinimumValueAttribute.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Applicant.cs" />
+    <Compile Include="Models\ApplyForTraining.cs" />
     <Compile Include="Models\ChangePassword.cs" />
     <Compile Include="Models\Job.cs" />
     <Compile Include="Models\LoginPage.cs" />
@@ -328,6 +329,7 @@
     <Content Include="Views\Applicant\Index.cshtml" />
     <Content Include="Views\Applicant\ApplyForJob.cshtml" />
     <Content Include="Views\Applicant\SearchForTraining.cshtml" />
+    <Content Include="Views\Applicant\ApplyForTraining.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

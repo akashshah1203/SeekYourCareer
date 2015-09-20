@@ -257,7 +257,7 @@ namespace SeekYourCareer.DataAccess
 
             string connectionString = Connstr();
             string queryString = null;
-            queryString = "Select Address,EmailID,PhoneNumber FROM RepDetails WHERE CompanyName=@comapny";
+            queryString = "Select Address,EmailID,PhoneNumber FROM RepDetails WHERE CompanyName=@company";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -290,5 +290,82 @@ namespace SeekYourCareer.DataAccess
             }
             return DetailList;
         }
+    
+        public ApplyForTraining ApplyDetails(string username,string trainingid)
+        {
+            ApplyForTraining obj1 = new ApplyForTraining();
+
+            string connectionString = Connstr();
+            string queryString = null;
+            queryString = "Select Name,Address,DOB,EmailID,ContactNumber,SSCPercent,HSCPercent,GradPercent,PGPercent,WorkExpYears FROM UserDetails WHERE UserName=@user";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@user",username);
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    obj1.Name = Convert.ToString(reader[0]);
+                    obj1.Address = Convert.ToString(reader[1]);
+                    DateTime pastdate = Convert.ToDateTime(reader[2]);
+                    DateTime currdate = DateTime.Today;
+                    int age = currdate.Year - pastdate.Year;
+                    if (pastdate > currdate.AddYears(-age))
+                    {
+                        age--;
+                    }
+                    obj1.Age = age;
+                    obj1.EmailID = Convert.ToString(reader[3]);
+                    obj1.Contact = Convert.ToString(reader[4]);
+                    obj1.SSCPercentage = Convert.ToDecimal(reader[5]);
+                    obj1.HscPercent = Convert.ToDecimal(reader[6]);
+                    obj1.GraduationPercent = Convert.ToDecimal(reader[7]);
+                    obj1.PostGradPercent = Convert.ToDecimal(reader[8]);
+                    obj1.Experience = Convert.ToInt32(reader[9]);
+                }
+                reader.Close();
+                connection.Close();
+            }
+
+            queryString = "Select RepId,Duration,StartingDate,Domain FROM TrainingDetails WHERE TrainingID=@training";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@training", trainingid);
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    int repid = Convert.ToInt32(reader[0]);
+                    obj1.Duration = Convert.ToInt32(reader[1]);
+                    obj1.StartDate = Convert.ToDateTime(reader[2]);
+                    obj1.Domain = Convert.ToString(reader[3]);
+                    obj1.TrainingID = trainingid;
+
+
+                    String queryString1 = "Select CompanyName FROM TrainingDetails WHERE RepID=@repid";
+                    SqlConnection connection1 = new SqlConnection(connectionString);
+                    SqlCommand command1= new SqlCommand(queryString1, connection1);
+                    
+                    command1.Parameters.AddWithValue("@repid", repid);
+                    connection1.Open();
+                    SqlDataReader reader1 = command1.ExecuteReader();
+                    while (reader1.Read())
+                    {
+                        obj1.Company = Convert.ToString(reader1[0]);
+                    }
+                    reader1.Close();
+                    connection1.Close();
+                }
+                reader.Close();
+                connection.Close();
+            }
+
+            return obj1;
+        }
+    
     }
 }

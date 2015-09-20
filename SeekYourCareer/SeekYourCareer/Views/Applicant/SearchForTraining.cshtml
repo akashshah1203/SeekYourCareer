@@ -72,11 +72,12 @@
                 html = "  <tr><th>Training ID</th><th>Company </th><th>Description</th></tr> ";
                 for (var i = 0; i < data.length; i++)
                 {
-                    html += "<tr> <td>" + data[i].TrainingID + "</td> <td> " + data[i].Company + "</td> <td> " + data[i].Description + " </td> " +
-                  " <td><input type=\"button\" name=\"DetailsButton\" onclick=\"CompanyDetails('" + data[i].Company + "','" + data[i].TrainingID
+                    html += "<tr> <td  >" + data[i].TrainingID + "</td> <td> " + data[i].Company + "</td> <td> " + data[i].Description + " </td> " +
+                  " <td><input type=\"button\"  value=\"Get Details\" onclick=\"CompanyDetails('" + data[i].Company + "','"
+                  + data[i].TrainingID
                   + "')\" value=\"Get Details\" > </td>"
-                  + " <td><input type=\"button\" name=\"ApplyButton\"  value=\"Apply\"onclick=\"ApplyClick('" + data[i].Company + "','" + data[i].TrainingID+ "')\""
-                  + "\" ></td></tr>";
+                  + " <td><button type=\"submit\" name=\"TrainingID\"  value=\"" + data[i].TrainingID + "\">Apply</button></td>" +
+                  + " </tr>";
                 }
 
 
@@ -93,6 +94,8 @@
 
     function CompanyDetails(company, trainingid)
     {
+        alert("In company details");
+        var html;
         var url = "/Applicant/GetDetailsTable";
         $.ajax({
             url: url,
@@ -101,10 +104,20 @@
             type: "POST",
             success: function (data)
             {
-                var html;
-                html = "  <tr><td>Training ID</td><td>Company </td></tr> ";
+                html = " <h3>Company Details </h3> <br/>";
+                html += "<tr><td>Comapny Name</td><td>     " + data.CompanyName + " </td></tr><br/> ";
+                html += "<tr><td>Address</td><td>   " + data.Address + " </td></tr><br/> ";
+                html += "<tr><td>Email ID</td><td>  " + data.EmailID + " </td></tr><br/> ";
+                html += "<tr><td>Phone Number</td><td>  " + data.Phone + " </td></tr> <br/>";
+                html += "<br/><br/> <h3>Company Details </h3><br/> ";
+                html += "<tr><td>Starting Date</td><td>     " + data.StartDate + " </td></tr><br/> ";
+                html += "<tr><td>Duration</td><td>  " + data.Duration + " </td></tr><br/> ";
+                html += "<tr><td>Graduation</td><td>    " + data.Graduation + " </td></tr><br/> ";
+                html += "<tr><td>Post Graduation</td><td>   " + data.PostGraduation + " </td></tr> <br/>";
+                html += "<tr><td>Past Experience</td><td>   " + data.PastExp + " </td></tr> <br/>";
+                html += "<tr><td>No. Of Seats Available</td><td>     " + data.SeatsAvailable + " </td></tr> <br/>";
+                $('#CompanyDetails').append(html);
 
-                
             },
             error: function (reponse)
             {
@@ -114,13 +127,14 @@
     }
     function ApplyClick(company, trainingid)
     {
-        var url = "/Applicant/GetDetailsTable";
+        var url = "/Applicant/ApplyForTraining";
         $.ajax({
             url: url,
-            data: { Domain: domainname, Location: locationname },
+            //data: {  },
             cache: false,
             type: "POST",
             success: function (data) {
+                $("#myform").replaceWith(data.form);
             },
             error: function (reponse) {
 
@@ -131,7 +145,7 @@
 </script>
 
 
-<form action="/Applicant/AddJobToDb">
+<form id="myform" action="/Applicant/ApplyForTraining">
 <h2>Search Training Offers</h2>
 
     

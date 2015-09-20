@@ -81,6 +81,9 @@ namespace SeekYourCareer.Controllers
         //---------------------------Search and apply for training-----------------------------------------------------------------------------
         //***************************************************************************************************************************************
 
+
+        //---------------------------Search for training-----------------------------------------------------------------------------
+        //***************************************************************************************************************************************
         public ActionResult SearchForTraining()
         {
             //Get Domain Names
@@ -112,11 +115,17 @@ namespace SeekYourCareer.Controllers
             DetailList = new DataAccess.ApplicantDAL().GetDetailsData(TrainingID,Company);
             return Json(DetailList);
         }
-
-        [HttpPost]
-        public ActionResult ApplyForTraining()
+       
+        
+        //---------------------------Apply for training-----------------------------------------------------------------------------
+        //***************************************************************************************************************************************
+        [HttpGet]
+        public ActionResult ApplyForTraining(string TrainingID)
         {
-
+            String Username = (string)Session["Username"];
+            ApplyForTraining app1 = new ApplyForTraining();
+            app1 = new DataAccess.ApplicantDAL().ApplyDetails(Username,TrainingID);
+            ViewBag.ApplyJob = app1;
             return View();
         }
         
