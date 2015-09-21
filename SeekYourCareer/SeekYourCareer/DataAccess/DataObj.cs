@@ -62,7 +62,13 @@ namespace SeekYourCareer.DataAccess
             command.Parameters.AddWithValue("@workexp", workexp);
             command.ExecuteNonQuery();
             connection.Close();
-            return 1;
+            queryString = "SELECT UserID from dbo.UserDetails Where UserName=@username ;";
+            SqlCommand command1 = new SqlCommand(queryString, connection);
+            connection.Open();
+            int userid = (int)command1.ExecuteScalar();
+           
+            connection.Close();
+            return userid;
         }
 
 

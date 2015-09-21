@@ -19,5 +19,6 @@ namespace SeekYourCareer.Models
         public int Experience { get; set; }
         public DateTime AppLastDate { get; set; }
         public string StaffApprovalStatus { get; set; }
+        public string CorrespondanceAddress { get; set; }
      }
 }

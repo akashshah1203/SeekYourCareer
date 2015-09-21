@@ -25,13 +25,24 @@ namespace SeekYourCareer.Controllers
             return View();
         }
 
-        //
+        //***************************************************************************************************************************************
+        //--------------------------APPLICANT TO SEARCH AND APPLY FOR JOB----------------------------------------------------------------------
+        //***************************************************************************************************************************************
+
         public ActionResult ApplyForJob()
         {
-            List<string> CompanyNames=new List<string>();
+
+            List<string> CompanyNames = new List<string>();
             CompanyNames = new DataAccess.ApplicantDAL().GetCompanyNames();
-            ViewBag.list = CompanyNames;
-            return View();
+            if (CompanyNames.Count > 0)
+            {
+                ViewBag.list = CompanyNames;
+                return View();
+            }
+            else
+            {
+                return View("Index");
+            }
         }
 
         [HttpPost]
@@ -43,91 +54,93 @@ namespace SeekYourCareer.Controllers
             return Json(streams);
         }
         [HttpPost]
-        public ActionResult ApplyForJob1 (string stream,string company)
+        public ActionResult ApplyForJob1(string stream, string company)
         {
-            string username=(string)Session["Username"];
+            string username = (string)Session["Username"];
+            Session["UserID"] = 3;
+            int Userid = (int)Session["UserID"];
             List<Job> jobdetails = new List<Job>();
-            
-            jobdetails = new DataAccess.ApplicantDAL().JobDescription(stream,company,username);
+            username = "akasha";
+            jobdetails = new DataAccess.ApplicantDAL().JobDescription(stream, company, username, Userid);
             return Json(jobdetails);
         }
 
 
-        // GET: /Applicant/Create
-
-        public ActionResult Create()
+        [HttpGet]
+        public ActionResult AddJobToDb(String CompanyName, String stream, String SelectedCheck, String CorrespondAddr)
         {
+
+            int userid = (int)Session["UserID"];
+            string jobid = SelectedCheck;
+            DateTime AppDate = DateTime.Now;
+            int appid = new DataAccess.ApplicantDAL().Addjob(userid, jobid, AppDate, CorrespondAddr);
+            return RedirectToAction("ApplyForJob");
+        }
+
+        //***************************************************************************************************************************************
+        //---------------------------Search and apply for training-----------------------------------------------------------------------------
+        //***************************************************************************************************************************************
+
+
+        //---------------------------Search for training-----------------------------------------------------------------------------
+        //***************************************************************************************************************************************
+        public ActionResult SearchForTraining()
+        {
+            //Get Domain Names
+            Session["UserID"] = 3;
+            List<string> DomainNames = new DataAccess.ApplicantDAL().GetDomainNames();
+            ViewBag.List = DomainNames;
             return View();
         }
 
-        //
-        // POST: /Applicant/Create
-
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult GetLocationNames(string domain)
         {
-            try
-            {
-                // TODO: Add insert logic here
+            List<string> LocationNames = new DataAccess.ApplicantDAL().GetLocation(domain);
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            return Json(LocationNames);
         }
 
-        //
-        // GET: /Applicant/Edit/5
-
-        public ActionResult Edit(int id)
+        [HttpPost]
+        public ActionResult GetTrainingTable(string Domain, string Location)
         {
+            List<TrainingTableData> data = new List<TrainingTableData>();
+            data = new DataAccess.ApplicantDAL().GetTableData(Domain,Location);
+            return Json(data);
+        }
+
+        [HttpPost]
+        public ActionResult GetDetailsTable(string TrainingID, string Company)
+        {
+            TrainingDetailsTable DetailList = new TrainingDetailsTable();
+            DetailList = new DataAccess.ApplicantDAL().GetDetailsData(TrainingID,Company);
+            return Json(DetailList);
+        }
+       
+        
+        //---------------------------Apply for training-----------------------------------------------------------------------------
+        //***************************************************************************************************************************************
+        [HttpGet]
+        public ActionResult ApplyForTraining(string TrainingID)
+        {
+            String Username = (string)Session["Username"];
+            Username = "akasha";
+            ApplyForTraining app1 = new ApplyForTraining();
+            app1 = new DataAccess.ApplicantDAL().ApplyDetails(Username,TrainingID);
+            ViewBag.ApplyJob = app1;
             return View();
         }
 
-        //
-        // POST: /Applicant/Edit/5
 
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult AddTrainingToDb(int userid,string trainingid,string corraddr,string corrcont)
         {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            int ret = new DataAccess.ApplicantDAL().AddTraining(userid, trainingid, corraddr, corrcont);
+            return Json(ret);
         }
+        
+        //***************************************************************************************************************************************
 
-        //
-        // GET: /Applicant/Delete/5
 
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
 
-        //
-        // POST: /Applicant/Delete/5
-
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

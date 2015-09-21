@@ -43,7 +43,7 @@ namespace SeekYourCareer.Controllers
                 {
                     Session["Username"] = model.UserName;
                     Session["Typeof"] = model.TypeOfUser;
-                    
+                    Session["Username"] = "akasha";
                     return RedirectToAction("Index","Home");
                 }
             }
@@ -90,6 +90,7 @@ namespace SeekYourCareer.Controllers
                 try
                 {
                     int n = new DataAccess.DataObj().InsertUser(model);
+                    Session["UserID"] = n;
                     return RedirectToAction("Index", "Home");
                 }
                 catch (MembershipCreateUserException e)
