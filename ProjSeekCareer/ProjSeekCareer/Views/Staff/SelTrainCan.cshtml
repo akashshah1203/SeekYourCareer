@@ -1,4 +1,5 @@
-﻿@model ProjSeekCareer.ViewModels.SelTCanViewModel
+﻿@using ProjSeekCareer.Models
+@model ProjSeekCareer.Models.SelectedTrainees
 
 @{
     ViewBag.Title = "SelTrainCan";
@@ -6,6 +7,28 @@
 
 <script src="http://ajapx.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script>
+
+    function GetTrainingIds(repid) {
+        var url = "/Staff/SelTrainId/";
+
+        $.ajax({ 
+                url: url, 
+               data: { RepId: repid }, 
+               cache: false, 
+               type: "POST", 
+               success: function (data) { 
+                    $("#ddltrainid").find('option').remove().end(); 
+                    $("#ddltrainid").append("<option value = '0' >" + "--Select--" + "</option>"); 
+                   for (var x = 0; x < data.length; x++) { 
+                        $("#ddltrainid").append("<option value = '" + data[x] + "' ></option>"); 
+                   } 
+                }, 
+                error: function (reponse) { 
+                     alert("error : " + reponse); 
+                 } 
+             }); 
+     } 
+      
     function GetApplicants(trainingId) {
 
         var url = "/Staff/SelTrainCan/";
@@ -64,9 +87,12 @@ document.getElementById("nodeGoto").addEventListener("click", function() {
 <h2>SelTrainCan</h2>
 
 <div>
-    <p>Select Branch</p> 
+        
+    <p>Select Company</p>
+     @Html.DropDownList("ddlcompany", new SelectList(Model.CompanyModel,"RepId","CompanyName"), "--Select--", new { @id = "ddlcompany", @style = "width:200px;" , @onchange = "javascript:GetTrainingIds(this.value);" }) 
     
-    @Html.DropDownList("ddltrainid", new SelectList(@ViewBag.MyList), "--Select--", new { @id = "ddltrainid", @style = "width:200px;" , @onchange = "javascript:GetApplicants(this.value);" }) 
+    <p>Training Id</p> 
+    @Html.DropDownList("ddltrainid", new SelectList(Model.TrainingModel,"RepId","TrainingId"), "--Select--", new { @id = "ddltrainid", @style = "width:200px;" , @onchange = "javascript:GetApplicants(this.value);" }) 
       
  <br /> 
      <br /> 

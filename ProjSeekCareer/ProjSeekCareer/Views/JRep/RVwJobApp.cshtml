@@ -1,0 +1,190 @@
+﻿@model ProjSeekCareer.Models.JobApplicant
+
+@{
+    ViewBag.Title = "SelTrainCan";
+}
+
+@*<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>*@
+<script src="~/Scripts/jquery-2.1.4.js"></script>
+<script>
+    var JOfferId;
+
+    function GetJobIDs(Domain) {
+        $("#ViewReq").empty();
+        $("#mytable").empty();
+        $("#ApplicantDiv").empty();
+        $("#SelectJob").empty();
+        if (Domain == '') {
+            alert("Select a stream code");
+            trhtml = '';
+            $("#ViewReq").empty();
+            $("#mytable").empty();
+            $("#ApplicantDiv").empty();
+            $("#SelectJob").empty();
+        }
+        else {
+            var url = "/JRep/RVwJobApp1";
+
+            $.ajax({
+                url: url,
+                data: { streamcode: Domain },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+
+                    var trhtml = '';
+                    trhtml = '<br/>Select Job Offer Id <br/><br/> <select name="DD" id="selectData">';
+                    trhtml += '<option value="0">' + '--Select--' + '</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    }
+                    trhtml += "</select><br/><br/>";
+                    
+                    $('#SelectJob').append(trhtml);
+                    $('body').on('change', '#selectData', Caller);
+
+
+                },
+                error: function (reponse) {
+                    alert("Error");
+                    alert("error : " + reponse);
+                }
+            });
+        }
+    }
+
+    function Caller() {
+        jid = this.value;
+        JOfferId = jid;
+        $('#mytable').empty();
+        if (jid != 0)
+            ViewApplicants(jid)
+        else {
+            alert("Select Job Offer Id 111");
+            JOfferId = '';
+            trhtml = '';
+            $('#ApplicantDiv').empty();
+            $("#ViewReq").empty();
+            $("#mytable").empty();
+            
+        }
+    }
+
+    function GetJobPreReq() {
+        
+        var url = "/JRep/RVwJobPreReq/";
+                
+        $.ajax({
+            url: url,
+            data: { jid: JOfferId },
+            cache: false,
+            type: "POST",
+            
+            success: function (data) {
+                
+                trhtml = "<table><tr><td align=\"left\"><b>Min SSC Percentage</b></td><td>:</td><td align=\"left\">" + data.MinSSCPercent + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>Min HSC Percentage</b></td><td>:</td><td align=\"left\">" + data.MinHSCPercent + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>Min Graduation Average</b></td><td>:</td><td align=\"left\">" + data.MinGradAvg + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>Min Post Graduation Average</b></td><td>:</td><td align=\"left\">" + data.MinPGAvg + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>Experience</b></td><td>:</td><td align=\"left\">" + data.Experience + "</td></tr></table>"
+
+                $('#mytable').append(trhtml);
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+    }
+    
+    function ViewApplicants(jobId) {
+        $('#ApplicantDiv').empty();
+        var url = "/JRep/RVwJobApplicants/";
+     
+        $.ajax({
+            url: url,
+            data: { jid: jobId },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                if (data.JobApplicants.length == 0) {
+                    trhtml = "";
+                    alert("No records to display");
+                    $("#mytable").empty();
+                    $("#ApplicantDiv").empty();
+                }
+                else {
+                    var trhtml='';
+                    trhtml += "<input type=\"button\" value=\"View Educational Requirements\" onclick= \"GetJobPreReq()\"/>";
+                    trhtml += "<br/><br/>";
+                    trhtml += "<table><tr><th>ApplicantId</th><th>Name</th><th>SSC Percentage</th><th>HSC Percentage</th><th>PG Percentage</th><th>Graduation Percentage</th><th>Experience</th><th>Select</th><th>Reject</th></tr>";
+                    for (var i = 0; i < data.JobApplicants.length; i++) {
+
+                        trhtml += "<tr> <td> " + data.JobApplicants[i].ApplicantId + "</td> <td> " + data.JobApplicants[i].Name + "</td> <td> " + data.JobApplicants[i].SSCPercent + "</td> <td> " + data.JobApplicants[i].HSCPercent + "</td> <td> " + data.JobApplicants[i].GradPercent + "</td> <td> " + data.JobApplicants[i].PGPercent + "</td> <td> " + data.JobApplicants[i].HaveWorkExp + "</td> <td> <input type=\"button\" value=\"Select\" onclick=\"Select(\"" + data.JobApplicants.UserID + "\")\" /> </td> <td> <input type=\"button\" value=\"Reject\" onclick=\"Reject(\"" + data.JobApplicants.UserID + "\")\" /> </td></tr>";
+                    }
+
+                    trhtml += "</table>";
+                    $('#ApplicantDiv').html(trhtml);
+                }
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+    }
+
+
+       function Select(userid) {
+           alert("Selected");
+           var url = "/JRep/RVwJobApplicants/";
+           $.ajax({
+               url: url,
+               data: { jid: jobId },
+               cache: false,
+               type: "POST",
+               success: function (data) {
+
+
+
+                   $('#ApplicantDiv').append(trhtml);
+
+               },
+               error: function (reponse) {
+
+                   alert("error : " + reponse);
+               }
+           });
+
+
+       }
+
+       function Reject(userid) {
+           alert("Rejected");
+       }
+</script> 
+
+
+<h2>VIEW JOB APPLICANTS</h2>
+
+<div>
+    <p>Stream Code</p> 
+    
+    @Html.DropDownList("ddldomain", new SelectList(@ViewBag.JobDomainL), "--Select--", new { @id = "ddldomain", @style = "width:200px;" , @onchange = "javascript:GetJobIDs(this.value);" }) 
+</div>
+ 
+<div id="SelectJob" class="editor-field">
+     
+</div>
+
+<div id="ViewReq" class="editor-field">
+     
+</div>
+
+<div id ="mytable" class ="display"> 
+    
+</div> 
+
+<div id="ApplicantDiv" name="DetailsDiv" align="center"> 
+
+</div> 

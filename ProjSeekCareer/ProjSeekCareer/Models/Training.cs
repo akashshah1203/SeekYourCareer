@@ -9,6 +9,7 @@ namespace ProjSeekCareer.Models
     {
         public string TrainingID { get; set; }
         public int RepId { get; set; }
+        public string Location { get; set; }
         public string Domain { get; set; }
         public char Graduation { get; set; }
         public char PG { get; set; }

@@ -15,73 +15,84 @@ namespace ProjSeekCareer.Controllers
     public class StaffController : Controller
     {
 
-        
-        //
-        // GET: /Staff/
-
         public ActionResult Index()
         {
-            return View();
+            SelectedTrainees selecttrainee = new SelectedTrainees();
+            selecttrainee.CompanyModel = new List<Company>();
+            selecttrainee.TrainingModel = new List<TrainingL>();
+            selecttrainee.CompanyModel = GetCompanyList();
+            return View(selecttrainee);
         }
 
+        public List<Company> GetCompanyList()
+        {
+            List<Company> companynames = new List<Company>();
+            string connectionString =
+                "Data Source=(localdb)\\Projects;Initial Catalog=Bank;"
+                + "Integrated Security=True";
+
+            string queryString =
+                "SELECT RepId, CompanyName from dbo.RepDetails;";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    Company obj = new Company();
+                    obj.RepId = Convert.ToString(reader[0]);
+                    obj.CompanyName = Convert.ToString(reader[1]);
+                    companynames.Add(obj);
+                }
+                reader.Close();
+            }
+            return companynames;
+        }
+
+        public List<TrainingL> GetTrainings(string repid)
+        {
+            List<TrainingL> trainings = new List<TrainingL>();
+
+            string connectionString =
+                "Data Source=(localdb)\\Projects;Initial Catalog=Bank;"
+                + "Integrated Security=True";
+
+            //string queryString =
+            //    "SELECT distinct A.TrainingId from dbo.TrainingAppln A, dbo.TrainingDetails B WHERE A.TrainingId = B.TrainingID and B.CompanyName = @filtervalue;";
+            string queryString = "SELECT distinct A.TrainingId from dbo.TrainingAppln A";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@filtervalue", repid);
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    TrainingL obj = new TrainingL();
+                    obj.TrainingId = Convert.ToString(reader[0]);
+                    //obj.RepId = Convert.ToString(reader[1]);
+                    trainings.Add(obj);
+                }
+                reader.Close();
+            }
+            return trainings;
+        }
         
-        public ActionResult DDTrainingId()
-        {
-            List<string> TrainingIds = new List<string>();
-            
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=Bank;"
-                + "Integrated Security=True";
-
-            string queryString =
-                "SELECT distinct TrainingId from dbo.TrainingAppln;";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(queryString, connection);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    TrainingIds.Add(Convert.ToString(reader[0]));
-                }
-                reader.Close();
-            }
-            ViewBag.MyList = TrainingIds;
-            return Json(TrainingIds);
-        }
-
-        [HttpGet]
-        public ActionResult SelTrainCan()
-        {
-
-            List<string> TrainingIds = new List<string>();
-
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=Bank;"
-                + "Integrated Security=True";
-
-            string queryString =
-                "SELECT distinct TrainingId from dbo.TrainingAppln;";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(queryString, connection);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    TrainingIds.Add(Convert.ToString(reader[0]));
-                }
-                reader.Close();
-            }
-            ViewBag.MyList = TrainingIds;
-            return View();
-        }
-
-
+        [HttpPost] 
+         public ActionResult SelTrainId(string repid) 
+         { 
+             List<TrainingL> objtraining = new List<TrainingL>();
+             objtraining = GetTrainings(repid); 
+             // SelectList obj = new SelectList(objtraining, "RepId", "TrainingId"); 
+             return Json(objtraining); 
+             
+         } 
+           
         [HttpPost]
         public ActionResult SelTrainCan(string trainid)
         {

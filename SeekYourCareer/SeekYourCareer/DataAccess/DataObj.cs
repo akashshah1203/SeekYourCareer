@@ -14,7 +14,7 @@ namespace SeekYourCareer.DataAccess
         public string Connstr()
         {
 
-            string connectionString = "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;" + "Integrated Security=True";
+            string connectionString = "Data Source=(localdb)\\Projects;Initial Catalog=Bank;" + "Integrated Security=True";
             connectionString = ConfigurationManager.ConnectionStrings["ConnectToDb"].ToString();
             return connectionString;
         }
