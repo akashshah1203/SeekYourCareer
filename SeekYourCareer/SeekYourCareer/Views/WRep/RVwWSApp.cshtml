@@ -1,0 +1,126 @@
+﻿@model SeekYourCareer.Models.WSPendingApp
+
+@{
+    ViewBag.Title = "SelTrainCan";
+}
+
+<script src="http://ajapx.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+    function GetWorkshopIDs(Domain) {
+
+        var url = "/WRep/RVwWSApp1";
+        alert(Domain);
+        $.ajax({
+            url: url,
+            data: { domain: Domain },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                
+                var trhtml;
+                trhtml = 'Select Workshop Id <select name="DD" id="selectData">';
+                alert(data.length);
+                for (var i = 0; i < data.length; i++) {
+                    trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                }
+                trhtml += "</select>";
+
+
+                $('#SelectWorkshop').append(trhtml);
+                $('body').on('change', '#selectData', Caller);
+            },
+            error: function (reponse) {
+                alert("Error");
+                alert("error : " + reponse);
+            }
+        });
+    }
+
+    function Caller() {
+        wid = this.value;
+        GetWSPreReq(wid);
+        ViewApplicants(wid)
+    }
+
+    function GetWSPreReq(wsId) {
+        alert(wsId);
+        var url = "/WRep/RVwWSPreReq/";
+        
+        $.ajax({
+            url: url,
+            data: { wid: wsId },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                var trhtml;
+                trhtml = "<table><tr><td align=\"left\"><b>WorkshopId</b></td><td>:</td><td align=\"left\">" + data.WorkshopId + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>Min Graduation Percentage</b></td><td>:</td><td align=\"left\">" + data.MinGradPct + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>Min PostGrad Percentage</b></td><td>:</td><td align=\"left\">" + data.MinPGPct + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>MinExperience</b></td><td>:</td><td align=\"left\">" + data.MinExperience + "</td></tr></table>"
+
+                $('#mytable').append(trhtml);
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+    }
+    
+    function ViewApplicants(wsId) {
+           
+           var url = "/WRep/RVwWSApplicants/";
+           alert(wsId);
+        $.ajax({
+            url: url,
+            data: { wid: wsId },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                var trhtml;
+                alert(data.PendingApps.length);
+                for (var i = 0; i < data.PendingApps.length; i++) {
+
+                    trhtml += "<tr> <td> " + data.PendingApps[i].Name + "</td> <td> " + data.PendingApps[i].GradPercent + "</td> <td> " + data.PendingApps[i].PGPercent + "</td> <td> " + data.PendingApps[i].WorkExpYears + "</td> <td> <input type=\"button\" value=\"Select\" onclick=\"Select()\" /> </td> <td> <input type=\"button\" value=\"Reject\" onclick=\"Reject()\" /> </td></tr>";
+                }
+
+                
+                $('#ApplicantDiv').append(trhtml);
+
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+    }
+
+       function Select() {
+           alert("Selected");
+       }
+
+       function Reject() {
+           alert("Rejected");
+       }
+</script> 
+
+
+<h2>VIEW WORKSHOP APPLICANTS</h2>
+
+<div>
+    <p>Domain</p> 
+    
+    @Html.DropDownList("ddldomain", new SelectList(@ViewBag.WSDomainL), "--Select--", new { @id = "ddldomain", @style = "width:200px;" , @onchange = "javascript:GetWorkshopIDs(this.value);" }) 
+</div>
+ 
+<div id="SelectWorkshop" class="editor-field">
+     
+</div>
+
+<div id ="mytable" class ="display"> 
+    
+</div> 
+
+<div id="ApplicantDiv" name="DetailsDiv" align="center"> 
+
+</div> 

@@ -42,8 +42,8 @@ namespace SeekYourCareer.Controllers
                 if (result == true)
                 {
                     Session["Username"] = model.UserName;
-                    Session["Typeof"] = model.TypeOfUser;
-                    Session["Username"] = "akasha";
+                    Session["TypeOfUser"] = model.TypeOfUser;
+                    //Session["Username"] = "akasha";
                     return RedirectToAction("Index","Home");
                 }
             }
