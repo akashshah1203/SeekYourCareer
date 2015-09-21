@@ -43,7 +43,7 @@ namespace SeekYourCareer.Controllers
                 {
                     Session["Username"] = model.UserName;
                     Session["Typeof"] = model.TypeOfUser;
-                    
+                    Session["Username"] = "akasha";
                     return RedirectToAction("Index","Home");
                 }
             }

@@ -90,7 +90,8 @@
 
                     for (var i = 0; i < data.length; i++)
                     {
-                        html += "<tr> <td>" + data[i].JobType + "</td> <td> " + data[i].MinSSCPercent + "</td> <td> " + data[i].MinHSCPercent + "</td> <td> "                             + data[i].MinGradAvg + "</td> <td> " + data[i].MinPGAvg + "</td> <td> " + data[i].SalPerMonth + "</td> <td> " +                                                data[i].Experience + "</td> <td> " + data[i].AppLastDate + "</td> <td><input type=\"checkbox\" name=\"SelectedCheck\" value=\""                                 + data[i].JobId + "\" > Select only 1</td></tr>";
+                        var date = new Date(parseInt((data[i].AppLastDate).substr(6)));
+                        html += "<tr> <td>" + data[i].JobType + "</td> <td> " + data[i].MinSSCPercent + "</td> <td> " + data[i].MinHSCPercent + "</td> <td> "                             + data[i].MinGradAvg + "</td> <td> " + data[i].MinPGAvg + "</td> <td> " + data[i].SalPerMonth + "</td> <td> " +                                                data[i].Experience + "</td> <td> " + date + "</td> <td><input type=\"checkbox\" name=\"SelectedCheck\" value=\""                                 + data[i].JobId + "\" > Select only 1</td></tr>";
 
                     }
                     //alert("almost");

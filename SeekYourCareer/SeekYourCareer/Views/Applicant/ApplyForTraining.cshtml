@@ -2,6 +2,215 @@
     ViewBag.Title = "ApplyForTraining";
 }
 
+<style>
+    .Buttons  {
+        text-align: center;
+    }
+</style>
+
+<script>
+    function Checktoggle()
+    {
+        if ($("#CheckB :checkbox:checked").length > 0)
+        {
+            alert("checked");
+            $("input[name='CorrespondAddr']").attr("disabled", true);
+            $("#Corraddr").val($("#address").val());
+            $("#Corrcontact").val($("#contact").val());
+        }
+        else
+        {
+            alert("not checked");
+            $("input[name='CorrespondAddr']").attr("disabled", false);
+            $("input[name='CorrespondAddr']").val("");
+        }
+    }
+    
+    function ApplyButton()
+    {
+        alert("applying");
+        var url = "/Applicant/AddTrainingToDb";
+        var userid1 =@ViewBag.ApplyJob.UserID ;
+        var trainingid1 ="@ViewBag.ApplyJob.TrainingID" ;
+        var correspondAddr=$("#Corraddr").val();
+        var correspondContact=$("#Corrcontact").val();
+        var addr=$("#address").val();
+        var email=$("emailid").val();
+        var contact=$("#contact").val();
+
+        //alert(userid1 + "  "  + trainingid1 + "  "  + correspondAddr + "  "  + correspondContact);
+        if(trainingid1=="" || correspondAddr=="" || correspondContact==""|| addr==""|| email==""|| contact=="")
+        {
+            var str="Fill All The Details To Proceed !!!!!";
+            $("#message").html("");
+            $("#message").html(str);
+                
+        }
+        else
+        {
+                $.ajax({
+                url: url,
+                data: { userid:userid1,trainingid:trainingid1 , corraddr:correspondAddr,corrcont:correspondContact},
+                cache: false,
+                type: "POST",
+                success: function (data) 
+                {
+                    var str="You have successfully Applied for the job !!!!!";
+                    $("#message").html("");
+                    $("#message").html(str);
+                    $("#ApplyButton").remove();
+                    //window.location.assign("/Applicant/Index");
+
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
+                }
+            });
+        }
+            //window.location
+    }
+    
+</script>
+
+
+
+
+
+
 <h2>Apply For Training</h2>
 
+<div id="message">
 
+</div>
+<h3>Personal Details</h3>
+
+<table>
+    <tr>
+        <td>
+            Applicant Name
+        </td>
+        <td>
+            @(ViewBag.ApplyJob.Name)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Address:  
+        </td>
+        <td>
+            <input type="text" id="address" value="@ViewBag.ApplyJob.Address" maxlength="50">
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Age:
+        </td>
+        <td>
+            @ViewBag.ApplyJob.Age
+        </td>
+    </tr>
+    <tr>
+        <td>
+            EmailId:
+        </td>
+        <td>
+            <input type="text" id="emailid" value="@ViewBag.ApplyJob.EmailID">
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Contact No.:
+        </td>
+        <td>
+            <input type="text" id="contact" value="@ViewBag.ApplyJob.Contact">
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <h4>Correspondance Address:</h4>
+        </td>
+        
+    </tr>
+    <tr>
+        <td>
+
+        </td>
+        <td>
+
+            <span id="CheckB"><input type="checkbox"  onclick="javascript: Checktoggle()">Same As Above</span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Correspondance Address:
+        </td>
+        <td>
+            <input type="text" id="Corraddr" name="CorrespondAddr"  >
+        </td>
+    </tr>
+      <tr>
+        <td>
+            Correspondance Contact No.:
+        </td>
+        <td>
+            <input type="text" id="Corrcontact" name="CorrespondAddr"  >
+        </td>
+    </tr>
+</table>
+
+<h2>Educational Details</h2>
+
+<table>
+    <tr>
+        <td>SSC Percentage</td>
+        <td>@ViewBag.ApplyJob.SSCPercentage</td>
+    </tr>
+    <tr>
+        <td>HSC Percentage</td>
+        <td>@ViewBag.ApplyJob.HscPercent</td>
+    </tr>
+     <tr>
+        <td>Graduation Percent</td>
+        <td>@ViewBag.ApplyJob.GraduationPercent</td>
+    </tr>
+    <tr>
+        <td>Post Graduation Percent</td>
+        <td>@ViewBag.ApplyJob.PostGradPercent</td>
+    </tr>
+    <tr>
+        <td>Experience</td>
+        <td>@ViewBag.ApplyJob.Experience</td>
+    </tr>
+</table>
+
+
+<h2>Training Details</h2>
+<table>
+    <tr>
+        <td>Company</td>
+        <td>@ViewBag.ApplyJob.Company</td>
+    </tr>
+        <tr>
+        <td>Duration in Days</td>
+        <td>@ViewBag.ApplyJob.Duration</td>
+    </tr>
+        <tr>
+        <td>Starting Date</td>
+        <td>@ViewBag.ApplyJob.StartDate</td>
+    </tr>
+        <tr>
+        <td>Domain</td>
+        <td>@ViewBag.ApplyJob.Domain</td>
+    </tr>
+        <tr>
+        <td>Training Offer ID</td>
+        <td>@ViewBag.ApplyJob.TrainingID</td>
+    </tr>
+</table>
+
+<br />
+<div class="Buttons">
+<button id="ApplyButton" onclick="javascript: ApplyButton()">Apply</button>
+<button onclick="location.href= '@Url.Action("SearchForTraining", "Applicant")'">Back</button>
+</div>

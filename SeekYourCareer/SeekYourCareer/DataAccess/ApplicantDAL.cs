@@ -71,7 +71,6 @@ namespace SeekYourCareer.DataAccess
             string connectionString = Connstr();
             List<Job> job1 = new List<Job>();
             string queryString = null;
-            Job j1 = new Job();
             
             String str1 = "T4.UserID=T3.UserID and T4.JobId=T2.JobId and T4.Status<>\"Applied\"";
             queryString = "SELECT T2.JobType,T2.MinSSCPercent,T2.MinHSCPercent,T2.MinGradAvg,T2.MinPGAvg,T2.SalPerMonth,T2.Experience,T2.AppLastDate,T2.JobId"                             + ",T3.Address from dbo.RepDetails T1, dbo.JobDetails T2,dbo.UserDetails T3 "
@@ -89,6 +88,8 @@ namespace SeekYourCareer.DataAccess
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
+                    Job j1 = new Job();
+
                     j1.JobType = Convert.ToString(reader[0]);
                     j1.MinSSCPercent = (float)(Convert.ToDecimal(reader[1]));
                     j1.MinHSCPercent = (float)Convert.ToDecimal(reader[2]);
@@ -242,7 +243,24 @@ namespace SeekYourCareer.DataAccess
                     
                     EntryIntoTable.Company = CompanyName;
 
-                    data.Add(EntryIntoTable);
+                    //----------------------------------------------------------------------------------------------------------------
+                    string queryString2 = "Select count(*) FROM TrainingAppln WHERE UserID=3 and TrainingId=@train";
+                    SqlConnection connection2 = new SqlConnection(connectionString);
+                    SqlCommand command2 = new SqlCommand(queryString2, connection2);
+                    command2.Parameters.AddWithValue("@train", EntryIntoTable.TrainingID);
+                    connection2.Open();
+                    int n = (int)command2.ExecuteScalar();
+                    connection2.Close();
+                    if (n == 0)
+                    {
+                        data.Add(EntryIntoTable);
+                    }
+                    else
+                    { 
+                    }
+                    //----------------------------------------------------------------------------------------------------------------
+
+                    //data.Add(EntryIntoTable);
 
                 }
                 reader.Close();
@@ -297,7 +315,7 @@ namespace SeekYourCareer.DataAccess
 
             string connectionString = Connstr();
             string queryString = null;
-            queryString = "Select Name,Address,DOB,EmailID,ContactNumber,SSCPercent,HSCPercent,GradPercent,PGPercent,WorkExpYears FROM UserDetails WHERE UserName=@user";
+            queryString = "Select Name,Address,DOB,EmailID,ContactNumber,SSCPercent,HSCPercent,GradPercent,PGPercent,WorkExpYears,UserID FROM UserDetails WHERE UserName=@user";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -324,6 +342,7 @@ namespace SeekYourCareer.DataAccess
                     obj1.GraduationPercent = Convert.ToDecimal(reader[7]);
                     obj1.PostGradPercent = Convert.ToDecimal(reader[8]);
                     obj1.Experience = Convert.ToInt32(reader[9]);
+                    obj1.UserID = Convert.ToInt32(reader[10]);
                 }
                 reader.Close();
                 connection.Close();
@@ -346,7 +365,7 @@ namespace SeekYourCareer.DataAccess
                     obj1.TrainingID = trainingid;
 
 
-                    String queryString1 = "Select CompanyName FROM TrainingDetails WHERE RepID=@repid";
+                    String queryString1 = "Select CompanyName FROM RepDetails WHERE RepID=@repid";
                     SqlConnection connection1 = new SqlConnection(connectionString);
                     SqlCommand command1= new SqlCommand(queryString1, connection1);
                     
@@ -366,6 +385,38 @@ namespace SeekYourCareer.DataAccess
 
             return obj1;
         }
-    
+
+
+        public int AddTraining(int userid,string trainingid,string corraddr,string corrcont)
+        {
+            DateTime currdate = DateTime.Today;
+            String SelectStatus = "Pending";
+
+            string connectionString = Connstr();
+            string queryString = null;
+
+            queryString = "Insert INTO TrainingAppln(UserID,TrainingId,AppDate,CorrAddress,CorrContact,SelectionStatus) "+
+                "VALUES(@userid,@train,@app,@addr,@contact,@select)";
+
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@userid",userid);
+                command.Parameters.AddWithValue("@train",trainingid);
+                command.Parameters.AddWithValue("@app",currdate);
+                command.Parameters.AddWithValue("@addr",corraddr);
+                command.Parameters.AddWithValue("@contact",corrcont);
+                command.Parameters.AddWithValue("@select", SelectStatus);
+               
+
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+
+            return (1);
+                       
+        }
     }
 }

@@ -87,6 +87,7 @@ namespace SeekYourCareer.Controllers
         public ActionResult SearchForTraining()
         {
             //Get Domain Names
+            Session["UserID"] = 3;
             List<string> DomainNames = new DataAccess.ApplicantDAL().GetDomainNames();
             ViewBag.List = DomainNames;
             return View();
@@ -123,10 +124,18 @@ namespace SeekYourCareer.Controllers
         public ActionResult ApplyForTraining(string TrainingID)
         {
             String Username = (string)Session["Username"];
+            Username = "akasha";
             ApplyForTraining app1 = new ApplyForTraining();
             app1 = new DataAccess.ApplicantDAL().ApplyDetails(Username,TrainingID);
             ViewBag.ApplyJob = app1;
             return View();
+        }
+
+
+        public ActionResult AddTrainingToDb(int userid,string trainingid,string corraddr,string corrcont)
+        {
+            int ret = new DataAccess.ApplicantDAL().AddTraining(userid, trainingid, corraddr, corrcont);
+            return Json(ret);
         }
         
         //***************************************************************************************************************************************
