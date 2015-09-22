@@ -27,7 +27,7 @@
                 success: function (data) {
 
                     var trhtml;
-                    trhtml = 'Job Offer Id <select name="DD" id="selectData">';
+                    trhtml = 'Job Offer Id <select name="DD" id="selectData" onchange="GetApplicants()">';
                     trhtml += '<option value="">' + '--Select--' + '</option>';
                     for (var i = 0; i < data.length; i++) {
                         trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
@@ -36,7 +36,7 @@
 
 
                     $('#SelectStream').append(trhtml);
-                    $('body').on('change', '#selectData', GetApplicants);
+                    //$('body').on('change', '#selectData', GetApplicants);
                 },
                 error: function (reponse) {
                     alert("Error");
@@ -49,7 +49,7 @@
     function GetApplicants() {
         $('#DetailsDiv').empty();
         $('#mytable').empty();
-        jobId = this.value;
+        jobId = document.getElementById("selectData").value;
         if (jobId == '') {
             alert('Select Job Id');
             $('#DetailsDiv').empty();

@@ -21,7 +21,7 @@
             success: function (data) {
 
                 var trhtml;
-                trhtml = 'Domain <select name="DD" id="selectData">';
+                trhtml = 'Domain <select name="DD" id="selectData" onchange="GetWorkshopIDs()">';
                 trhtml += '<option value="">' + '--Select--' + '</option>';
                 for (var i = 0; i < data.length; i++) {
                     trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
@@ -30,7 +30,7 @@
 
 
                 $('#SelectDomain').append(trhtml);
-                $('body').on('change', '#selectData', GetWorkshopIDs);
+                //$('body').on('change', '#selectData', GetWorkshopIDs);
             },
             error: function (reponse) {
                 alert("Error");
@@ -43,7 +43,8 @@
         
         $('#ApplicantDiv').empty();
         $('#mytable').empty();
-        Domain = this.value;
+        Domain = document.getElementById("selectData").value;
+        alert(Domain);
         var url = "/WStaff/StVwWSApp2";
         
         $.ajax({
@@ -54,7 +55,7 @@
             success: function (data) {
                 
                 var trhtml;
-                trhtml = 'Select Workshop Id <select name="DD" id="selectData">';
+                trhtml = 'Select Workshop Id <select name="DD" id="selectData1" onchange="Caller()">';
                 trhtml += '<option value="">' + '--Select--' + '</option>';
                 for (var i = 0; i < data.length; i++) {
                     trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
@@ -63,7 +64,7 @@
 
 
                 $('#SelectWorkshop').html(trhtml);
-                $('body').on('change', '#selectData', Caller);
+                //$('body').on('change', '#selectData', Caller);
             },
             error: function (reponse) {
                 alert("Error");
@@ -73,7 +74,7 @@
     }
 
     function Caller() {
-        wid = this.value;
+        wid = document.getElementById("selectData1").value;
         if (wid == '') {
             alert('Select Workshop Id');
             $('#ApplicantDiv').empty();

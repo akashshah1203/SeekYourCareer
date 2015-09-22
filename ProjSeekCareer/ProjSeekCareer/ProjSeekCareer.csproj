@@ -330,6 +330,10 @@
     <Content Include="Views\WStaff\StVwWSApp.cshtml" />
     <Content Include="Views\JRep\RVwJobApp.cshtml" />
     <Content Include="Views\JStaff\StVwJobApp.cshtml" />
+    <Content Include="Views\Staff\RSelTrainCan.cshtml" />
+    <Content Include="Views\ApplicantHome\ApplicantIndex.cshtml" />
+    <Content Include="Views\RepresentativeHome\RepresentativeIndex.cshtml" />
+    <Content Include="Views\StaffHome\StaffIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

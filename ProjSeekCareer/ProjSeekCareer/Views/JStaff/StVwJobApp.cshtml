@@ -2,42 +2,46 @@
     ViewBag.Title = "StVwJobApp";
 }
 
-<h2>StVwJobApp</h2>
-
-
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script>
     var JOfferId;
     function GetDomains(company) {
+        $('#SelectJob').empty();
+        $('#SelectDomain').empty();
+        $('#mytable').empty();
+        $('#ApplicantDiv').empty();
+            var url = "/JStaff/StVwJobApp1";
 
-        var url = "/JStaff/StVwJobApp1";
-        
-        $.ajax({
-            url: url,
-            data: { cname: company },
-            cache: false,
-            type: "POST",
-            success: function (data) {
+            $.ajax({
+                url: url,
+                data: { cname: company },
+                cache: false,
+                type: "POST",
+                success: function (data) {
 
-                var trhtml;
-                trhtml = 'Stream Code <select name="DD" id="selectData">';
-                alert(data.length);
-                for (var i = 0; i < data.length; i++) {
-                    trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    var trhtml;
+                    trhtml = 'Stream Code <select name="DD" id="selectData">';
+                    trhtml += '<option value="">' + '--Select--' + '</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    }
+                    trhtml += "</select>";
+
+                    $('#SelectDomain').html(trhtml);
+                    $('body').on('change', '#selectData', GetJobIDs);
+                },
+                error: function (reponse) {
+                    alert("Error");
+                    alert("error : " + reponse);
                 }
-                trhtml += "</select>";
-                
-                $('#SelectDomain').append(trhtml);
-                $('body').on('change', '#selectData', GetJobIDs);
-            },
-            error: function (reponse) {
-                alert("Error");
-                alert("error : " + reponse);
-            }
-        });
+            });
+        
     }
 
     function GetJobIDs() {
+        $('#SelectJob').empty();
+        $('#mytable').empty();
+        $('#ApplicantDiv').empty();
         Domain = this.value;
         var url = "/JStaff/StVwJobApp2";
         
@@ -48,17 +52,18 @@
             type: "POST",
             success: function (data) {
                 
-                var trhtml;
-                trhtml = 'Select Job Offer Id <select name="DD" id="selectData">';
-                alert(data.length);
-                for (var i = 0; i < data.length; i++) {
-                    trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
-                }
-                trhtml += "</select>";
+                    var trhtml;
+                    trhtml = 'Select Job Offer Id <select name="DD" id="selectData">';
+                    trhtml += '<option value="">' + '--Select--' + '</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    }
+                    trhtml += "</select>";
 
-                trhtml += "<input type=\"button\" value=\"View\" onclick= \"GetJobPreReq()\"/>";
-                $('#SelectJob').append(trhtml);
-                $('body').on('change', '#selectData', Caller);
+                    trhtml += "<input type=\"button\" value=\"View\" onclick= \"GetJobPreReq()\"/>";
+                    $('#SelectJob').append(trhtml);
+                    $('body').on('change', '#selectData', Caller);
+                
             },
             error: function (reponse) {
                 alert("Error");
@@ -70,61 +75,74 @@
     function Caller() {
         jid = this.value;
         JOfferId = this.value;
-        ViewApplicants(jid)
+        $('#mytable').empty();
+        $('#ApplicantDiv').empty();
+        ViewApplicants(jid);
     }
 
     function GetJobPreReq() {
-        
-        var url = "/JStaff/StVwJobPreReq/";
-        
-        $.ajax({
-            url: url,
-            data: { jid: JOfferId },
-            cache: false,
-            type: "POST",
-            success: function (data) {
-                var trhtml;
-                trhtml = "<table><tr><td align=\"left\"><b>Min SSC Percentage</b></td><td>:</td><td align=\"left\">" + data.MinSSCPercent + "</td></tr>"
-                trhtml += "<tr><td align=\"left\"><b>Min HSC Percentage</b></td><td>:</td><td align=\"left\">" + data.MinHSCPercent + "</td></tr>"
-                trhtml += "<tr><td align=\"left\"><b>Min Graduation Average</b></td><td>:</td><td align=\"left\">" + data.MinGradAvg + "</td></tr>"
-                trhtml += "<tr><td align=\"left\"><b>Min Post Graduation Average</b></td><td>:</td><td align=\"left\">" + data.MinPGAvg + "</td></tr>"
-                trhtml += "<tr><td align=\"left\"><b>Experience</b></td><td>:</td><td align=\"left\">" + data.Experience + "</td></tr></table>"
+        if (JOfferId == '') {
+            alert('Select Job Offer Id');
+            $('#ApplicantDiv').empty();
+            $('#mytable').empty();
+        }
+        else {
+            var url = "/JStaff/StVwJobPreReq/";
 
-                $('#mytable').append(trhtml);
-            },
-            error: function (reponse) {
+            $.ajax({
+                url: url,
+                data: { jid: JOfferId },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    var trhtml;
+                    trhtml = "<table><tr><td align=\"left\"><b>Min SSC Percentage</b></td><td>:</td><td align=\"left\">" + data.MinSSCPercent + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Min HSC Percentage</b></td><td>:</td><td align=\"left\">" + data.MinHSCPercent + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Min Graduation Average</b></td><td>:</td><td align=\"left\">" + data.MinGradAvg + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Min Post Graduation Average</b></td><td>:</td><td align=\"left\">" + data.MinPGAvg + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Experience</b></td><td>:</td><td align=\"left\">" + data.Experience + "</td></tr></table>"
 
-                alert("error : " + reponse);
-            }
-        });
+                    $('#mytable').html(trhtml);
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
+                }
+            });
+        }
     }
     
     function ViewApplicants(jobId) {
-           
-           var url = "/JStaff/StVwJobApplicants/";
-           
-        $.ajax({
-            url: url,
-            data: { jid: jobId },
-            cache: false,
-            type: "POST",
-            success: function (data) {
-                var trhtml;
-           
-                for (var i = 0; i < data.JobApplicants.length; i++) {
+        if (jobId == '') {
+            alert('Select Job Id');
+            $('#mytable').empty();
+            $('#ApplicantDiv').empty();
+        }
+        else {
+            var url = "/JStaff/StVwJobApplicants/";
 
-                    trhtml += "<tr> <td> " + data.JobApplicants[i].Name + "</td> <td> " + data.JobApplicants[i].SSCPercent + "</td> <td> " + data.JobApplicants[i].HSCPercent + "</td> <td> " + data.JobApplicants[i].GradPercent + "</td> <td> " + data.JobApplicants[i].PGPercent + "</td> <td> " + data.JobApplicants[i].HaveWorkExp + "</td> </tr>";
+            $.ajax({
+                url: url,
+                data: { jid: jobId },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    var trhtml = "<table><tr><th>ApplicantId</th><th>Name</th><th>SSC Percentage</th><th>HSC Percentage</th><th>PG Percentage</th><th>Graduation Percentage</th><th>Experience</th></tr>";
+                    for (var i = 0; i < data.JobApplicants.length; i++) {
+
+                        trhtml += "<tr> <td> " + data.JobApplicants[i].Name + "</td> <td> " + data.JobApplicants[i].SSCPercent + "</td> <td> " + data.JobApplicants[i].HSCPercent + "</td> <td> " + data.JobApplicants[i].GradPercent + "</td> <td> " + data.JobApplicants[i].PGPercent + "</td> <td> " + data.JobApplicants[i].HaveWorkExp + "</td> </tr>";
+                    }
+
+                    trhtml += "</table>";
+                    $('#ApplicantDiv').html(trhtml);
+
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
                 }
-
-                
-                $('#ApplicantDiv').append(trhtml);
-
-            },
-            error: function (reponse) {
-
-                alert("error : " + reponse);
-            }
-        });
+            });
+        }
     }
 
        function Select() {

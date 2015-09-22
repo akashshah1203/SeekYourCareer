@@ -20,7 +20,7 @@
                 success: function (data) {
 
                     var trhtml;
-                    trhtml = 'Stream Code <select name="DD" id="selectData">';
+                    trhtml = 'Stream Code <select name="DD" id="selectData" onchange="GetJobIDs()">';
                     trhtml += '<option value="">' + '--Select--' + '</option>';
                     for (var i = 0; i < data.length; i++) {
                         trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
@@ -28,7 +28,7 @@
                     trhtml += "</select>";
 
                     $('#SelectDomain').html(trhtml);
-                    $('body').on('change', '#selectData', GetJobIDs);
+                    //$('body').on('change', '#selectData', GetJobIDs);
                 },
                 error: function (reponse) {
                     alert("Error");
@@ -42,7 +42,7 @@
         $('#SelectJob').empty();
         $('#mytable').empty();
         $('#ApplicantDiv').empty();
-        Domain = this.value;
+        Domain = document.getElementById("selectData").value;
         var url = "/JStaff/StVwJobApp2";
         
         $.ajax({
@@ -53,7 +53,7 @@
             success: function (data) {
                 
                     var trhtml;
-                    trhtml = 'Select Job Offer Id <select name="DD" id="selectData">';
+                    trhtml = 'Select Job Offer Id <select name="DD" id="selectData1" onchange="Caller()">';
                     trhtml += '<option value="">' + '--Select--' + '</option>';
                     for (var i = 0; i < data.length; i++) {
                         trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
@@ -62,7 +62,7 @@
 
                     trhtml += "<input type=\"button\" value=\"View\" onclick= \"GetJobPreReq()\"/>";
                     $('#SelectJob').append(trhtml);
-                    $('body').on('change', '#selectData', Caller);
+                    //$('body').on('change', '#selectData', Caller);
                 
             },
             error: function (reponse) {
@@ -73,8 +73,8 @@
     }
 
     function Caller() {
-        jid = this.value;
-        JOfferId = this.value;
+        jid = document.getElementById("selectData1").value;
+        JOfferId = jid;
         $('#mytable').empty();
         $('#ApplicantDiv').empty();
         ViewApplicants(jid);

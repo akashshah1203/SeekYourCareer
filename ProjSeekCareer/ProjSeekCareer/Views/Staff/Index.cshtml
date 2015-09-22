@@ -2,63 +2,78 @@
 @model ProjSeekCareer.Models.SelectedTrainees
 
 @{
-    ViewBag.Title = "SelTrainCan";
+    ViewBag.Title = "Shortlisted Training Applicants - Staff";
 }
 
 <script src="http://ajapx.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script>
 
     function GetTrainingIds(repid) {
-        var url = "/Staff/SelTrainId/";
+        $('#mytable').empty();
+        $('#DetailsDiv').empty();
+        if (repid == '') {
+            alert('Select Training Id');
+            $('#mytable').empty();
+            $('#DetailsDiv').empty();
+        }
+        else {
+            var url = "/Staff/SelTrainId/";
 
-        $.ajax({ 
-                url: url, 
-               data: { RepId: repid }, 
-               cache: false, 
-               type: "POST",
-               
-               success: function (data) {
-                   alert(data.length);
-                   
-                    $("#ddltrainid").find('option').remove().end(); 
-                    $("#ddltrainid").append("<option value = '0' >" + "--Select--" + "</option>"); 
-                   for (var x = 0; x < data.length; x++) { 
-                       $("#ddltrainid").append("<option value = '" + data[x].TrainingId + "' >"+data[x].TrainingId+"</option>");
-                   } 
-                }, 
-                error: function (reponse) { 
-                     alert("error : " + reponse); 
-                 } 
-             }); 
+            $.ajax({
+                url: url,
+                data: { RepId: repid },
+                cache: false,
+                type: "POST",
+
+                success: function (data) {
+
+                    $("#ddltrainid").find('option').remove().end();
+                    $("#ddltrainid").append("<option value = '0' >" + "--Select--" + "</option>");
+                    for (var x = 0; x < data.length; x++) {
+                        $("#ddltrainid").append("<option value = '" + data[x].TrainingId + "' >" + data[x].TrainingId + "</option>");
+                    }
+                },
+                error: function (reponse) {
+                    alert("error : " + reponse);
+                }
+            });
+        }
      } 
       
     function GetApplicants(trainingId) {
+        $('#mytable').empty();
+        $('#DetailsDiv').empty();
+        if(trainingId == '') {
+            alert('Select TrainingId');
+            $('#mytable').empty();
+            $('#DetailsDiv').empty();
+        }
+        else {
+            var url = "/Staff/SelTrainCan/";
 
-        var url = "/Staff/SelTrainCan/";
-        
-        $.ajax({
-            url: url,
-            data: { trainid: trainingId },
-            cache: false,
-            type: "POST",
-            success: function (data) {
-                var trhtml;
-           
-                for (var i = 0; i < data.TrainApplications.length; i++) {
-                                        
-                    trhtml += "<tr> <td>" + data.TrainApplications[i].ApplicantId + "</td> <td> " + data.TrainApplications[i].Name + "</td> <td> <input type=\"button\" value=\"Details\" onclick=\"GetDetails('" + data.TrainApplications[i].ApplicantId + "','" + data.TrainApplications[i].TrainingId + "','" + data.TrainApplications[i].AppDate + "','" + data.TrainApplications[i].CorrAddress + "','" + data.TrainApplications[i].ContactNo + "','" + data.TrainApplications[i].SelectionStatus + "')\" /> </td> </tr>";
+            $.ajax({
+                url: url,
+                data: { trainid: trainingId },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    var trhtml = "<table><tr><th>Applicant Id</th><th>Name</th></tr>";
+
+                    for (var i = 0; i < data.TrainApplications.length; i++) {
+
+                        trhtml += "<tr> <td>" + data.TrainApplications[i].ApplicantId + "</td> <td> " + data.TrainApplications[i].Name + "</td> <td> <input type=\"button\" value=\"Details\" onclick=\"GetDetails('" + data.TrainApplications[i].ApplicantId + "','" + data.TrainApplications[i].TrainingId + "','" + data.TrainApplications[i].AppDate + "','" + data.TrainApplications[i].CorrAddress + "','" + data.TrainApplications[i].ContactNo + "','" + data.TrainApplications[i].SelectionStatus + "')\" /> </td> </tr>";
+                    }
+                    trhtml += "</table>";
+                  //  $('#mytable tbody > tr').remove();
+                    $('#mytable').html(trhtml);
+
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
                 }
-                
-                $('#mytable tbody > tr').remove();
-                $('#mytable').append(trhtml);
-
-            },
-            error: function (reponse) {
-
-                alert("error : " + reponse);
-            }
-        });
-
+            });
+        }
 
     }
 
@@ -87,7 +102,7 @@ document.getElementById("nodeGoto").addEventListener("click", function() {
 }, false);
 </script>
 
-<h2>SelTrainCan</h2>
+<h2>Shortlisted Training Candidates</h2>
 
 <div>
         
@@ -95,7 +110,7 @@ document.getElementById("nodeGoto").addEventListener("click", function() {
      @Html.DropDownList("ddlcompany", new SelectList(Model.CompanyModel,"RepId","CompanyName"), "--Select--", new { @id = "ddlcompany", @style = "width:200px;" , @onchange = "javascript:GetTrainingIds(this.value);" }) 
     
     <p>Training Id</p> 
-    @Html.DropDownList("ddltrainid", new SelectList(Model.TrainingModel,"TrainingId","TrainingId"), "--Select--", new { @id = "ddltrainid", @style = "width:200px;" , @onchange = "javascript:GetApplicants(this.value);" }) 
+    @Html.DropDownList("ddltrainid", new SelectList(Model.TrainingModel,"RepId","TrainingId"), "--Select--", new { @id = "ddltrainid", @style = "width:200px;" , @onchange = "javascript:GetApplicants(this.value);" }) 
       
  <br /> 
      <br /> 
@@ -103,10 +118,7 @@ document.getElementById("nodeGoto").addEventListener("click", function() {
  
   <table id ="mytable" class ="display"> 
       <thead> 
-          <tr> 
-              <th>Applicant Id</th> 
-              <th>Name</th> 
-              <th>  </th>
+          <tr>
            </tr> 
       </thead> 
       <tbody> 
