@@ -20,31 +20,13 @@ namespace SeekYourCareer.Controllers
             return View();
         }
         
+        
         //The codes: RSelJobCan is to show Selected Job Candidates
         [HttpGet]
         public ActionResult RSelJobCan()
         {
-            List<string> JobIds = new List<string>();
+            List<string> JobIds = new DataAccess.RepresentativeDAL().JobIDListAll();
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
-
-            string queryString =
-                "SELECT distinct JobId from dbo.JobApplications;";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(queryString, connection);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    JobIds.Add(Convert.ToString(reader[0]));
-                }
-                reader.Close();
-            }
             ViewBag.JobIdL = JobIds;
             return View();
         }
@@ -53,42 +35,8 @@ namespace SeekYourCareer.Controllers
         [HttpPost]
         public ActionResult RSelJobCan(string jobid)
         {
-            SelJCanViewModel jobapplns = new SelJCanViewModel();
-            jobapplns.JobApplications = new List<SelJobApplicants>();
-
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
-
-            string queryString =
-                "SELECT A.ApplicantId, A.UserID, A.JobId, A.AppDate, A.Correspondance, A.Status, B.Name, B.DOB, B.ContactNumber, B.EmailID from dbo.JobApplications A, dbo.UserDetails B WHERE A.UserID = B.UserID and A.JobId = @filtervalue;";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(queryString, connection);
-                command.Parameters.AddWithValue("@filtervalue", jobid);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    SelJobApplicants jobappln = new SelJobApplicants();
-                    jobappln.ApplicantId = Convert.ToInt32(reader[0]);
-                    jobappln.UserID = Convert.ToInt32(reader[1]);
-                    jobappln.JobId = Convert.ToString(reader[2]);
-                    jobappln.AppDate = Convert.ToDateTime(reader[3]);
-                    jobappln.Correspondance = Convert.ToString(reader[4]);
-                    jobappln.Status = Convert.ToString(reader[5]);
-                    jobappln.Name = Convert.ToString(reader[6]);
-                    jobappln.Age = Convert.ToDateTime(reader[7]);
-                    jobappln.ContactNo = Convert.ToString(reader[8]);
-                    jobappln.EmailId = Convert.ToString(reader[9]);
-
-                    jobapplns.JobApplications.Add(jobappln);
-                }
-                reader.Close();
-            }
-
+            SelJCanViewModel jobapplns = new DataAccess.RepresentativeDAL().SelectedJobApplicants(jobid);
+         
             return Json(jobapplns);
         }
         //

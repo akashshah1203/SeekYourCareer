@@ -137,28 +137,8 @@ namespace SeekYourCareer.Controllers
         [HttpGet]
         public ActionResult RSelTrainCan()
         {
-
-            List<string> TrainingIds = new List<string>();
-
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
-
-            string queryString =
-                "SELECT distinct TrainingId from dbo.TrainingAppln;";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(queryString, connection);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    TrainingIds.Add(Convert.ToString(reader[0]));
-                }
-                reader.Close();
-            }
+            List<string> TrainingIds = new DataAccess.RepresentativeDAL().TrainingIDListApplied();
+           
             ViewBag.MyList = TrainingIds;
             return View();
         }
@@ -167,42 +147,8 @@ namespace SeekYourCareer.Controllers
         [HttpPost]
         public ActionResult RSelTrainCan(string trainid)
         {
-
-            SelTCanViewModel trainingapplns = new SelTCanViewModel();
-            trainingapplns.TrainApplications = new List<TrainApplication>();
-
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
-
-            string queryString =
-                "SELECT * from dbo.TrainingAppln WHERE TrainingId = @filtervalue;";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(queryString, connection);
-                command.Parameters.AddWithValue("@filtervalue", trainid);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    TrainApplication trainingappln = new TrainApplication();
-                    trainingappln.ApplicantId = Convert.ToInt32(reader[0]);
-                    trainingappln.UserID = Convert.ToInt32(reader[1]);
-                    trainingappln.Name = Convert.ToString(reader[2]);
-                    trainingappln.TrainingId = Convert.ToString(reader[3]);
-                    trainingappln.AppDate = Convert.ToDateTime(reader[4]);
-                    trainingappln.CorrAddress = Convert.ToString(reader[5]);
-                    trainingappln.ContactNo = Convert.ToString(reader[6]);
-                    trainingappln.SelectionStatus = Convert.ToString(reader[7]);
-
-
-                    trainingapplns.TrainApplications.Add(trainingappln);
-                }
-                reader.Close();
-            }
-
+            SelTCanViewModel trainingapplns = new DataAccess.RepresentativeDAL().TrainingApplicantDetail(trainid);
+            
             return Json(trainingapplns);
         }
 

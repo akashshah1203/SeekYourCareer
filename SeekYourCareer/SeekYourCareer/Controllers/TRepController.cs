@@ -16,27 +16,8 @@ namespace SeekYourCareer.Controllers
         [HttpGet]
         public ActionResult RVwTrainCan()
         {
-            List<string> TrainIds = new List<string>();
+            List<string> TrainIds = new DataAccess.RepresentativeDAL().TrainingIDListAll();
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
-
-            string queryString =
-                "SELECT TrainingID from dbo.TrainingDetails;";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(queryString, connection);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    TrainIds.Add(Convert.ToString(reader[0]));
-                }
-                reader.Close();
-            }
             ViewBag.TrainIdL = TrainIds;
             return View();
         }
@@ -44,79 +25,16 @@ namespace SeekYourCareer.Controllers
         [HttpPost]
         public ActionResult RVwTrainCan(string tid)
         {
-            Training traindetails = new Training();
+            Training traindetails = new DataAccess.RepresentativeDAL().TrainingDetailOf(tid);
             
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
-
-            string queryString =
-                "SELECT * from dbo.TrainingDetails WHERE TrainingID = @filtervalue;";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(queryString, connection);
-                command.Parameters.AddWithValue("@filtervalue", tid);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    traindetails.TrainingID = Convert.ToString(reader[0]);
-                    traindetails.RepId = Convert.ToInt32(reader[1]);
-                    traindetails.Location = Convert.ToString(reader[2]);
-                    traindetails.Domain = Convert.ToString(reader[3]);
-                    traindetails.Graduation = Convert.ToChar(reader[4]);
-                    traindetails.PG = Convert.ToChar(reader[5]);
-                    traindetails.PastExp = Convert.ToInt32(reader[6]);
-                    traindetails.StartingDate = Convert.ToDateTime(reader[7]);
-                    traindetails.Duration = Convert.ToInt32(reader[8]);
-                    traindetails.NoOfSeat = Convert.ToInt32(reader[9]);
-                    traindetails.TrainingDesc = Convert.ToString(reader[10]);
-                    traindetails.StaffApproval = Convert.ToString(reader[11]);
-                }
-                reader.Close();
-            }
-
             return Json(traindetails);
         }
 
         [HttpPost]
         public ActionResult RVwTrainApplicants(string tid)
         {
-            TrainApplicantsViewModel TrainApps = new TrainApplicantsViewModel();
-            TrainApps.TrainApplicants = new List<TrainApplicant>();
-
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
-
-            string queryString =
-                "SELECT A.ApplicantId, A.Name, A.AppDate, B.SSCPercent, B.HSCPercent, B.GradPercent, B.PGPercent, B.WorkExpYears from dbo.TrainingAppln A, dbo.UserDetails B WHERE A.UserID = B.UserID AND A.TrainingId = @filtervalue;";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(queryString, connection);
-                command.Parameters.AddWithValue("@filtervalue", tid);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    TrainApplicant obj = new TrainApplicant();
-                    obj.ApplicantId = Convert.ToInt32(reader[0]);
-                    obj.Name = Convert.ToString(reader[1]);
-                    obj.AppDate = Convert.ToDateTime(reader[2]);
-                    obj.SSCPercent = Convert.ToDouble(reader[3]);
-                    obj.HSCPercent = Convert.ToDouble(reader[4]);
-                    obj.GradPercent = Convert.ToDouble(reader[5]);
-                    obj.PGPercent = Convert.ToDouble(reader[6]);
-                    obj.Experience = Convert.ToInt32(reader[7]);
-                    TrainApps.TrainApplicants.Add(obj);
-                }
-                reader.Close();
-            }
-
+            TrainApplicantsViewModel TrainApps = new DataAccess.RepresentativeDAL().TrainingApplicantsFor(tid);
+            
             return Json(TrainApps);
         }
 

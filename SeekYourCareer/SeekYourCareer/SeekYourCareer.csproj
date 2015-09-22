@@ -372,6 +372,7 @@
     <Content Include="Views\WRep\RVwWSApp.cshtml" />
     <Content Include="Views\WStaff\StVwWSApp.cshtml" />
     <Content Include="Views\RepresentativeHome\RepresentativeIndex.cshtml" />
+    <Content Include="Views\Staff\RSelTrainCan.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
