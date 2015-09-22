@@ -57,7 +57,7 @@ namespace SeekYourCareer.Controllers
         public ActionResult ApplyForJob1(string stream, string company)
         {
             string username = (string)Session["Username"];
-            Session["UserID"] = 3;
+            Session["UserID"] = 1002;
             int Userid = (int)Session["UserID"];
             List<Job> jobdetails = new List<Job>();
             username = "akasha";
@@ -71,6 +71,8 @@ namespace SeekYourCareer.Controllers
         {
 
             int userid = (int)Session["UserID"];
+            userid = 1002;
+
             string jobid = SelectedCheck;
             DateTime AppDate = DateTime.Now;
             int appid = new DataAccess.ApplicantDAL().Addjob(userid, jobid, AppDate, CorrespondAddr);
@@ -87,7 +89,7 @@ namespace SeekYourCareer.Controllers
         public ActionResult SearchForTraining()
         {
             //Get Domain Names
-            Session["UserID"] = 3;
+            Session["UserID"] = 1002;
             List<string> DomainNames = new DataAccess.ApplicantDAL().GetDomainNames();
             ViewBag.List = DomainNames;
             return View();

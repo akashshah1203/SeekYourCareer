@@ -205,7 +205,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
-    <Compile Include="Models\Applicant.cs" />
+    <Compile Include="Models\Applicant1.cs" />
     <Compile Include="Models\Job.cs" />
     <Compile Include="Models\JobApplicant.cs" />
     <Compile Include="Models\JobApplication.cs" />

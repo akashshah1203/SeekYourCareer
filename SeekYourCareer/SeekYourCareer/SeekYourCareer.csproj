@@ -210,9 +210,17 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ApplicantController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\JRepController.cs" />
+    <Compile Include="Controllers\JStaffController.cs" />
     <Compile Include="Controllers\RepresentativeController.cs" />
+    <Compile Include="Controllers\StaffController.cs" />
+    <Compile Include="Controllers\TRepController.cs" />
+    <Compile Include="Controllers\TStaffController.cs" />
+    <Compile Include="Controllers\WRepController.cs" />
+    <Compile Include="Controllers\WStaffController.cs" />
     <Compile Include="DataAccess\ApplicantDAL.cs" />
     <Compile Include="DataAccess\DataObj.cs" />
+    <Compile Include="DataAccess\RepresentativeDAL.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -220,14 +228,34 @@
     <Compile Include="MinimumValueAttribute.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Applicant.cs" />
+    <Compile Include="Models\Applicant1.cs" />
     <Compile Include="Models\ApplyForTraining.cs" />
     <Compile Include="Models\ChangePassword.cs" />
     <Compile Include="Models\Job.cs" />
+    <Compile Include="Models\JobApplicant.cs" />
+    <Compile Include="Models\JobApplication.cs" />
+    <Compile Include="Models\JobPrerequisite.cs" />
     <Compile Include="Models\LoginPage.cs" />
+    <Compile Include="Models\Representative.cs" />
+    <Compile Include="Models\SelectedTrainees.cs" />
+    <Compile Include="Models\SelJobApplicants.cs" />
+    <Compile Include="Models\TrainApplicant.cs" />
+    <Compile Include="Models\TrainApplication.cs" />
+    <Compile Include="Models\Training.cs" />
     <Compile Include="Models\TrainingDetailsTable.cs" />
     <Compile Include="Models\TrainingTableData.cs" />
+    <Compile Include="Models\Workshop.cs" />
+    <Compile Include="Models\WSApplication.cs" />
+    <Compile Include="Models\WSPendingApp.cs" />
+    <Compile Include="Models\WSPrerequisite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\JobApplicantViewModel.cs" />
+    <Compile Include="ViewModels\SelJCanViewModel.cs" />
+    <Compile Include="ViewModels\SelTCanViewModel.cs" />
+    <Compile Include="ViewModels\TrainApplicantsViewModel.cs" />
+    <Compile Include="ViewModels\TrainingIdViewModel.cs" />
     <Compile Include="ViewModels\ViewJobOffers.cs" />
+    <Compile Include="ViewModels\WSPendAppViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\themes\base\accordion.css" />
@@ -319,7 +347,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
-    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Login1.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\Home\AdminLoginPage.cshtml" />
@@ -331,9 +359,24 @@
     <Content Include="Views\Applicant\ApplyForJob.cshtml" />
     <Content Include="Views\Applicant\SearchForTraining.cshtml" />
     <Content Include="Views\Applicant\ApplyForTraining.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\JRep\RSelJobCan.cshtml" />
+    <Content Include="Views\JRep\RVwJobApp.cshtml" />
+    <Content Include="Views\JRep\SelJobCan.cshtml" />
+    <Content Include="Views\JStaff\StSelJobCanDD.cshtml" />
+    <Content Include="Views\JStaff\StVwJobApp.cshtml" />
+    <Content Include="Views\Staff\Index.cshtml" />
+    <Content Include="Views\Staff\SelTrainCan.cshtml" />
+    <Content Include="Views\TRep\RVwTrainCan.cshtml" />
+    <Content Include="Views\TStaff\StVwTrainCan.cshtml" />
+    <Content Include="Views\WRep\RVwWSApp.cshtml" />
+    <Content Include="Views\WStaff\StVwWSApp.cshtml" />
+    <Content Include="Views\RepresentativeHome\RepresentativeIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\ApplicantHome\" />
+    <Folder Include="Views\StaffHome\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

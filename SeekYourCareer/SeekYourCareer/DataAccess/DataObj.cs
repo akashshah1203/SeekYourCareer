@@ -14,7 +14,7 @@ namespace SeekYourCareer.DataAccess
         public string Connstr()
         {
 
-            string connectionString = "Data Source=(localdb)\\Projects;Initial Catalog=Bank;" + "Integrated Security=True";
+            string connectionString = "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;" + "Integrated Security=True";
             connectionString = ConfigurationManager.ConnectionStrings["ConnectToDb"].ToString();
             return connectionString;
         }
@@ -98,17 +98,18 @@ namespace SeekYourCareer.DataAccess
                 if (Type.CompareTo("Applicant") == 0)
                 {
                     queryString = "Select count(UserName) from UserDetails where UserName=@usern and Password=@Pass";
+                    
+
                 } 
                 if (Type.CompareTo("Representative") == 0)
                 {
-                    queryString = "Select count(UserName) from RepDetails where UserName=@usern and Password=@Pass";
-                }    
-            SqlCommand command = new SqlCommand(queryString, connection);
-            command.Parameters.AddWithValue("@usern",Username);
-            command.Parameters.AddWithValue("@Pass", Password);
-            num = (int)command.ExecuteScalar();
-            connection.Close();
-
+                    queryString = "Select count(CompanyName) from RepDetails where CompanyName=@usern and Password=@Pass";
+                }
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@usern", Username);
+                command.Parameters.AddWithValue("@Pass", Password);
+                num = (int)command.ExecuteScalar();
+                connection.Close();
             if (num == 1)
                 return true; 
 

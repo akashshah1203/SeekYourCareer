@@ -13,7 +13,12 @@ namespace SeekYourCareer.Controllers
 
         public ActionResult Index()
         {
+            if (Session["TypeOfUser"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             return View();
+
         }
 
         //
