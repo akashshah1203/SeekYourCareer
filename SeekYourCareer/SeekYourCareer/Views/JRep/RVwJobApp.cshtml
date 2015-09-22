@@ -71,12 +71,11 @@
     }
 
     function GetJobPreReq() {
-        
         var url = "/JRep/RVwJobPreReq/";
                 
         $.ajax({
             url: url,
-            data: { jid: JOfferId },
+            data: { jobid: JOfferId },
             cache: false,
             type: "POST",
             

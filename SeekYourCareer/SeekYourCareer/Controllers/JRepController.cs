@@ -98,27 +98,7 @@ namespace SeekYourCareer.Controllers
         [HttpGet]
         public ActionResult RVwJobApp()
         {
-            List<string> StreamCodes = new List<string>();
-
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
-
-            string queryString =
-                "SELECT distinct StreamCode from dbo.JobDetails;";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(queryString, connection);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    StreamCodes.Add(Convert.ToString(reader[0]));
-                }
-                reader.Close();
-            }
+            List<string> StreamCodes = new DataAccess.RepresentativeDAL().JobStreamCodes();
             ViewBag.JobDomainL = StreamCodes;
             return View();
         }
@@ -126,101 +106,24 @@ namespace SeekYourCareer.Controllers
         [HttpPost]
         public ActionResult RVwJobApp1(string streamcode)
         {
-            List<string> JIDs = new List<string>();
+            List<string> JobIDs = new DataAccess.RepresentativeDAL().JobIDList(streamcode);
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
-
-            string queryString =
-                "SELECT JobId from dbo.JobDetails WHERE StreamCode = @filtervalue;";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(queryString, connection);
-                command.Parameters.AddWithValue("@filtervalue", streamcode);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    JIDs.Add(Convert.ToString(reader[0]));
-                }
-                reader.Close();
-            }
-            return Json(JIDs);
+            return Json(JobIDs);
         }
 
         [HttpPost]
-        public ActionResult RVwJobPreReq(string jid)
+        public ActionResult RVwJobPreReq(string jobid)
         {
-            JobPrerequisite prereq = new JobPrerequisite();
-
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
-
-            string queryString =
-                "SELECT MinSSCPercent, MinHSCPercent, MinGradAvg, MinPGAvg, Experience from dbo.JobDetails WHERE JobId = @filtervalue;";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(queryString, connection);
-                command.Parameters.AddWithValue("@filtervalue", jid);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    prereq.MinSSCPercent = Convert.ToDouble(reader[0]);
-                    prereq.MinHSCPercent = Convert.ToDouble(reader[1]);
-                    prereq.MinGradAvg = Convert.ToDouble(reader[2]);
-                    prereq.MinPGAvg = Convert.ToDouble(reader[3]);
-                    prereq.Experience = Convert.ToInt32(reader[4]);
-                }
-                reader.Close();
-            }
-
+            JobPrerequisite prereq = new DataAccess.RepresentativeDAL().JobPrerequisiteDetail(jobid);
+                    
             return Json(prereq);
         }
 
         [HttpPost]
         public ActionResult RVwJobApplicants(string jid)
         {
-            JobApplicantViewModel JobApps = new JobApplicantViewModel();
-            JobApps.JobApplicants = new List<JobApplicant>();
-
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
-
-            string queryString =
-                "SELECT A.UserID, A.ApplicantId, B.Name, B.SSCPercent, B.HSCPercent, B.GradPercent, B.PGPercent, B.HaveWorkExp from dbo.JobApplications A, dbo.UserDetails B WHERE A.UserID = B.UserID AND A.JobId = @filtervalue;";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(queryString, connection);
-                command.Parameters.AddWithValue("@filtervalue", jid);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    JobApplicant obj = new JobApplicant();
-                    obj.UserID = Convert.ToInt32(reader[0]);
-                    obj.ApplicantId = Convert.ToInt32(reader[1]);
-                    obj.Name = Convert.ToString(reader[2]);
-                    obj.SSCPercent = Convert.ToDouble(reader[3]);
-                    obj.HSCPercent = Convert.ToInt32(reader[4]);
-                    obj.GradPercent = Convert.ToDouble(reader[5]);
-                    obj.PGPercent = Convert.ToDouble(reader[6]);
-                    obj.HaveWorkExp = Convert.ToChar(reader[7]);
-
-                    JobApps.JobApplicants.Add(obj);
-                }
-                reader.Close();
-            }
-
+            JobApplicantViewModel JobApps = new DataAccess.RepresentativeDAL().JobApplicantsDetail(jid);
+            
             return Json(JobApps);
         }
 
