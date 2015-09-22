@@ -1,15 +1,17 @@
 ﻿@model SeekYourCareer.Models.WSPendingApp
 
 @{
-    ViewBag.Title = "SelTrainCan";
+    ViewBag.Title = "View Workshop Applicants - Representative";
 }
 
 <script src="http://ajapx.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script>
     function GetWorkshopIDs(Domain) {
-
+        $('#SelectWorkshop').empty();
+        $('#mytable').empty();
+        $('#ApplicantDev').empty();
         var url = "/WRep/RVwWSApp1";
-        alert(Domain);
+        
         $.ajax({
             url: url,
             data: { domain: Domain },
@@ -19,7 +21,7 @@
                 
                 var trhtml;
                 trhtml = 'Select Workshop Id <select name="DD" id="selectData">';
-                alert(data.length);
+                trhtml += '<option value="">' + '--Select--' + '</option>';
                 for (var i = 0; i < data.length; i++) {
                     trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
                 }
@@ -38,12 +40,19 @@
 
     function Caller() {
         wid = this.value;
-        GetWSPreReq(wid);
-        ViewApplicants(wid)
+        if (wid == '') {
+            alert('Select Workshop Id');
+            $('#ApplicantDiv').empty();
+            $('#mytable').empty();
+        }
+        else {
+            GetWSPreReq(wid);
+            ViewApplicants(wid);
+        }
     }
 
     function GetWSPreReq(wsId) {
-        alert(wsId);
+        
         var url = "/WRep/RVwWSPreReq/";
         
         $.ajax({
@@ -58,7 +67,7 @@
                 trhtml += "<tr><td align=\"left\"><b>Min PostGrad Percentage</b></td><td>:</td><td align=\"left\">" + data.MinPGPct + "</td></tr>"
                 trhtml += "<tr><td align=\"left\"><b>MinExperience</b></td><td>:</td><td align=\"left\">" + data.MinExperience + "</td></tr></table>"
 
-                $('#mytable').append(trhtml);
+                $('#mytable').html(trhtml);
             },
             error: function (reponse) {
 
@@ -70,22 +79,22 @@
     function ViewApplicants(wsId) {
            
            var url = "/WRep/RVwWSApplicants/";
-           alert(wsId);
+           
         $.ajax({
             url: url,
             data: { wid: wsId },
             cache: false,
             type: "POST",
             success: function (data) {
-                var trhtml;
-                alert(data.PendingApps.length);
+                var trhtml="<table><tr><th>User Name</th><th>Graduation %</th><th>Post Graduation %</th><th>Experience</th><th>Select Applicants</th><th>Reject Applicants</th></tr>";
+           
                 for (var i = 0; i < data.PendingApps.length; i++) {
 
                     trhtml += "<tr> <td> " + data.PendingApps[i].Name + "</td> <td> " + data.PendingApps[i].GradPercent + "</td> <td> " + data.PendingApps[i].PGPercent + "</td> <td> " + data.PendingApps[i].WorkExpYears + "</td> <td> <input type=\"button\" value=\"Select\" onclick=\"Select()\" /> </td> <td> <input type=\"button\" value=\"Reject\" onclick=\"Reject()\" /> </td></tr>";
                 }
-
+                trhtml += "</table>";
                 
-                $('#ApplicantDiv').append(trhtml);
+                $('#ApplicantDiv').html(trhtml);
 
             },
             error: function (reponse) {

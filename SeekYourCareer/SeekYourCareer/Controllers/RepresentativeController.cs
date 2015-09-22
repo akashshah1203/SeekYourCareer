@@ -13,13 +13,12 @@ namespace SeekYourCareer.Controllers
 
         public ActionResult Index()
         {
-            string str="Representative";
-            if (str.CompareTo((string)Session["TypeOfUser"]) == 0)
+            if (Session["TypeOfUser"] == null)
             {
-                return View();
+                return RedirectToAction("Login", "Account");
             }
+            return View();
 
-            return RedirectToAction("Index", "Home");
         }
 
         //

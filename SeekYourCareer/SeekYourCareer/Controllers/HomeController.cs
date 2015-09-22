@@ -12,7 +12,12 @@ namespace SeekYourCareer.Controllers
         {
             //ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
             string usertype=(string)Session["TypeOfUser"];
-            if (usertype.CompareTo("Admin") == 0)
+            Console.WriteLine(Session["TypeOfUser"]);
+            if (Session["TypeOfUser"] == null)
+            { 
+            
+            }
+            else if (usertype.CompareTo("Admin") == 0)
             {
                 //return View("AdminLoginPage");
                 return RedirectToAction("Index","Admin");

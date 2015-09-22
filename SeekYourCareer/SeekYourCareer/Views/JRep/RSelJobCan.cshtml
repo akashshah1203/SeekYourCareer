@@ -7,33 +7,38 @@
 <script src="http://ajapx.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script>
     function GetApplicants(jobId) {
+        $('#DetailsDiv').empty();
+        if (jobId == '') {
+            alert('Select Job Id');
+            $('#DetailsDiv').empty();
+            $('#mytable').empty();
+        }
+        else {
+            var url = "/JRep/RSelJobCan/";
 
-        var url = "/JRep/RSelJobCan/";
+            $.ajax({
+                url: url,
+                data: { jobid: jobId },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    var trhtml = "<table><tr><th>Application Id</th><th>User Id</th><th>Job Offer Id</th><th>Applied Date</th><th>Correspondance Address</th><th>Approval Status</th></tr>";
 
-        $.ajax({
-            url: url,
-            data: { jobid: jobId },
-            cache: false,
-            type: "POST",
-            success: function (data) {
-                var trhtml;
+                    for (var i = 0; i < data.JobApplications.length; i++) {
 
-                for (var i = 0; i < data.JobApplications.length; i++) {
-                                        
-                    trhtml += "<tr> <td>" + data.JobApplications[i].ApplicantId + "</td> <td> " + data.JobApplications[i].UserID + "</td> <td> " + data.JobApplications[i].JobId + "</td> <td> " + data.JobApplications[i].AppDate + "</td> <td> " + data.JobApplications[i].Correspondance + "</td> <td> " + data.JobApplications[i].Status + "</td> <td> <input type=\"button\" value=\"Details\" onclick=\"GetDetails('" + data.JobApplications[i].Name + "','" + data.JobApplications[i].Age + "','" + data.JobApplications[i].Correspondance + "','" + data.JobApplications[i].ContactNo + "','" + data.JobApplications[i].EmailId + "')\" /> </td> </tr>";
+                        trhtml += "<tr> <td>" + data.JobApplications[i].ApplicantId + "</td> <td> " + data.JobApplications[i].UserID + "</td> <td> " + data.JobApplications[i].JobId + "</td> <td> " + data.JobApplications[i].AppDate + "</td> <td> " + data.JobApplications[i].Correspondance + "</td> <td> " + data.JobApplications[i].Status + "</td> <td> <input type=\"button\" value=\"Details\" onclick=\"GetDetails('" + data.JobApplications[i].Name + "','" + data.JobApplications[i].Age + "','" + data.JobApplications[i].Correspondance + "','" + data.JobApplications[i].ContactNo + "','" + data.JobApplications[i].EmailId + "')\" /> </td> </tr>";
+                    }
+                    trhtml += "</table>";
+                    $('#mytable tbody > tr').remove();
+                    $('#mytable').html(trhtml);
+
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
                 }
-                
-                $('#mytable tbody > tr').remove();
-                $('#mytable').append(trhtml);
-
-            },
-            error: function (reponse) {
-
-                alert("error : " + reponse);
-            }
-        });
-
-
+            });
+        }
     }
 
     function GetDetails(a,b,c,d,e) {
@@ -61,11 +66,7 @@
  
   <table id ="mytable" class ="display"> 
       <thead> 
-          <tr> 
-              <th>Applicant Id</th> 
-              <th>Name</th> 
-              <th>  </th>
-           </tr> 
+          
       </thead> 
       <tbody> 
  
