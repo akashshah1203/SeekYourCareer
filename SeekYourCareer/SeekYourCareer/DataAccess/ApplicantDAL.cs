@@ -19,6 +19,10 @@ namespace SeekYourCareer.DataAccess
             return connectionString;
         }
 
+
+        //***************************************************************************************************************************************
+        //--------------------------------WHEN APPLICANT IS APPLYING FOR JOB---------------------------------------------------------------------
+        //***************************************************************************************************************************************
         public List<string> GetCompanyNames()
         {
             string connectionString = Connstr();
@@ -39,10 +43,6 @@ namespace SeekYourCareer.DataAccess
             }
             return companynames;
         }
-
-        //***************************************************************************************************************************************
-        //--------------------------------WHEN APPLICANT IS APPLYING FOR JOB---------------------------------------------------------------------
-        //***************************************************************************************************************************************
 
         public List<string> Stream(string companyname)
         {
@@ -73,8 +73,9 @@ namespace SeekYourCareer.DataAccess
             string queryString = null;
             
             String str1 = "T4.UserID=T3.UserID and T4.JobId=T2.JobId and T4.Status<>\"Applied\"";
-            queryString = "SELECT T2.JobType,T2.MinSSCPercent,T2.MinHSCPercent,T2.MinGradAvg,T2.MinPGAvg,T2.SalPerMonth,T2.Experience,T2.AppLastDate,T2.JobId"                             + ",T3.Address from dbo.RepDetails T1, dbo.JobDetails T2,dbo.UserDetails T3 "
-                               + " Where T1.RepID=T2.RepId and T1.CompanyName=@company and T2.StreamCode=@stream and T3.UserName=@username and T3.UserID=@userid and T3.SSCPercent>=T2.MinSSCPercent and T3.HSCPercent>=T2.MinHSCPercent and T3.GradPercent>=T2.MinGradAvg and T3.PGPercent>=T2.MinPGAvg and T3.WorkExpYears >= T2.Experience ";
+            queryString = "SELECT T2.JobType,T2.MinSSCPercent,T2.MinHSCPercent,T2.MinGradAvg,T2.MinPGAvg,T2.SalPerMonth,T2.Experience,T2.AppLastDate,T2.JobId"                             + ",T3.Address,T2.Location from dbo.RepDetails T1, dbo.JobDetails T2,dbo.UserDetails T3 "
+                               + " Where T1.RepID=T2.RepId and T1.CompanyName=@company and T2.StreamCode=@stream and T3.UserName=@username and T3.UserID=@userid and T3.SSCPercent>=T2.MinSSCPercent and T3.HSCPercent>=T2.MinHSCPercent and T3.GradPercent>=T2.MinGradAvg and T3.PGPercent>=T2.MinPGAvg and T3.WorkExpYears >= T2.Experience and T2.StaffApprovalStatus='Approved'";
+            //Add Date to the query
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
@@ -100,6 +101,7 @@ namespace SeekYourCareer.DataAccess
                     j1.AppLastDate = Convert.ToDateTime(reader[7]);
                     j1.JobId = Convert.ToString(reader[8]);
                     j1.CorrespondanceAddress = Convert.ToString(reader[9]);
+                    j1.Location = Convert.ToString(reader[10]);
                     string queryString1 = null;
                     SqlConnection connection1 = new SqlConnection(connectionString);
                     queryString1 = "Select COUNT(*) FROM dbo.JobApplications WHERE UserID=@userid and JobId=@jobid";
@@ -124,13 +126,38 @@ namespace SeekYourCareer.DataAccess
             return (job1);
         }
 
-        public int Addjob(int UserID, string JobId, DateTime AppDate, string Correspondance)
+        public int Addjob(int UserID, string JobId, DateTime AppDate, string Correspondance,string name)
         {
             int appid;
             string connectionString = Connstr();
+
             string queryString = null;
-            queryString = "INSERT INTO dbo.JobApplications (UserID,JobId,AppDate,Correspondance,Status) " +
-                "values( @userid,@jobid,@appdate,@corr,@status);";
+            string location = "";
+            int LocID = 0;
+
+            queryString = "Select Location,LocationID FROM JobDetails where JobId=@jobid";
+
+            using (SqlConnection connection1 = new SqlConnection(connectionString))
+            {
+                SqlCommand command1 = new SqlCommand(queryString, connection1);
+                command1.Parameters.AddWithValue("@jobid", JobId);
+
+
+                connection1.Open();
+                SqlDataReader reader1 = command1.ExecuteReader();
+                while (reader1.Read())
+                {
+                    location = Convert.ToString(reader1[0]);
+                    LocID = Convert.ToInt32(reader1[1]);
+                }
+                reader1.Close();
+                connection1.Close();
+            }
+
+
+
+            queryString = "INSERT INTO dbo.JobApplications(UserID,JobId,AppDate,Correspondance,Status,Name,Location,LocationID) " +
+                "values( @userid,@jobid,@appdate,@corr,@status,@name,@loc,@locid);";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
@@ -139,6 +166,9 @@ namespace SeekYourCareer.DataAccess
                 command.Parameters.AddWithValue("@appdate", AppDate);
                 command.Parameters.AddWithValue("@corr", Correspondance);
                 command.Parameters.AddWithValue("@status", "Applied");
+                command.Parameters.AddWithValue("@name", name);
+                command.Parameters.AddWithValue("@loc", location);
+                command.Parameters.AddWithValue("@locid", LocID);
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -207,7 +237,7 @@ namespace SeekYourCareer.DataAccess
             return LocationName;
         }
 
-        public List<TrainingTableData> GetTableData(string DomainName,string Location)
+        public List<TrainingTableData> GetTableData(string DomainName,string Location,int UserID)
         {
             List<TrainingTableData> data = new List<TrainingTableData>();
             TrainingTableData EntryIntoTable = new TrainingTableData();
@@ -244,10 +274,12 @@ namespace SeekYourCareer.DataAccess
                     EntryIntoTable.Company = CompanyName;
 
                     //----------------------------------------------------------------------------------------------------------------
-                    string queryString2 = "Select count(*) FROM TrainingAppln WHERE UserID=3 and TrainingId=@train";
+                    string queryString2 = "Select count(*) FROM TrainingAppln WHERE UserID=@userid and TrainingId=@train";
                     SqlConnection connection2 = new SqlConnection(connectionString);
                     SqlCommand command2 = new SqlCommand(queryString2, connection2);
                     command2.Parameters.AddWithValue("@train", EntryIntoTable.TrainingID);
+                    command2.Parameters.AddWithValue("@userid", UserID);
+
                     connection2.Open();
                     int n = (int)command2.ExecuteScalar();
                     connection2.Close();
@@ -387,16 +419,37 @@ namespace SeekYourCareer.DataAccess
         }
 
 
-        public int AddTraining(int userid,string trainingid,string corraddr,string corrcont)
+        public int AddTraining(int userid,string trainingid,string corraddr,string corrcont,string username)
         {
             DateTime currdate = DateTime.Today;
             String SelectStatus = "Pending";
 
             string connectionString = Connstr();
             string queryString = null;
+            string location="";
+            int LocID=0;
+            queryString = "Select Location,LocationID FROM TrainingDetails where TrainingID=@trainid";
 
-            queryString = "Insert INTO TrainingAppln(UserID,TrainingId,AppDate,CorrAddress,CorrContact,SelectionStatus) "+
-                "VALUES(@userid,@train,@app,@addr,@contact,@select)";
+            using (SqlConnection connection1 = new SqlConnection(connectionString))
+            {
+                SqlCommand command1 = new SqlCommand(queryString, connection1);
+                command1.Parameters.AddWithValue("@trainid", trainingid);
+
+
+                connection1.Open();
+                SqlDataReader reader1 = command1.ExecuteReader();
+                while (reader1.Read())
+                {
+                    location = Convert.ToString(reader1[0]);
+                    LocID = Convert.ToInt32(reader1[1]);
+                }
+                reader1.Close();
+                connection1.Close();
+            }
+
+
+            queryString = "Insert INTO TrainingAppln(UserID,TrainingId,AppDate,CorrAddress,CorrContact,SelectionStatus,Name,LocationID,Location) " +
+                "VALUES(@userid,@train,@app,@addr,@contact,@select,@name,@locid,@loc)";
 
 
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -408,6 +461,9 @@ namespace SeekYourCareer.DataAccess
                 command.Parameters.AddWithValue("@addr",corraddr);
                 command.Parameters.AddWithValue("@contact",corrcont);
                 command.Parameters.AddWithValue("@select", SelectStatus);
+                command.Parameters.AddWithValue("@name", username);
+                command.Parameters.AddWithValue("@locid", LocID);
+                command.Parameters.AddWithValue("@loc", location);
                
 
                 connection.Open();
@@ -418,5 +474,163 @@ namespace SeekYourCareer.DataAccess
             return (1);
                        
         }
+
+
+        //***************************************************************************************************************************************
+        //--------------------------------WHEN APPLICANT IS APPLYING FOR TRAINING--------------------------------------------------------------
+        //***************************************************************************************************************************************
+
+
+        public List<string> GetCompanyNamesWorkshop()
+        {
+            string connectionString = Connstr();
+            List<string> companynames = new List<string>();
+            string queryString = null;
+            queryString = "SELECT distinct T1.CompanyName from dbo.RepDetails T1, dbo.WorkshopDetails T2 Where T1.RepId=T2.RepId and T2.StaffApproval='Approved'";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    companynames.Add(Convert.ToString(reader[0]));
+                }
+                reader.Close();
+                connection.Close();
+            }
+            return companynames;
+        }
+
+        public List<string> GetDomainWorkshop(string companyname)
+        {
+            List<string> DomainName = new List<string>();
+
+            string connectionString = Connstr();
+            string queryString = null;
+            queryString = "Select DISTINCT(T1.Domain) FROM WorkshopDetails as T1,RepDetails as T2 WHERE T2.CompanyName=@company and T1.RepId=T2.RepID";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@company", companyname);
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    DomainName.Add(Convert.ToString(reader[0]));
+                }
+                reader.Close();
+                connection.Close();
+            }
+            return DomainName;
+        }
+
+        public List<WorkshopTable> GetTableWorkshop(string domain,string companyname,int userid)
+        {
+            List<WorkshopTable> sending = new List<WorkshopTable>();
+
+            string connectionString = Connstr();
+            string queryString = null;
+            queryString = "Select Location,FromDate,Todate,NoOfSeats,MinGradPct,MinPGPct,WorkshopDesc,WorkshopId" +
+                            " FROM WorkshopDetails as T1,RepDetails as T2 WHERE Domain=@domain and T1.RepId=T2.RepID and T2.CompanyName=@company";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@domain",domain);
+                command.Parameters.AddWithValue("@company", companyname);
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+
+                    int workshopid = Convert.ToInt32(reader[7]);
+                    string queryString1 = null;
+                    queryString1 = "Select COUNT(*)" +
+                                    " FROM WorkshopAppln WHERE WorkshopId=@workid1 and UserId=@userid1"; 
+                    SqlConnection connection1 = new SqlConnection(connectionString);
+                    SqlCommand command1 = new SqlCommand(queryString1, connection1);
+                    command1.Parameters.AddWithValue("@workid1",workshopid);
+                    command1.Parameters.AddWithValue("@userid1", userid);
+
+                    connection1.Open();
+                    int num=(int)command1.ExecuteScalar();
+                    connection1.Close();
+
+                    if (num == 0)
+                    {
+                        WorkshopTable table = new WorkshopTable();
+
+                        table.CompanyName = companyname;
+                        table.Location = Convert.ToString(reader[0]);
+                        table.FromDate = Convert.ToDateTime(reader[1]);
+                        table.ToDate = Convert.ToDateTime(reader[2]);
+                        table.NoOfSeats = Convert.ToInt32(reader[3]);
+                        table.MinGrad = Convert.ToDecimal(reader[4]);
+                        table.MinPostGrad = Convert.ToDecimal(reader[5]);
+                        table.Details = Convert.ToString(reader[6]);
+                        table.WorkshopID = Convert.ToInt32(reader[7]);
+
+                        sending.Add(table);
+                    }
+                    else
+                    { 
+                    
+                    }
+
+                }
+                reader.Close();
+                connection.Close();
+            }
+
+            return sending;
+        
+        }
+
+        public bool AddWorkshopApplicant(int WorkshopID, string Location,int userid)
+        {
+            int locationid = 0;
+            string connectionString = Connstr();
+            string queryString = null;
+            queryString = "SELECT LocationID from WorkshopDetails Where WorkshopId=@workid";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@workid",WorkshopID);
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                reader.Read();
+                locationid = Convert.ToInt32(reader[0]);
+
+                reader.Close();
+                connection.Close();
+            }
+
+            DateTime currdate = DateTime.Today;
+            string status = "Pending";
+            queryString = "INSERT INTO WorkshopAppln(UserId,WorkshopId,AppDate,LocationID,Location,Status) "+
+                            "VALUES(@userid,@workid,@appdate,@locationid,@location,@status)";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@userid",userid);
+                command.Parameters.AddWithValue("@workid", WorkshopID);
+                command.Parameters.AddWithValue("@appdate", currdate);
+                command.Parameters.AddWithValue("@locationid", locationid);
+                command.Parameters.AddWithValue("@location",Location);
+                command.Parameters.AddWithValue("@status", status);
+                
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+                return (true);
+            }
+
+            return false;
+        }
+
     }
 }

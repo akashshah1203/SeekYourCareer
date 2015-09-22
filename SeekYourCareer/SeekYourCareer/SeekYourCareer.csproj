@@ -245,6 +245,8 @@
     <Compile Include="Models\TrainingDetailsTable.cs" />
     <Compile Include="Models\TrainingTableData.cs" />
     <Compile Include="Models\Workshop.cs" />
+    <Compile Include="Models\WorkshopApplication.cs" />
+    <Compile Include="Models\WorkshopTable.cs" />
     <Compile Include="Models\WSApplication.cs" />
     <Compile Include="Models\WSPendingApp.cs" />
     <Compile Include="Models\WSPrerequisite.cs" />
@@ -372,6 +374,8 @@
     <Content Include="Views\WRep\RVwWSApp.cshtml" />
     <Content Include="Views\WStaff\StVwWSApp.cshtml" />
     <Content Include="Views\RepresentativeHome\RepresentativeIndex.cshtml" />
+    <Content Include="Views\Applicant\WorkshopHome.cshtml" />
+    <Content Include="Views\Applicant\WorkshopTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

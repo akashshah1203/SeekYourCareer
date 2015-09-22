@@ -119,6 +119,47 @@ namespace SeekYourCareer.DataAccess
             return false;
         }
 
+        public int GetUserID(string Username)
+        {
+            int id;
+            string connectionString = Connstr();
+            SqlConnection connection = new SqlConnection(connectionString);
+            string queryString = null;
+            queryString = "Select UserID from UserDetails where UserName=@usern";
+            SqlCommand command = new SqlCommand(queryString, connection);
+            command.Parameters.AddWithValue("@usern", Username);
+            connection.Open();
+            id = (int)command.ExecuteScalar();
+            connection.Close();
+
+            connection.Open();
+
+            return id;
+        }
+       
+        public string GetName(string Username)
+        {
+            string name;
+            string connectionString = Connstr();
+            SqlConnection connection = new SqlConnection(connectionString);
+            string queryString = null;
+            queryString = "Select Name from UserDetails where UserName=@usern";
+            SqlCommand command = new SqlCommand(queryString, connection);
+            command.Parameters.AddWithValue("@usern", Username);
+            connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+            reader.Read();
+
+            name = Convert.ToString(reader[0]);
+
+            
+            reader.Close();
+            connection.Close();
+
+            connection.Open();
+
+            return name;
+        }
         public bool ChangePassword(string username,string oldP,string newP)
         {
             string connectionString = Connstr();

@@ -16,6 +16,7 @@ namespace SeekYourCareer.Models
         public float MinGradAvg { get; set; }
         public float MinPGAvg { get; set; }
         public int SalPerMonth { get; set; }
+        public string Location { get; set; }
         public int Experience { get; set; }
         public DateTime AppLastDate { get; set; }
         public string StaffApprovalStatus { get; set; }
