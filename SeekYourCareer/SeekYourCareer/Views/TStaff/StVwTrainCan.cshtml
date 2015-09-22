@@ -18,7 +18,7 @@
             success: function (data) {
                 
                 var trhtml;
-                trhtml = 'Training Id <select name="DD" id="selectData">';
+                trhtml = 'Training Id <select name="DD" id="selectData" onchange="GetTraining()">';
                 trhtml += '<option value="">' + '--Select--' + '</option>';
                 for (var i = 0; i < data.length; i++) {
                     trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
@@ -27,7 +27,7 @@
 
 
                 $('#SelectStream').html(trhtml);
-                $('body').on('change', '#selectData', GetTraining);
+                //$('body').on('change', '#selectData', GetTraining);
             },
             error: function (reponse) {
                 alert("Error");
@@ -37,7 +37,7 @@
     }
 
     function GetTraining() {
-        trainId = this.value;
+        trainId = document.getElementById("selectData").value;
         
         var url = "/TStaff/StVwTrainCanM/";
         

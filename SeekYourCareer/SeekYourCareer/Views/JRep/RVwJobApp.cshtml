@@ -10,6 +10,7 @@
     var JOfferId;
 
     function GetJobIDs(Domain) {
+        alert('Entering GetJobIDs function');
         $("#ViewReq").empty();
         $("#mytable").empty();
         $("#ApplicantDiv").empty();
@@ -33,7 +34,7 @@
                 success: function (data) {
 
                     var trhtml = '';
-                    trhtml = '<br/>Select Job Offer Id <br/><br/> <select name="DD" id="selectData">';
+                    trhtml = '<br/>Select Job Offer Id <br/><br/> <select name="DD" id="selectData" onchange="Caller()">';
                     trhtml += '<option value="0">' + '--Select--' + '</option>';
                     for (var i = 0; i < data.length; i++) {
                         trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
@@ -41,9 +42,8 @@
                     trhtml += "</select><br/><br/>";
                     
                     $('#SelectJob').append(trhtml);
-                    $('body').on('change', '#selectData', Caller);
-
-
+                    //$('body').on('change', '#selectData', Caller);
+                    
                 },
                 error: function (reponse) {
                     alert("Error");
@@ -54,7 +54,10 @@
     }
 
     function Caller() {
-        jid = this.value;
+        alert('Entering Caller function');
+        //jid = this.value;
+        jid = document.getElementById("selectData").value;
+        alert(jid);
         JOfferId = jid;
         $('#mytable').empty();
         if (jid != 0)
@@ -71,6 +74,8 @@
     }
 
     function GetJobPreReq() {
+        alert('Entering GetJobPreReq function');
+        $('#mytable').empty();
         var url = "/JRep/RVwJobPreReq/";
                 
         $.ajax({
@@ -97,6 +102,7 @@
     }
     
     function ViewApplicants(jobId) {
+        alert('Entering View Applicants function');
         $('#ApplicantDiv').empty();
         var url = "/JRep/RVwJobApplicants/";
      
