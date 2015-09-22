@@ -16,7 +16,7 @@ namespace ProjSeekCareer
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "JRep", action = "RVwJobApp", id = UrlParameter.Optional }
+                defaults: new { controller = "JStaff", action = "StVwJobApp", id = UrlParameter.Optional }
             );
         }
     }

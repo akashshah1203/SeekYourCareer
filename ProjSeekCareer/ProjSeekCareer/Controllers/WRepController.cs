@@ -52,7 +52,7 @@ namespace ProjSeekCareer.Controllers
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT A.WorkshopId from dbo.WorkshopDetails A, dbo.WorkshopAppln B WHERE A.WorkshopId = B.WorkshopId AND B.Status = 'Pending' AND A.Domain = @filtervalue;";
+                "SELECT distinct A.WorkshopId from dbo.WorkshopDetails A, dbo.WorkshopAppln B WHERE A.WorkshopId = B.WorkshopId AND B.Status = 'Pending' AND A.Domain = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {

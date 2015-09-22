@@ -188,7 +188,7 @@ namespace ProjSeekCareer.Controllers
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT JobId from dbo.JobDetails WHERE StreamCode = @filtervalue;";
+                "SELECT distinct JobId from dbo.JobDetails WHERE StreamCode = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
