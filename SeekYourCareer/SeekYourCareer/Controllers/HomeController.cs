@@ -24,12 +24,19 @@ namespace SeekYourCareer.Controllers
             }
             else if (usertype.CompareTo("Applicant") == 0)
             {
+                string username=(string)Session["Username"];
+
+                int userid = new DataAccess.DataObj().GetUserID(username);
+                string name = new DataAccess.DataObj().GetName(username);
+                Session["UserID"] = userid;
+                Session["Name"] = name;
                 return RedirectToAction("Index", "Applicant");
 
                 //return View("ApplicantLoginPage");
             }
             else if (usertype.CompareTo("Representative") == 0)
             {
+
                 return RedirectToAction("Index", "Representative");
             }
             return View();
