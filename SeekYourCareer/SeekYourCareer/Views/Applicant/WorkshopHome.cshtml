@@ -1,0 +1,100 @@
+﻿@{
+    ViewBag.Title = "WorkshopHome";
+}
+
+
+<style>
+    #checkB  
+    {
+        width:50px;
+    }
+    input radio {
+           
+    }
+</style>
+
+<script>
+    function DomainSelect(companyname)
+    {
+        var url = "/Applicant/WorkshopGetDomain";
+        if (companyname == "")
+        {
+            str = "Select a Company Name From The List!!!!!!";
+            //$("#errormessage").html("");
+
+
+            //$("#errormessage").append(str);
+        }
+        else {
+            $("#errormessage").html("");
+
+            $.ajax({
+                url: url,
+                data: { CompanyName: companyname },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    //console.log(data);
+                    var html;
+                    html = "Domain:  ";
+                    for (var i = 0; i < data.length; i++) {
+                        html += "<input class=\"domaincheckbox\" id=\"checkB\" type=\"radio\" onclick=\"domain_table('" + data[i] + "','" + companyname + "')\" name=\"stream\" value=\"" + data[i] + "\">" + data[i];
+
+                    }
+                    //alert("appending");
+                    $('#SelectDomain').html("");
+                    $('#SelectDomain').append(html);
+
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
+                }
+            });
+        }
+
+    }
+
+    function domain_table(domain, company)
+    {
+        alert("in domain-table");
+        var url = "/Applicant/WorkshopTable";
+        $.ajax({
+            url: url,
+            data: { domain: domain, companyname: company },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                alert("success");
+                $("#partialview").html(data);
+            },
+            error: function (reponse) {
+                alert(" not success");
+
+                alert("error : " + reponse);
+            }
+        });
+    }
+
+</script>
+
+
+<h2>Workshop Home</h2>
+
+
+    
+<div>
+    <p>Select Domain Name</p> 
+    
+    @Html.DropDownList("DomainName", new SelectList(@ViewBag.List), "--Select--", new { @id = "DomainName", @style = "width:200px;" , @onchange = "javascript:DomainSelect(this.value);" }) 
+      
+</div>
+
+<div id="SelectDomain" class="editor-field">
+     
+</div>
+
+<div id="partialview">
+
+
+</div>
