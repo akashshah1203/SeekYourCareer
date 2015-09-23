@@ -22,16 +22,21 @@
                 cache: false,
                 type: "POST",
                 success: function (data) {
-                    var trhtml = "<table><tr><th>Application Id</th><th>User Id</th><th>Job Offer Id</th><th>Applied Date</th><th>Correspondance Address</th><th>Approval Status</th></tr>";
-
-                    for (var i = 0; i < data.JobApplications.length; i++) {
-
-                        trhtml += "<tr> <td>" + data.JobApplications[i].ApplicantId + "</td> <td> " + data.JobApplications[i].UserID + "</td> <td> " + data.JobApplications[i].JobId + "</td> <td> " + data.JobApplications[i].AppDate + "</td> <td> " + data.JobApplications[i].Correspondance + "</td> <td> " + data.JobApplications[i].Status + "</td> <td> <input type=\"button\" value=\"Details\" onclick=\"GetDetails('" + data.JobApplications[i].Name + "','" + data.JobApplications[i].Age + "','" + data.JobApplications[i].Correspondance + "','" + data.JobApplications[i].ContactNo + "','" + data.JobApplications[i].EmailId + "')\" /> </td> </tr>";
+                    if (data.JobApplications.length == 0) {
+                        trhtml = "No records to display";
+                        $('#mytable').html(trhtml);
                     }
-                    trhtml += "</table>";
-                    $('#mytable tbody > tr').remove();
-                    $('#mytable').html(trhtml);
+                    else {
+                        var trhtml = "<table><tr><th>Application Id</th><th>User Id</th><th>Job Offer Id</th><th>Applied Date</th><th>Correspondance Address</th><th>Approval Status</th></tr>";
 
+                        for (var i = 0; i < data.JobApplications.length; i++) {
+
+                            trhtml += "<tr> <td>" + data.JobApplications[i].ApplicantId + "</td> <td> " + data.JobApplications[i].UserID + "</td> <td> " + data.JobApplications[i].JobId + "</td> <td> " + data.JobApplications[i].AppDate + "</td> <td> " + data.JobApplications[i].Correspondance + "</td> <td> " + data.JobApplications[i].Status + "</td> <td> <input type=\"button\" value=\"Details\" onclick=\"GetDetails('" + data.JobApplications[i].Name + "','" + data.JobApplications[i].Age + "','" + data.JobApplications[i].Correspondance + "','" + data.JobApplications[i].ContactNo + "','" + data.JobApplications[i].EmailId + "')\" /> </td> </tr>";
+                        }
+                        trhtml += "</table>";
+                        $('#mytable tbody > tr').remove();
+                        $('#mytable').html(trhtml);
+                    }
                 },
                 error: function (reponse) {
 

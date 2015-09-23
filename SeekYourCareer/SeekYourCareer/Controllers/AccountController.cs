@@ -49,6 +49,7 @@ namespace SeekYourCareer.Controllers
                     string name = new DataAccess.DataObj().GetName(model.UserName);
                     Session["Username"] = model.UserName;
                     Session["TypeOfUser"] = model.TypeOfUser;
+                    FormsAuthentication.SetAuthCookie(model.UserName, true);
                     Session["UserID"] = userid;
                     Session["Name"] = name;
 

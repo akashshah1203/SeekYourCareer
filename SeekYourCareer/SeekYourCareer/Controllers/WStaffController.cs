@@ -10,10 +10,35 @@ using System.Data.SqlClient;
 
 namespace SeekYourCareer.Controllers
 {
+    [Authorize]
     public class WStaffController : Controller
     {
         //
         // GET: /WStaff/
+        [HttpGet]
+        public ActionResult PostWorkshop()
+        {
+            List<string> companynames = new DataAccess.StaffDAL().CompanyNames();
+
+            ViewBag.WSCompanyNames = companynames;
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult PostWorkshopDD(string cname)
+        {
+            List<string> Domains = new DataAccess.StaffDAL().WSDomainsByCompany(cname);
+
+            return Json(Domains);
+        }
+
+        [HttpPost]
+        public ActionResult PostWorkshopM(string domain)
+        {
+            WorkshopViewModel WSOffers = new DataAccess.StaffDAL().ListWorkshopsBy(domain);
+
+            return Json(WSOffers);
+        }
 
         [HttpGet]
         public ActionResult StVwWSApp()

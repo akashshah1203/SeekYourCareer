@@ -10,6 +10,7 @@ using SeekYourCareer.ViewModels;
 
 namespace SeekYourCareer.Controllers
 {
+    [Authorize]
     public class JRepController : Controller
     {
         //

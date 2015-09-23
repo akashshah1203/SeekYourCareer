@@ -47,6 +47,8 @@
             $('#mytable').empty();
         }
         else {
+            $('#mytable').empty();
+            $('#ApplicantDiv').empty();
             GetWSPreReq(wid);
             ViewApplicants(wid);
         }
@@ -78,7 +80,8 @@
     }
     
     function ViewApplicants(wsId) {
-           
+        $('#ApplicantDiv').empty();
+        $('#mytable').empty();
            var url = "/WRep/RVwWSApplicants/";
            
         $.ajax({

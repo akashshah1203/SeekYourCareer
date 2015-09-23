@@ -10,10 +10,27 @@ using System.Data.SqlClient;
 
 namespace SeekYourCareer.Controllers
 {
+    [Authorize]
     public class WRepController : Controller
     {
         //
         // GET: /WRep/
+        [HttpGet]
+        public ActionResult SelectedWorkshopApp()
+        {
+            List<int> WorkshopIds = new DataAccess.RepresentativeDAL().WorkshopIdList();
+            ViewBag.WorkshopIdL = WorkshopIds;
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult SelectedWSApplicants(int wid)
+        {
+            WSSelectedAppsVM WSApps = new DataAccess.RepresentativeDAL().SelectedWSApplicantsD(wid);
+            
+            return Json(WSApps);
+        }
+
         [HttpGet]
         public ActionResult RVwWSApp()
         {

@@ -10,7 +10,7 @@
     var JOfferId;
 
     function GetJobIDs(Domain) {
-        alert('Entering GetJobIDs function');
+        
         $("#ViewReq").empty();
         $("#mytable").empty();
         $("#ApplicantDiv").empty();
@@ -54,16 +54,16 @@
     }
 
     function Caller() {
-        alert('Entering Caller function');
+        
         //jid = this.value;
         jid = document.getElementById("selectData").value;
-        alert(jid);
+        
         JOfferId = jid;
         $('#mytable').empty();
         if (jid != 0)
             ViewApplicants(jid)
         else {
-            alert("Select Job Offer Id 111");
+            alert("Select Job Offer Id");
             JOfferId = '';
             trhtml = '';
             $('#ApplicantDiv').empty();
@@ -74,7 +74,7 @@
     }
 
     function GetJobPreReq() {
-        alert('Entering GetJobPreReq function');
+        
         $('#mytable').empty();
         var url = "/JRep/RVwJobPreReq/";
                 
@@ -102,7 +102,7 @@
     }
     
     function ViewApplicants(jobId) {
-        alert('Entering View Applicants function');
+        
         $('#ApplicantDiv').empty();
         var url = "/JRep/RVwJobApplicants/";
      

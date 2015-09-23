@@ -12,6 +12,7 @@ using SeekYourCareer.ViewModels;
 
 namespace SeekYourCareer.Controllers
 {
+    [Authorize]
     public class StaffController : Controller
     {
 

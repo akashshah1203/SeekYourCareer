@@ -28,6 +28,69 @@ namespace SeekYourCareer.DataAccess
             return (0);
         }
 
+        public List<int> WorkshopIdList()
+        {
+            List<int> WorkshopIds = new List<int>();
+            string connectionString =
+                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
+                + "Integrated Security=True";
+
+            string queryString =
+                "SELECT WorkshopId from dbo.WorkshopDetails;";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    WorkshopIds.Add(Convert.ToInt32(reader[0]));
+                }
+                reader.Close();
+            }
+            return WorkshopIds;
+        }
+
+        public WSSelectedAppsVM SelectedWSApplicantsD(int wid)
+        {
+            WSSelectedAppsVM selwsapps = new WSSelectedAppsVM();
+            selwsapps.WSSelectedApps = new List<WSSelectedApp>();
+
+            string connectionString =
+                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
+                + "Integrated Security=True";
+
+            string queryString =
+                "SELECT A.ApplicantId, A.WorkshopId, A.AppDate, B.Name, B.DOB, B.Address, B.ContactNumber, B.EmailID from dbo.WorkshopAppln A, dbo.UserDetails B WHERE A.UserId = B.UserID and A.Status = 'Selected' and A.WorkshopId = @filtervalue;";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@filtervalue", wid);
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    WSSelectedApp wsappdetail = new WSSelectedApp();
+                    wsappdetail.ApplicantId = Convert.ToInt32(reader[0]);
+                    wsappdetail.WorkshopId = Convert.ToInt32(reader[1]);
+                    wsappdetail.AppDate = Convert.ToDateTime(reader[2]);
+                    wsappdetail.Name = Convert.ToString(reader[3]);
+                    wsappdetail.DOB = Convert.ToDateTime(reader[4]);
+                    wsappdetail.Address = Convert.ToString(reader[5]);
+                    wsappdetail.ContactNo = Convert.ToString(reader[6]);
+                    wsappdetail.EmailId = Convert.ToString(reader[7]);
+
+                    selwsapps.WSSelectedApps.Add(wsappdetail);
+                }
+                reader.Close();
+            }
+            return selwsapps;
+        }
+
         //Training Applicant Details of a particular training id
         public SelTCanViewModel TrainingApplicantDetail(string trainid)
         {
@@ -218,20 +281,21 @@ namespace SeekYourCareer.DataAccess
         }
 
         //List of Training IDs from Training Details
-        public List<string> TrainingIDListAll()
+        public List<string> TrainingIDListAll(string companyname)
         {
             List<string> TrainIds = new List<string>();
-
+            
             string connectionString =
                 "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT TrainingID from dbo.TrainingDetails;";
+                "SELECT TrainingID from dbo.TrainingDetails WHERE CompanyName = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@filtervalue", companyname);
 
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -254,7 +318,7 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT * from dbo.TrainingDetails WHERE TrainingID = @filtervalue;";
+                "SELECT TrainingID, RepId, Location, Domain, Graduation, PG, PastExp, StartingDate, Duration, NoOfSeat, TrainingDesc, StaffApproval from dbo.TrainingDetails WHERE TrainingID = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -359,7 +423,7 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT A.ApplicantId, A.UserID, A.JobId, A.AppDate, A.Correspondance, A.Status, B.Name, B.DOB, B.ContactNumber, B.EmailID from dbo.JobApplications A, dbo.UserDetails B WHERE A.UserID = B.UserID and A.JobId = @filtervalue;";
+                "SELECT A.ApplicantId, A.UserID, A.JobId, A.AppDate, A.Correspondance, A.Status, B.Name, B.DOB, B.ContactNumber, B.EmailID from dbo.JobApplications A, dbo.UserDetails B WHERE A.UserID = B.UserID and A.Status = 'Selected' and A.JobId = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
