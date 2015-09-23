@@ -9,6 +9,7 @@ using SeekYourCareer.ViewModels;
 
 namespace SeekYourCareer.Controllers
 {
+    [Authorize]
     public class TRepController : Controller
     {
         //
@@ -16,10 +17,12 @@ namespace SeekYourCareer.Controllers
         [HttpGet]
         public ActionResult RVwTrainCan()
         {
-            List<string> TrainIds = new DataAccess.RepresentativeDAL().TrainingIDListAll();
+            string RepName = (string)(Session["Username"]);
+            List<string> TrainIds = new DataAccess.RepresentativeDAL().TrainingIDListAll(RepName);
 
-            ViewBag.TrainIdL = TrainIds;
-            return View();
+                ViewBag.TrainIdL = TrainIds;
+                return View();
+            
         }
 
         [HttpPost]

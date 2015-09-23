@@ -249,6 +249,7 @@
     <Compile Include="Models\WSApplication.cs" />
     <Compile Include="Models\WSPendingApp.cs" />
     <Compile Include="Models\WSPrerequisite.cs" />
+    <Compile Include="Models\WSSelectedApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\JobApplicantViewModel.cs" />
     <Compile Include="ViewModels\SelJCanViewModel.cs" />
@@ -256,7 +257,9 @@
     <Compile Include="ViewModels\TrainApplicantsViewModel.cs" />
     <Compile Include="ViewModels\TrainingIdViewModel.cs" />
     <Compile Include="ViewModels\ViewJobOffers.cs" />
+    <Compile Include="ViewModels\WorkshopViewModel.cs" />
     <Compile Include="ViewModels\WSPendAppViewModel.cs" />
+    <Compile Include="ViewModels\WSSelectedAppsVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\themes\base\accordion.css" />
@@ -374,6 +377,8 @@
     <Content Include="Views\WStaff\StVwWSApp.cshtml" />
     <Content Include="Views\RepresentativeHome\RepresentativeIndex.cshtml" />
     <Content Include="Views\Staff\RSelTrainCan.cshtml" />
+    <Content Include="Views\WStaff\PostWorkshop.cshtml" />
+    <Content Include="Views\WRep\SelectedWorkshopApp.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

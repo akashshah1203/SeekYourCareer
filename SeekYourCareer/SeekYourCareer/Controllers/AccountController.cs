@@ -43,6 +43,7 @@ namespace SeekYourCareer.Controllers
                 {
                     Session["Username"] = model.UserName;
                     Session["TypeOfUser"] = model.TypeOfUser;
+                    FormsAuthentication.SetAuthCookie(model.UserName, true);
                     //Session["Username"] = "akasha";
                     return RedirectToAction("Index","Home");
                 }

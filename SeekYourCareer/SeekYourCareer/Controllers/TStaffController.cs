@@ -9,6 +9,7 @@ using SeekYourCareer.ViewModels;
 
 namespace SeekYourCareer.Controllers
 {
+    [Authorize]
     public class TStaffController : Controller
     {
         //
