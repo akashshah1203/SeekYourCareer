@@ -14,19 +14,21 @@
 </style>
 
 <script>
-    function DomainSelect(companyname)
+    function DomainSelect(companyname)//comes here after selecting a company name from the dropdown
     {
+
+        $("#errormessage").html("");
+        $("#SelectDomain").html("");
+        $("#partialview").html("");
+        $("#errormessage").html("");
+        
         var url = "/Applicant/WorkshopGetDomain";
         if (companyname == "")
         {
             str = "Select a Company Name From The List!!!!!!";
-            //$("#errormessage").html("");
-
-
-            //$("#errormessage").append(str);
+            $("#errormessage").append(str);
         }
         else {
-            $("#errormessage").html("");
 
             $.ajax({
                 url: url,
@@ -55,7 +57,7 @@
 
     }
 
-    function domain_table(domain, company)
+    function domain_table(domain, company)//comes here after selecting the radio button
     {
         alert("in domain-table");
         var url = "/Applicant/WorkshopTable";
@@ -65,8 +67,18 @@
             cache: false,
             type: "POST",
             success: function (data) {
-                alert("success");
-                $("#partialview").html(data);
+
+                if (data == "")
+                {
+                    str = "Currently No Workshops Availabe For The Current Selection !!!!!";
+                    $("#errormessage").html("");
+                    $("#errormessage").append(str);
+                }
+                else
+                {
+                    $("#partialview").html(data);
+                }
+
             },
             error: function (reponse) {
                 alert(" not success");
@@ -98,3 +110,8 @@
 
 
 </div>
+
+<div id="errormessage" style="font-size:40px ; color:darkblue">
+
+</div>
+

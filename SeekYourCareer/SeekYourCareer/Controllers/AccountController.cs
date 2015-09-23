@@ -24,6 +24,10 @@ namespace SeekYourCareer.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            if (Session["Username"] != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }

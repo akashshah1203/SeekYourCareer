@@ -221,7 +221,6 @@
     <Compile Include="DataAccess\ApplicantDAL.cs" />
     <Compile Include="DataAccess\DataObj.cs" />
     <Compile Include="DataAccess\RepresentativeDAL.cs" />
-    <Compile Include="DataAccess\StaffDAL.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
