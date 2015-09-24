@@ -25,18 +25,21 @@
                 cache: false,
                 type: "POST",
                 success: function (data) {
+                    if (data.length == 0)
+                        $('#mytable').html("No records to display");
+                    else {
+                        var trhtml;
+                        trhtml = '<br/>Job Offer Id <br/><br/><select name="DD" id="selectData" onchange="GetApplicants()">';
+                        trhtml += '<option value="">' + '--Select--' + '</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                        }
+                        trhtml += "</select>";
 
-                    var trhtml;
-                    trhtml = 'Job Offer Id <select name="DD" id="selectData" onchange="GetApplicants()">';
-                    trhtml += '<option value="">' + '--Select--' + '</option>';
-                    for (var i = 0; i < data.length; i++) {
-                        trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
+
+                        $('#SelectStream').append(trhtml);
+                        //$('body').on('change', '#selectData', GetApplicants);
                     }
-                    trhtml += "</select>";
-
-
-                    $('#SelectStream').append(trhtml);
-                    //$('body').on('change', '#selectData', GetApplicants);
                 },
                 error: function (reponse) {
                     alert("Error");
@@ -64,16 +67,19 @@
                 cache: false,
                 type: "POST",
                 success: function (data) {
-                    var trhtml = "<table><tr><th>Applicant Id</th><th>UserId</th><th>JobOfferId</th><th>AppliedDate</th><th>Correspondance Address</th><th>Approval Status</th></tr>";
+                    if (data.JobApplications.length == 0)
+                        $('#mytable').html("No records to display");
+                    else {
+                        var trhtml = "<table><tr><th>Applicant Id</th><th>UserId</th><th>JobOfferId</th><th>AppliedDate</th><th>Correspondance Address</th><th>Approval Status</th></tr>";
 
-                    for (var i = 0; i < data.JobApplications.length; i++) {
+                        for (var i = 0; i < data.JobApplications.length; i++) {
 
-                        trhtml += "<tr> <td>" + data.JobApplications[i].ApplicantId + "</td> <td> " + data.JobApplications[i].UserID + "</td> <td> " + data.JobApplications[i].JobId + "</td> <td> " + data.JobApplications[i].AppDate + "</td> <td> " + data.JobApplications[i].Correspondance + "</td> <td> " + data.JobApplications[i].Status + "</td> <td> <input type=\"button\" value=\"Details\" onclick=\"GetDetails('" + data.JobApplications[i].Name + "','" + data.JobApplications[i].Age + "','" + data.JobApplications[i].Correspondance + "','" + data.JobApplications[i].ContactNo + "','" + data.JobApplications[i].EmailId + "')\" /> </td> </tr>";
+                            trhtml += "<tr> <td>" + data.JobApplications[i].ApplicantId + "</td> <td> " + data.JobApplications[i].UserID + "</td> <td> " + data.JobApplications[i].JobId + "</td> <td> " + data.JobApplications[i].AppDate + "</td> <td> " + data.JobApplications[i].Correspondance + "</td> <td> " + data.JobApplications[i].Status + "</td> <td> <input type=\"button\" value=\"Details\" onclick=\"GetDetails('" + data.JobApplications[i].Name + "','" + data.JobApplications[i].Age + "','" + data.JobApplications[i].Correspondance + "','" + data.JobApplications[i].ContactNo + "','" + data.JobApplications[i].EmailId + "')\" /> </td> </tr>";
+                        }
+
+                        $('#mytable tbody > tr').remove();
+                        $('#mytable').append(trhtml);
                     }
-
-                    $('#mytable tbody > tr').remove();
-                    $('#mytable').append(trhtml);
-
                 },
                 error: function (reponse) {
 

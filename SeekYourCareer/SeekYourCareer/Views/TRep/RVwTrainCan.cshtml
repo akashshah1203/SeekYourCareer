@@ -70,7 +70,7 @@
                     trhtml = "<table><tr><th>Applicant Id</th><th>Name</th><th>Date of Application</th><th>SSC Percentage</th><th>HSC Percentage</th><th>Grad Percentage</th><th>PG Percentage</th><th>Experience in Months</th></tr>";
                     for (var i = 0; i < data.TrainApplicants.length; i++) {
 
-                        trhtml += "<tr> <td>" + data.TrainApplicants[i].ApplicantId + "</td> <td>" + data.TrainApplicants[i].Name + "</td> <td>" + data.TrainApplicants[i].AppDate + "</td> <td> " + data.TrainApplicants[i].SSCPercent + "</td> <td> " + data.TrainApplicants[i].HSCPercent + "</td> <td> " + data.TrainApplicants[i].GradPercent + "</td> <td> " + data.TrainApplicants[i].PGPercent + "</td> <td> " + data.TrainApplicants[i].Experience + "</td> <td> <input type=\"button\" value=\"Select\" onclick=\"Select()\" /> </td> <td> <input type=\"button\" value=\"Reject\" onclick=\"Reject()\" /> </td></tr>";
+                        trhtml += "<tr> <td>" + data.TrainApplicants[i].ApplicantId + "</td> <td>" + data.TrainApplicants[i].Name + "</td> <td>" + data.TrainApplicants[i].AppDate + "</td> <td> " + data.TrainApplicants[i].SSCPercent + "</td> <td> " + data.TrainApplicants[i].HSCPercent + "</td> <td> " + data.TrainApplicants[i].GradPercent + "</td> <td> " + data.TrainApplicants[i].PGPercent + "</td> <td> " + data.TrainApplicants[i].Experience + "</td> <td> <input type=\"button\" value=\"Select\" onclick=\"Select('" + data.TrainApplicants[i].ApplicantId + "','" + trainId + "')\" /> </td> <td> <input type=\"button\" value=\"Reject\" onclick=\"Reject('" + data.TrainApplicants[i].ApplicantId + "','" + trainId + "')\" /> </td></tr>";
                     }
 
                     trhtml += "</table>";
@@ -84,20 +84,53 @@
         });
     }
 
-       function Select() {
+       function Select(userId, trainId) {
            alert("Selected");
+           var url = "/TRep/SelectTrainingCandidate/";
+           $.ajax({
+               url: url,
+               data: { applicantId: userId },
+               cache: false,
+               type: "POST",
+               success: function (data) {
+
+                   ViewApplicants(trainId);
+
+               },
+               error: function (reponse) {
+
+                   alert("error : " + reponse);
+               }
+           });
        }
 
-       function Reject() {
+       function Reject(userId, trainId) {
            alert("Rejected");
+           var url = "/TRep/RejectTrainingCandidate/";
+           $.ajax({
+               url: url,
+               data: { applicantId: userId },
+               cache: false,
+               type: "POST",
+               success: function (data) {
+
+                   ViewApplicants(trainId);
+
+               },
+               error: function (reponse) {
+
+                   alert("error : " + reponse);
+               }
+           });
        }
+
 </script> 
 
 
 <h2>VIEW TRAINING APPLICANTS</h2>
 
 <div>
-    <p>Job Offer Id</p> 
+    <p>Training Offer Id</p> 
     
     @Html.DropDownList("ddltrainid", new SelectList(@ViewBag.TrainIdL), "--Select--", new { @id = "ddljobid", @style = "width:200px;" , @onchange = "javascript:GetTraining(this.value);" }) 
       
@@ -113,6 +146,10 @@
 
   </div> 
   
+<div id ="ShowError" class ="display"> 
+      
+
+</div> 
 
 
 
