@@ -12,7 +12,7 @@
 
 @*<script src="http://ajapx.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>*@
 <script>
-    function SelectStream(companyname)
+    function SelectStream(companyname)//come here to get the list of checkboxes populated
     {
         $("#errormessage").html("");
         $("#SelectStream").html("");
@@ -62,7 +62,8 @@
             });
         }
     }
-    function stream_table(stream,company)
+
+    function stream_table(stream, company)
     {
         alert(stream);
 
@@ -109,7 +110,7 @@
                     $('#showtable  tr').remove();
                     
                     $('#showtable').append(html);
-                    str = "Correspondance Address <input type=\"text\" name=\"CorrespondAddr\" value=\""+addr+"\" maxlength=\"50\"/>";
+                    str = "Correspondance Address <input type=\"text\" id=\"correspondAddr\" name=\"CorrespondAddr\" value=\""+addr+"\" maxlength=\"50\"/>";
                     $('#correspAddr').html("");
                     $('#correspAddr').append(str);
                     str = "<input type=\"submit\" value=\"Apply For Job\" onclick=\"return OnSubmit()\"/>";
@@ -130,6 +131,14 @@
         if ($("input[type=checkbox]:checked").length == 0)
         {
             str = "Select a Job From The List!!!!!!";
+            $('#errormessage').html("");
+            $('#errormessage').append(str);
+
+        }
+        else if ($("#correspondAddr").val() == "")
+        {
+
+            str = "Fill In the Correspondance Address To Proceed !!!!!!";
             $('#errormessage').html("");
             $('#errormessage').append(str);
 
@@ -177,7 +186,7 @@
 <div id="addbutton">
     @*<input type="button" value="Apply For Job" onclick="return func3()"/>*@
 </div>
-    <div id="errormessage">
+    <div id="errormessage" style="font-size:40px ; color:darkblue">
 
     </div>
 </form> 

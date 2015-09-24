@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewBag.Title = "ApplyForTraining";
 }
 
@@ -13,14 +14,16 @@
     {
         if ($("#CheckB :checkbox:checked").length > 0)
         {
-            alert("checked");
+            //alert("checked");
             $("input[name='CorrespondAddr']").attr("disabled", true);
             $("#Corraddr").val($("#address").val());
             $("#Corrcontact").val($("#contact").val());
+            $("#Corraddr").css("background-color","lightgrey");
+            $("#Corrcontact").css("background-color","lightgrey");
         }
         else
         {
-            alert("not checked");
+            //alert("not checked");
             $("input[name='CorrespondAddr']").attr("disabled", false);
             $("input[name='CorrespondAddr']").val("");
         }
@@ -35,9 +38,10 @@
         var correspondAddr=$("#Corraddr").val();
         var correspondContact=$("#Corrcontact").val();
         var addr=$("#address").val();
-        var email=$("emailid").val();
+        var email=$("#emailid").val();
         var contact=$("#contact").val();
-
+        var pattern=/^[a-zA-Z0-9._-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+        
         //alert(userid1 + "  "  + trainingid1 + "  "  + correspondAddr + "  "  + correspondContact);
         if(trainingid1=="" || correspondAddr=="" || correspondContact==""|| addr==""|| email==""|| contact=="")
         {
@@ -45,6 +49,12 @@
             $("#message").html("");
             $("#message").html(str);
                 
+        }
+        else if(!pattern.test(email))
+        {
+            var str="Input Correct EmailID !!!!!";
+            $("#message").html("");
+            $("#message").html(str);
         }
         else
         {
@@ -59,7 +69,8 @@
                     $("#message").html("");
                     $("#message").html(str);
                     $("#ApplyButton").remove();
-                    //window.location.assign("/Applicant/Index");
+                    alert(str);
+                    window.location.assign("/Applicant/Index");
 
                 },
                 error: function (reponse) {
@@ -80,9 +91,6 @@
 
 <h2>Apply For Training</h2>
 
-<div id="message">
-
-</div>
 <h3>Personal Details</h3>
 
 <table>
@@ -213,4 +221,9 @@
 <div class="Buttons">
 <button id="ApplyButton" onclick="javascript: ApplyButton()">Apply</button>
 <button onclick="location.href= '@Url.Action("SearchForTraining", "Applicant")'">Back</button>
+</div>
+
+
+<div id="message" style="font-size:40px ; color:darkblue">
+
 </div>

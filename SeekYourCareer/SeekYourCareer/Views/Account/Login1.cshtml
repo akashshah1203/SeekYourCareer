@@ -4,7 +4,8 @@
     ViewBag.Title = "Login";
 }
 <style>
-    .editor-field input[type="radio"] {
+    .editor-field input[type="radio"] 
+    {
         width:50px;
     }
     </style>
@@ -25,7 +26,6 @@
             @Html.RadioButtonFor(model => model.TypeOfUser, "Applicant") Applicant
             @Html.RadioButtonFor(model => model.TypeOfUser, "Representative") Representative
             @Html.ValidationMessageFor(model => model.TypeOfUser)
-            
         </div>
 
         <div class="editor-label">

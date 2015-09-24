@@ -4,6 +4,45 @@
     ViewBag.Title = "Register";
 }
 
+
+<script>
+    function CheckUserAvailability()
+    {
+        var username = document.getElementById("UserName").value;
+        var serviceurl = "http://localhost:51074/Service1.svc/CheckAvailability?username=" + username;
+        jQuery.support.cors = true;
+        $.ajax({
+            url: serviceurl,
+            cache: false,
+            type: "GET",
+            async: false,
+            dataType: "jsonp",
+            success: function (data) {
+                console.log(data);
+                var retval = JSON.parse(data);
+
+                if (retval["available"] == false)
+                {
+                    alert("Username Not Available.")
+                    document.getElementById("Register").disabled = true;
+                    $("#Register").attr("disabled",true);
+                }
+                else {
+                    document.getElementById("Register").disabled = false;
+                    $("#Register").attr("disabled", false);
+                    alert("Username Available.")
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                debugger;
+                alert("Service Error");
+            }
+        });
+    }
+</script>
+
+
+
 <h2>Register</h2>
 
 @using (Html.BeginForm()) {
@@ -20,7 +59,7 @@
             @Html.EditorFor(model => model.UserName)
             @Html.ValidationMessageFor(model => model.UserName)
         </div>
-
+        <input type="button" value="Check Username" onclick="CheckUserAvailability()"/>
         <div class="editor-label">
             @Html.LabelFor(model => model.Password)
         </div>
@@ -142,7 +181,7 @@
         </div>
 
         <p>
-            <input type="submit" value="Create" />
+            <input type="submit" value="Create" id="Register" disabled/>
         </p>
     </fieldset>
 }

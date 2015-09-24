@@ -14,8 +14,8 @@ namespace SeekYourCareer.Controllers
             string usertype=(string)Session["TypeOfUser"];
             Console.WriteLine(Session["TypeOfUser"]);
             if (Session["TypeOfUser"] == null)
-            { 
-            
+            {
+                return RedirectToAction("Login","Account");
             }
             else if (usertype.CompareTo("Admin") == 0)
             {
