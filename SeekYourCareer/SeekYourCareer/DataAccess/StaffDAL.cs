@@ -133,7 +133,7 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT A.UserID, A.ApplicantId, B.Name, B.SSCPercent, B.HSCPercent, B.GradPercent, B.PGPercent, B.HaveWorkExp from dbo.JobApplications A, dbo.UserDetails B WHERE A.UserID = B.UserID AND A.JobId = @filtervalue;";
+                "SELECT A.UserID, A.ApplicantId, B.Name, B.SSCPercent, B.HSCPercent, B.GradPercent, B.PGPercent, B.HaveWorkExp from dbo.JobApplications A, dbo.UserDetails B WHERE A.Status = 'Pending' AND A.UserID = B.UserID AND A.JobId = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -236,7 +236,7 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT A.ApplicantId, A.Name, A.AppDate, B.SSCPercent, B.HSCPercent, B.GradPercent, B.PGPercent, B.WorkExpYears from dbo.TrainingAppln A, dbo.UserDetails B WHERE A.UserID = B.UserID AND A.TrainingId = @filtervalue;";
+                "SELECT A.ApplicantId, A.Name, convert(varchar, A.AppDate), B.SSCPercent, B.HSCPercent, B.GradPercent, B.PGPercent, B.WorkExpYears from dbo.TrainingAppln A, dbo.UserDetails B WHERE A.UserID = B.UserID AND A.TrainingId = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -250,7 +250,7 @@ namespace SeekYourCareer.DataAccess
                     TrainApplicant obj = new TrainApplicant();
                     obj.ApplicantId = Convert.ToInt32(reader[0]);
                     obj.Name = Convert.ToString(reader[1]);
-                    obj.AppDate = Convert.ToDateTime(reader[2]);
+                    obj.AppDate = Convert.ToString(reader[2]);
                     obj.SSCPercent = Convert.ToDouble(reader[3]);
                     obj.HSCPercent = Convert.ToDouble(reader[4]);
                     obj.GradPercent = Convert.ToDouble(reader[5]);
@@ -299,7 +299,7 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT A.ApplicantId, A.UserID, A.JobId, A.AppDate, A.Correspondance, A.Status, B.Name, B.DOB, B.ContactNumber, B.EmailID from dbo.JobApplications A, dbo.UserDetails B WHERE A.UserID = B.UserID and A.JobId = @filtervalue;";
+                "SELECT A.ApplicantId, A.UserID, A.JobId, convert(varchar, A.AppDate), A.Correspondance, A.Status, B.Name, CONVERT(int, ROUND(DATEDIFF(hour,B.DOB,GETDATE())/8766.0,0)), B.ContactNumber, B.EmailID from dbo.JobApplications A, dbo.UserDetails B WHERE A.UserID = B.UserID and A.JobId = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -314,11 +314,11 @@ namespace SeekYourCareer.DataAccess
                     jobappln.ApplicantId = Convert.ToInt32(reader[0]);
                     jobappln.UserID = Convert.ToInt32(reader[1]);
                     jobappln.JobId = Convert.ToString(reader[2]);
-                    jobappln.AppDate = Convert.ToDateTime(reader[3]);
+                    jobappln.AppDate = Convert.ToString(reader[3]);
                     jobappln.Correspondance = Convert.ToString(reader[4]);
                     jobappln.Status = Convert.ToString(reader[5]);
                     jobappln.Name = Convert.ToString(reader[6]);
-                    jobappln.Age = Convert.ToDateTime(reader[7]);
+                    jobappln.Age = Convert.ToInt32(reader[7]);
                     jobappln.ContactNo = Convert.ToString(reader[8]);
                     jobappln.EmailId = Convert.ToString(reader[9]);
 
@@ -531,7 +531,7 @@ namespace SeekYourCareer.DataAccess
                     trainingappln.UserID = Convert.ToInt32(reader[1]);
                     trainingappln.Name = Convert.ToString(reader[2]);
                     trainingappln.TrainingId = Convert.ToString(reader[3]);
-                    trainingappln.AppDate = Convert.ToDateTime(reader[4]);
+                    trainingappln.AppDate = Convert.ToString(reader[4]);
                     trainingappln.CorrAddress = Convert.ToString(reader[5]);
                     trainingappln.ContactNo = Convert.ToString(reader[6]);
                     trainingappln.SelectionStatus = Convert.ToString(reader[7]);

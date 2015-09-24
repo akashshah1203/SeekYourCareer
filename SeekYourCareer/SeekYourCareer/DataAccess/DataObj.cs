@@ -121,7 +121,7 @@ namespace SeekYourCareer.DataAccess
 
         public int GetUserID(string Username)
         {
-            int id;
+            int id=0;
             string connectionString = Connstr();
             SqlConnection connection = new SqlConnection(connectionString);
             string queryString = null;

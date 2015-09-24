@@ -7,33 +7,40 @@
 <script src="http://ajapx.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script>
     function GetApplicants(trainingId) {
+        $('#mytable').empty();
+        $('#DetailsDiv').empty();
+        if (trainingId == '')
+            alert("Select Training Id");
+        else {
+            var url = "/Staff/RSelTrainCan/";
 
-        var url = "/Staff/RSelTrainCan/";
+            $.ajax({
+                url: url,
+                data: { trainid: trainingId },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    if (data.TrainApplications.length == 0)
+                        $('#mytable').html("No records to display");
+                    else {
+                        var trhtml = "<table><tr><th>Applicant Id</th><th>Name</th></tr>";
 
-        $.ajax({
-            url: url,
-            data: { trainid: trainingId },
-            cache: false,
-            type: "POST",
-            success: function (data) {
-                var trhtml = "<table><tr><th>Applicant Id</th><th>Name</th></tr>";
+                        for (var i = 0; i < data.TrainApplications.length; i++) {
 
-                for (var i = 0; i < data.TrainApplications.length; i++) {
-                                        
-                    trhtml += "<tr> <td>" + data.TrainApplications[i].ApplicantId + "</td> <td> " + data.TrainApplications[i].Name + "</td> <td> <input type=\"button\" value=\"Details\" onclick=\"GetDetails('" + data.TrainApplications[i].ApplicantId + "','" + data.TrainApplications[i].TrainingId + "','" + data.TrainApplications[i].AppDate + "','" + data.TrainApplications[i].CorrAddress + "','" + data.TrainApplications[i].ContactNo + "','" + data.TrainApplications[i].SelectionStatus + "')\" /> </td> </tr>";
+                            trhtml += "<tr> <td>" + data.TrainApplications[i].ApplicantId + "</td> <td> " + data.TrainApplications[i].Name + "</td> <td> <input type=\"button\" value=\"Details\" onclick=\"GetDetails('" + data.TrainApplications[i].ApplicantId + "','" + data.TrainApplications[i].TrainingId + "','" + data.TrainApplications[i].AppDate + "','" + data.TrainApplications[i].CorrAddress + "','" + data.TrainApplications[i].ContactNo + "','" + data.TrainApplications[i].SelectionStatus + "')\" /> </td> </tr>";
+                        }
+
+                        $('#mytable tbody > tr').remove();
+                        $('#mytable').append(trhtml);
+                    }
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
                 }
-                
-                $('#mytable tbody > tr').remove();
-                $('#mytable').append(trhtml);
+            });
 
-            },
-            error: function (reponse) {
-
-                alert("error : " + reponse);
-            }
-        });
-
-
+        }
     }
 
     function TestFn(temp,nemp)
@@ -61,10 +68,10 @@ document.getElementById("nodeGoto").addEventListener("click", function() {
 }, false);
 </script>
 
-<h2>SelTrainCan</h2>
+<h2>Shortlisted Training Candidates</h2>
 
 <div>
-    <p>Select Branch</p> 
+    <p>Select Training Id</p> 
     
     @Html.DropDownList("ddltrainid", new SelectList(@ViewBag.MyList), "--Select--", new { @id = "ddltrainid", @style = "width:200px;" , @onchange = "javascript:GetApplicants(this.value);" }) 
       

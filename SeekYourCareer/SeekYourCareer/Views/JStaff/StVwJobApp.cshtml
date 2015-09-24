@@ -10,6 +10,11 @@
         $('#SelectDomain').empty();
         $('#mytable').empty();
         $('#ApplicantDiv').empty();
+        if (company == '') {
+            alert('Select Company');
+            $('#SelectDomain').empty();
+        }
+        else {
             var url = "/JStaff/StVwJobApp1";
 
             $.ajax({
@@ -20,7 +25,7 @@
                 success: function (data) {
 
                     var trhtml;
-                    trhtml = 'Stream Code <select name="DD" id="selectData" onchange="GetJobIDs()">';
+                    trhtml = '<br/>Stream Code <br/><br/><select name="DD" id="selectData" onchange="GetJobIDs()">';
                     trhtml += '<option value="">' + '--Select--' + '</option>';
                     for (var i = 0; i < data.length; i++) {
                         trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
@@ -35,7 +40,7 @@
                     alert("error : " + reponse);
                 }
             });
-        
+        }
     }
 
     function GetJobIDs() {
@@ -43,33 +48,39 @@
         $('#mytable').empty();
         $('#ApplicantDiv').empty();
         Domain = document.getElementById("selectData").value;
-        var url = "/JStaff/StVwJobApp2";
-        
-        $.ajax({
-            url: url,
-            data: { streamcode: Domain },
-            cache: false,
-            type: "POST",
-            success: function (data) {
-                
+        if (Domain == '') {
+            alert('Select Stream Code');
+            $('#SelectJob').empty();
+        }
+        else {
+            var url = "/JStaff/StVwJobApp2";
+
+            $.ajax({
+                url: url,
+                data: { streamcode: Domain },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+
                     var trhtml;
-                    trhtml = 'Select Job Offer Id <select name="DD" id="selectData1" onchange="Caller()">';
+                    trhtml = '<br/>Select Job Offer Id <br/><br/><select name="DD" id="selectData1" onchange="Caller()">';
                     trhtml += '<option value="">' + '--Select--' + '</option>';
                     for (var i = 0; i < data.length; i++) {
                         trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
                     }
                     trhtml += "</select>";
 
-                    trhtml += "<input type=\"button\" value=\"View\" onclick= \"GetJobPreReq()\"/>";
+                    trhtml += "<br/><br/><input type=\"button\" value=\"View Job Details\" onclick= \"GetJobPreReq()\"/>";
                     $('#SelectJob').append(trhtml);
                     //$('body').on('change', '#selectData', Caller);
-                
-            },
-            error: function (reponse) {
-                alert("Error");
-                alert("error : " + reponse);
-            }
-        });
+
+                },
+                error: function (reponse) {
+                    alert("Error");
+                    alert("error : " + reponse);
+                }
+            });
+        }
     }
 
     function Caller() {
@@ -127,15 +138,18 @@
                 cache: false,
                 type: "POST",
                 success: function (data) {
-                    var trhtml = "<table><tr><th>ApplicantId</th><th>Name</th><th>SSC Percentage</th><th>HSC Percentage</th><th>PG Percentage</th><th>Graduation Percentage</th><th>Experience</th></tr>";
-                    for (var i = 0; i < data.JobApplicants.length; i++) {
+                    if (data.JobApplicants.length == 0)
+                        $('#ApplicantDiv').html("No records to display");
+                    else {
+                        var trhtml = "<table><tr><th>Name</th><th>SSC Percentage</th><th>HSC Percentage</th><th>PG Percentage</th><th>Graduation Percentage</th><th>Experience</th></tr>";
+                        for (var i = 0; i < data.JobApplicants.length; i++) {
 
-                        trhtml += "<tr> <td> " + data.JobApplicants[i].Name + "</td> <td> " + data.JobApplicants[i].SSCPercent + "</td> <td> " + data.JobApplicants[i].HSCPercent + "</td> <td> " + data.JobApplicants[i].GradPercent + "</td> <td> " + data.JobApplicants[i].PGPercent + "</td> <td> " + data.JobApplicants[i].HaveWorkExp + "</td> </tr>";
+                            trhtml += "<tr> <td> " + data.JobApplicants[i].Name + "</td> <td> " + data.JobApplicants[i].SSCPercent + "</td> <td> " + data.JobApplicants[i].HSCPercent + "</td> <td> " + data.JobApplicants[i].GradPercent + "</td> <td> " + data.JobApplicants[i].PGPercent + "</td> <td> " + data.JobApplicants[i].HaveWorkExp + "</td> </tr>";
+                        }
+
+                        trhtml += "</table>";
+                        $('#ApplicantDiv').html(trhtml);
                     }
-
-                    trhtml += "</table>";
-                    $('#ApplicantDiv').html(trhtml);
-
                 },
                 error: function (reponse) {
 

@@ -11,7 +11,7 @@ namespace SeekYourCareer.DataAccess
 {
     public class RepresentativeDAL
     {
-        public int AddSelectedApplicant(string applicantid)
+        public int SelectJobApplicant(int applicantid)
         {
             string connectionString ="Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"+ "Integrated Security=True";
 
@@ -24,7 +24,86 @@ namespace SeekYourCareer.DataAccess
                 command.ExecuteNonQuery();
                 connection.Close();
             }
+            return (0);
+        }
 
+        public int RejectJobApplicant(int applicantid)
+        {
+            string connectionString = "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;" + "Integrated Security=True";
+
+            string queryString = "Update JobApplications SET Status='Rejected' where ApplicantId=@user";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@user", applicantid);
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            return (0);
+        }
+
+        public int SelectTrainingApplicant(int applicantid)
+        {
+            string connectionString = "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;" + "Integrated Security=True";
+
+            string queryString = "Update TrainingAppln SET SelectionStatus='Selected' where ApplicantId=@user";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@user", applicantid);
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            return (0);
+        }
+
+        public int RejectTrainingApplicant(int applicantid)
+        {
+            string connectionString = "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;" + "Integrated Security=True";
+
+            string queryString = "Update TrainingAppln SET SelectionStatus='Rejected' where ApplicantId=@user";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@user", applicantid);
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            return (0);
+        }
+
+        public int SelectWorkshopApplicant(int applicantid)
+        {
+            string connectionString = "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;" + "Integrated Security=True";
+
+            string queryString = "Update WorkshopAppln SET Status='Selected' where ApplicantId=@user";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@user", applicantid);
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            return (0);
+        }
+
+        public int RejectWorkshopApplicant(int applicantid)
+        {
+            string connectionString = "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;" + "Integrated Security=True";
+
+            string queryString = "Update WorkshopAppln SET Status='Rejected' where ApplicantId=@user";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@user", applicantid);
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
             return (0);
         }
 
@@ -63,7 +142,7 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT A.ApplicantId, A.WorkshopId, A.AppDate, B.Name, B.DOB, B.Address, B.ContactNumber, B.EmailID from dbo.WorkshopAppln A, dbo.UserDetails B WHERE A.UserId = B.UserID and A.Status = 'Selected' and A.WorkshopId = @filtervalue;";
+                "SELECT A.ApplicantId, A.WorkshopId, convert(varchar, A.AppDate), B.Name, B.DOB, B.Address, B.ContactNumber, B.EmailID from dbo.WorkshopAppln A, dbo.UserDetails B WHERE A.UserId = B.UserID and A.Status = 'Selected' and A.WorkshopId = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -77,7 +156,7 @@ namespace SeekYourCareer.DataAccess
                     WSSelectedApp wsappdetail = new WSSelectedApp();
                     wsappdetail.ApplicantId = Convert.ToInt32(reader[0]);
                     wsappdetail.WorkshopId = Convert.ToInt32(reader[1]);
-                    wsappdetail.AppDate = Convert.ToDateTime(reader[2]);
+                    wsappdetail.AppDate = Convert.ToString(reader[2]);
                     wsappdetail.Name = Convert.ToString(reader[3]);
                     wsappdetail.DOB = Convert.ToDateTime(reader[4]);
                     wsappdetail.Address = Convert.ToString(reader[5]);
@@ -102,7 +181,7 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT * from dbo.TrainingAppln WHERE TrainingId = @filtervalue;";
+                "SELECT ApplicantId, UserID, Name, TrainingId, convert(varchar, AppDate), CorrAddress, CorrContact, SelectionStatus from dbo.TrainingAppln WHERE TrainingId = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -118,7 +197,7 @@ namespace SeekYourCareer.DataAccess
                     trainingappln.UserID = Convert.ToInt32(reader[1]);
                     trainingappln.Name = Convert.ToString(reader[2]);
                     trainingappln.TrainingId = Convert.ToString(reader[3]);
-                    trainingappln.AppDate = Convert.ToDateTime(reader[4]);
+                    trainingappln.AppDate = Convert.ToString(reader[4]);
                     trainingappln.CorrAddress = Convert.ToString(reader[5]);
                     trainingappln.ContactNo = Convert.ToString(reader[6]);
                     trainingappln.SelectionStatus = Convert.ToString(reader[7]);
@@ -132,7 +211,7 @@ namespace SeekYourCareer.DataAccess
         }
 
         //List all training ids for which candidates have applied
-        public List<string> TrainingIDListApplied()
+        public List<string> TrainingIDListApplied(string RepName)
         {
             List<string> TrainingIds = new List<string>();
 
@@ -141,11 +220,12 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT distinct TrainingId from dbo.TrainingAppln;";
+                "SELECT distinct A.TrainingId from dbo.TrainingAppln A, dbo.TrainingDetails B WHERE A.TrainingId = B.TrainingID AND B.CompanyName=@filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@filtervalue", RepName);
 
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -159,7 +239,7 @@ namespace SeekYourCareer.DataAccess
         }
 
         //Details of applicants who applied for a workshop and are pending
-        public WSPendAppViewModel PendingWSApplications(string wid)
+        public WSPendAppViewModel PendingWSApplications(string wid, string repName)
         {
             WSPendAppViewModel WSPendApps = new WSPendAppViewModel();
             WSPendApps.PendingApps = new List<WSPendingApp>();
@@ -169,11 +249,12 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT A.UserId, B.Name, B.GradPercent, B.PGPercent, B.WorkExpYears from dbo.WorkshopAppln A, dbo.UserDetails B WHERE A.UserId = B.UserID AND A.WorkshopId = @filtervalue;";
+                "SELECT A.ApplicantId, A.UserId, B.Name, B.GradPercent, B.PGPercent, B.WorkExpYears from dbo.WorkshopAppln A, dbo.UserDetails B, dbo.RepDetails C, dbo.WorkshopDetails D WHERE A.UserId = B.UserID AND A.Status = 'Pending' AND A.WorkshopId = D.WorkshopId AND C.RepID = D.RepId AND C.CompanyName =@companyFilter AND A.WorkshopId = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@companyFilter", repName);
                 command.Parameters.AddWithValue("@filtervalue", wid);
 
                 connection.Open();
@@ -181,11 +262,12 @@ namespace SeekYourCareer.DataAccess
                 while (reader.Read())
                 {
                     WSPendingApp obj = new WSPendingApp();
-                    obj.UserId = Convert.ToInt32(reader[0]);
-                    obj.Name = Convert.ToString(reader[1]);
-                    obj.GradPercent = Convert.ToDouble(reader[2]);
-                    obj.PGPercent = Convert.ToDouble(reader[3]);
-                    obj.WorkExpYears = Convert.ToInt32(reader[4]);
+                    obj.ApplicantId = Convert.ToInt32(reader[0]);
+                    obj.UserId = Convert.ToInt32(reader[1]);
+                    obj.Name = Convert.ToString(reader[2]);
+                    obj.GradPercent = Convert.ToDouble(reader[3]);
+                    obj.PGPercent = Convert.ToDouble(reader[4]);
+                    obj.WorkExpYears = Convert.ToInt32(reader[5]);
 
                     WSPendApps.PendingApps.Add(obj);
                 }
@@ -226,7 +308,7 @@ namespace SeekYourCareer.DataAccess
         }
 
         //Returns workshop ids for which there are applications that are yet to be approved
-        public List<string> PendingWorkshopIDs(string domain)
+        public List<string> PendingWorkshopIDs(string domain, string repName)
         {
             List<string> WIDs = new List<string>();
 
@@ -235,11 +317,12 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT A.WorkshopId from dbo.WorkshopDetails A, dbo.WorkshopAppln B WHERE A.WorkshopId = B.WorkshopId AND B.Status = 'Pending' AND A.Domain = @filtervalue;";
+                "SELECT A.WorkshopId from dbo.WorkshopDetails A, dbo.WorkshopAppln B, dbo.RepDetails C WHERE A.WorkshopId = B.WorkshopId AND A.RepId = C.RepID AND C.CompanyName= @filter AND B.Status = 'Pending' AND A.Domain = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@filter", repName);
                 command.Parameters.AddWithValue("@filtervalue", domain);
 
                 connection.Open();
@@ -254,7 +337,7 @@ namespace SeekYourCareer.DataAccess
         }
 
         //List all workshop domains
-        public List<string> WorkshopDomainsAll()
+        public List<string> WorkshopDomainsAll(string RepName)
         {
             List<string> Domains = new List<string>();
 
@@ -263,11 +346,12 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT distinct Domain from dbo.WorkshopDetails;";
+                "SELECT distinct Domain from dbo.WorkshopDetails A, dbo.RepDetails B WHERE A.RepId = B.RepID AND B.CompanyName=@filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@filtervalue", RepName);
 
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -358,7 +442,7 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT A.ApplicantId, A.Name, A.AppDate, B.SSCPercent, B.HSCPercent, B.GradPercent, B.PGPercent, B.WorkExpYears from dbo.TrainingAppln A, dbo.UserDetails B WHERE A.UserID = B.UserID AND A.TrainingId = @filtervalue;";
+                "SELECT A.ApplicantId, A.Name, convert(varchar, A.AppDate), B.SSCPercent, B.HSCPercent, B.GradPercent, B.PGPercent, B.WorkExpYears from dbo.TrainingAppln A, dbo.UserDetails B WHERE A.UserID = B.UserID AND A.SelectionStatus = 'Pending' AND A.TrainingId = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -372,7 +456,7 @@ namespace SeekYourCareer.DataAccess
                     TrainApplicant obj = new TrainApplicant();
                     obj.ApplicantId = Convert.ToInt32(reader[0]);
                     obj.Name = Convert.ToString(reader[1]);
-                    obj.AppDate = Convert.ToDateTime(reader[2]);
+                    obj.AppDate = Convert.ToString(reader[2]);
                     obj.SSCPercent = Convert.ToDouble(reader[3]);
                     obj.HSCPercent = Convert.ToDouble(reader[4]);
                     obj.GradPercent = Convert.ToDouble(reader[5]);
@@ -386,7 +470,7 @@ namespace SeekYourCareer.DataAccess
         }
 
         //List of JobIds from Job Applications table to see pending applications
-        public List<string> JobIDListAll()
+        public List<string> JobIDListAll(string RepName)
         {
             List<string> JobIDs = new List<string>();
 
@@ -395,12 +479,13 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT distinct JobId from dbo.JobApplications;";
+                "SELECT distinct A.JobId from dbo.JobApplications A, dbo.JobDetails B, dbo.RepDetails C WHERE A.JobId = B.JobId AND B.RepId = C.RepID AND C.CompanyName=@filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
-                
+                command.Parameters.AddWithValue("@filtervalue", RepName);
+
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
@@ -423,7 +508,7 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT A.ApplicantId, A.UserID, A.JobId, A.AppDate, A.Correspondance, A.Status, B.Name, B.DOB, B.ContactNumber, B.EmailID from dbo.JobApplications A, dbo.UserDetails B WHERE A.UserID = B.UserID and A.Status = 'Selected' and A.JobId = @filtervalue;";
+                "SELECT A.ApplicantId, A.UserID, A.JobId, convert(varchar, A.AppDate), A.Correspondance, A.Status, B.Name, convert(int, ROUND(DATEDIFF(hour,B.DOB,GETDATE())/8766.0,0)), B.ContactNumber, B.EmailID from dbo.JobApplications A, dbo.UserDetails B WHERE A.UserID = B.UserID and A.Status = 'Selected' and A.JobId = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -438,11 +523,11 @@ namespace SeekYourCareer.DataAccess
                     jobappln.ApplicantId = Convert.ToInt32(reader[0]);
                     jobappln.UserID = Convert.ToInt32(reader[1]);
                     jobappln.JobId = Convert.ToString(reader[2]);
-                    jobappln.AppDate = Convert.ToDateTime(reader[3]);
+                    jobappln.AppDate = Convert.ToString(reader[3]);
                     jobappln.Correspondance = Convert.ToString(reader[4]);
                     jobappln.Status = Convert.ToString(reader[5]);
                     jobappln.Name = Convert.ToString(reader[6]);
-                    jobappln.Age = Convert.ToDateTime(reader[7]);
+                    jobappln.Age = Convert.ToInt32(reader[7]);
                     jobappln.ContactNo = Convert.ToString(reader[8]);
                     jobappln.EmailId = Convert.ToString(reader[9]);
 
@@ -454,15 +539,16 @@ namespace SeekYourCareer.DataAccess
         }
 
         //Returns List of stream codes from Job Details table - 
-        public List<String> JobStreamCodes()
+        public List<String> JobStreamCodes(string RepName)
         {
             List<string> StreamCodes = new List<string>();
             string connectionString = "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;" + "Integrated Security=True";
 
-            string queryString = "SELECT distinct StreamCode from dbo.JobDetails;";
+            string queryString = "SELECT distinct A.StreamCode from dbo.JobDetails A, dbo.RepDetails B WHERE A.RepId = B.RepID AND B.CompanyName=@filtervalue;";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@filtervalue", RepName);
 
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -545,7 +631,7 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT A.UserID, A.ApplicantId, B.Name, B.SSCPercent, B.HSCPercent, B.GradPercent, B.PGPercent, B.HaveWorkExp from dbo.JobApplications A, dbo.UserDetails B WHERE A.UserID = B.UserID AND A.JobId = @filtervalue;";
+                "SELECT A.UserID, A.ApplicantId, B.Name, B.SSCPercent, B.HSCPercent, B.GradPercent, B.PGPercent, B.HaveWorkExp from dbo.JobApplications A, dbo.UserDetails B WHERE A.UserID = B.UserID AND A.Status = 'Pending' AND A.JobId = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {

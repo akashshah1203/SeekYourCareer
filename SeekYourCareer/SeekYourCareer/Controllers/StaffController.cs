@@ -18,6 +18,16 @@ namespace SeekYourCareer.Controllers
 
         public ActionResult Index()
         {
+            string type = (string)Session["TypeOfUser"];
+            if (type == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else if (type.CompareTo("Admin") != 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             SelectedTrainees selecttrainee = new SelectedTrainees();
             selecttrainee.CompanyModel = new List<Company>();
             selecttrainee.TrainingModel = new List<TrainingL>();
@@ -59,7 +69,18 @@ namespace SeekYourCareer.Controllers
         [HttpGet]
         public ActionResult RSelTrainCan()
         {
-            List<string> TrainingIds = new DataAccess.RepresentativeDAL().TrainingIDListApplied();
+            string type = (string)Session["TypeOfUser"];
+            if (type == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else if (type.CompareTo("Representative") != 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            string RepName = (string)(Session["Username"]);
+            List<string> TrainingIds = new DataAccess.RepresentativeDAL().TrainingIDListApplied(RepName);
            
             ViewBag.MyList = TrainingIds;
             return View();

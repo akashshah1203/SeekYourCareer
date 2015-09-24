@@ -9,7 +9,7 @@ namespace SeekYourCareer.Models
     {
         public int ApplicantId { get; set; }
         public int WorkshopId { get; set; }
-        public DateTime AppDate { get; set; }
+        public string AppDate { get; set; }
 
         public string Name { get; set; }
         public DateTime DOB { get; set; }

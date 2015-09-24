@@ -18,9 +18,10 @@
             cache: false,
             type: "POST",
             success: function (data) {
-                
+                if (data.length == 0)
+                    $('#ShowError').html("No pending workshop applicants");
                 var trhtml;
-                trhtml = 'Select Workshop Id <select name="DD" id="selectData" onchange="Caller()">';
+                trhtml = '<br/>Select Workshop Id <br/><br/><select name="DD" id="selectData" onchange="Caller()"><br/><br/>';
                 trhtml += '<option value="">' + '--Select--' + '</option>';
                 for (var i = 0; i < data.length; i++) {
                     trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
@@ -90,15 +91,39 @@
             cache: false,
             type: "POST",
             success: function (data) {
-                var trhtml="<table><tr><th>User Name</th><th>Graduation %</th><th>Post Graduation %</th><th>Experience</th><th>Select Applicants</th><th>Reject Applicants</th></tr>";
-           
-                for (var i = 0; i < data.PendingApps.length; i++) {
-
-                    trhtml += "<tr> <td> " + data.PendingApps[i].Name + "</td> <td> " + data.PendingApps[i].GradPercent + "</td> <td> " + data.PendingApps[i].PGPercent + "</td> <td> " + data.PendingApps[i].WorkExpYears + "</td> <td> <input type=\"button\" value=\"Select\" onclick=\"Select()\" /> </td> <td> <input type=\"button\" value=\"Reject\" onclick=\"Reject()\" /> </td></tr>";
-                }
-                trhtml += "</table>";
                 
-                $('#ApplicantDiv').html(trhtml);
+                if (data.PendingApps.length == 0)
+                    $('#ShowError').html("No records to display");
+                    else{
+                        var trhtml="<table><tr><th>User Name</th><th>Graduation %</th><th>Post Graduation %</th><th>Experience</th><th>Select Applicants</th><th>Reject Applicants</th></tr>";
+           
+                        for (var i = 0; i < data.PendingApps.length; i++) {
+
+                            trhtml += "<tr> <td> " + data.PendingApps[i].Name + "</td> <td> " + data.PendingApps[i].GradPercent + "</td> <td> " + data.PendingApps[i].PGPercent + "</td> <td> " + data.PendingApps[i].WorkExpYears + "</td> <td> <input type=\"button\" value=\"Select\" onclick=\"Select('" + data.PendingApps[i].ApplicantId + "')\" /> </td> <td> <input type=\"button\" value=\"Reject\" onclick=\"Reject('" + data.PendingApps[i].ApplicantId + "')\" /> </td></tr>";
+                        }
+                        trhtml += "</table>";
+                
+                        $('#ApplicantDiv').html(trhtml);
+                    }
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+    }
+
+    function Select(userId, wsId) {
+        alert("Selected");
+        var url = "/WRep/SelectWorkshopCandidate/";
+        $.ajax({
+            url: url,
+            data: { applicantId: userId },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+
+                ViewApplicants(wsId);
 
             },
             error: function (reponse) {
@@ -108,13 +133,26 @@
         });
     }
 
-       function Select() {
-           alert("Selected");
-       }
+    function Reject(userId, wsId) {
+        alert("Rejected");
+        var url = "/WRep/RejectWorkshopCandidate/";
+        $.ajax({
+            url: url,
+            data: { applicantId: userId },
+            cache: false,
+            type: "POST",
+            success: function (data) {
 
-       function Reject() {
-           alert("Rejected");
-       }
+                ViewApplicants(wsId);
+
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+    }
+
 </script> 
 
 
@@ -136,4 +174,8 @@
 
 <div id="ApplicantDiv" name="DetailsDiv" align="center"> 
 
+</div> 
+
+<div id ="ShowError" class ="display"> 
+    
 </div> 

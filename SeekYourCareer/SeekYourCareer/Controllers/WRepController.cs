@@ -34,7 +34,18 @@ namespace SeekYourCareer.Controllers
         [HttpGet]
         public ActionResult RVwWSApp()
         {
-            List<string> Domains = new DataAccess.RepresentativeDAL().WorkshopDomainsAll();
+            string type = (string)Session["TypeOfUser"];
+            if (type == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else if (type.CompareTo("Representative") != 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            string RepName = (string)(Session["Username"]);
+            List<string> Domains = new DataAccess.RepresentativeDAL().WorkshopDomainsAll(RepName);
             
             ViewBag.WSDomainL = Domains;
             return View();
@@ -43,7 +54,8 @@ namespace SeekYourCareer.Controllers
         [HttpPost]
         public ActionResult RVwWSApp1(string domain)
         {
-            List<string> WIDs = new DataAccess.RepresentativeDAL().PendingWorkshopIDs(domain);
+            string repName = (string)(Session["Username"]);
+            List<string> WIDs = new DataAccess.RepresentativeDAL().PendingWorkshopIDs(domain, repName);
             
             return Json(WIDs);
         }
@@ -59,9 +71,26 @@ namespace SeekYourCareer.Controllers
         [HttpPost]
         public ActionResult RVwWSApplicants(string wid)
         {
-            WSPendAppViewModel WSPendApps = new DataAccess.RepresentativeDAL().PendingWSApplications(wid);
+            string repName = (string)(Session["Username"]);
+            WSPendAppViewModel WSPendApps = new DataAccess.RepresentativeDAL().PendingWSApplications(wid, repName);
         
             return Json(WSPendApps);
+        }
+
+        [HttpPost]
+        public ActionResult SelectWorkshopCandidate(int applicantId)
+        {
+            int returnValue = new DataAccess.RepresentativeDAL().SelectWorkshopApplicant(applicantId);
+
+            return Json(returnValue);
+        }
+
+        [HttpPost]
+        public ActionResult RejectWorkshopCandidate(int applicantId)
+        {
+            int returnValue = new DataAccess.RepresentativeDAL().RejectWorkshopApplicant(applicantId);
+
+            return Json(returnValue);
         }
 
         public ActionResult Index()

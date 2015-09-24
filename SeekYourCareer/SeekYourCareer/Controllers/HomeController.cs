@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using SeekYourCareer.Models;
 
 namespace SeekYourCareer.Controllers
 {
@@ -24,6 +25,11 @@ namespace SeekYourCareer.Controllers
             }
             else if (usertype.CompareTo("Applicant") == 0)
             {
+                string username = (string)Session["Username"];
+                int userid = new DataAccess.DataObj().GetUserID(username);
+                string name = new DataAccess.DataObj().GetName(username);
+                Session["UserID"] = userid;
+                Session["Name"] = name;
                 return RedirectToAction("Index", "Applicant");
 
                 //return View("ApplicantLoginPage");

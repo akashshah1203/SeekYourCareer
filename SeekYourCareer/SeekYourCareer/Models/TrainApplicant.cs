@@ -9,7 +9,7 @@ namespace SeekYourCareer.Models
     {
         public int ApplicantId { get; set; }
         public string Name { get; set; }
-        public DateTime AppDate { get; set; }
+        public string AppDate { get; set; }
         public double SSCPercent { get; set; }
         public double HSCPercent { get; set; }
         public double GradPercent { get; set; }

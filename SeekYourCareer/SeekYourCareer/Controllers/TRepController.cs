@@ -17,6 +17,16 @@ namespace SeekYourCareer.Controllers
         [HttpGet]
         public ActionResult RVwTrainCan()
         {
+            string type = (string)Session["TypeOfUser"];
+            if (type == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else if (type.CompareTo("Representative") != 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             string RepName = (string)(Session["Username"]);
             List<string> TrainIds = new DataAccess.RepresentativeDAL().TrainingIDListAll(RepName);
 
@@ -39,6 +49,20 @@ namespace SeekYourCareer.Controllers
             TrainApplicantsViewModel TrainApps = new DataAccess.RepresentativeDAL().TrainingApplicantsFor(tid);
             
             return Json(TrainApps);
+        }
+
+        public ActionResult SelectTrainingCandidate(int applicantId)
+        {
+            int returnValue = new DataAccess.RepresentativeDAL().SelectTrainingApplicant(applicantId);
+
+            return Json(returnValue);
+        }
+
+        public ActionResult RejectTrainingCandidate(int applicantId)
+        {
+            int returnValue = new DataAccess.RepresentativeDAL().RejectTrainingApplicant(applicantId);
+
+            return Json(returnValue);
         }
 
         public ActionResult Index()

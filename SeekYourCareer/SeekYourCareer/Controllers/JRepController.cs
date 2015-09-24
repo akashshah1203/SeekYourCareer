@@ -26,7 +26,18 @@ namespace SeekYourCareer.Controllers
         [HttpGet]
         public ActionResult RSelJobCan()
         {
-            List<string> JobIds = new DataAccess.RepresentativeDAL().JobIDListAll();
+            string type = (string)Session["TypeOfUser"];
+            if (type == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else if (type.CompareTo("Representative") != 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            string RepName = (string)(Session["Username"]);
+            List<string> JobIds = new DataAccess.RepresentativeDAL().JobIDListAll(RepName);
 
             ViewBag.JobIdL = JobIds;
             return View();
@@ -47,7 +58,18 @@ namespace SeekYourCareer.Controllers
         [HttpGet]
         public ActionResult RVwJobApp()
         {
-            List<string> StreamCodes = new DataAccess.RepresentativeDAL().JobStreamCodes();
+            string type = (string)Session["TypeOfUser"];
+            if (type == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else if (type.CompareTo("Representative") != 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            string RepName = (string)(Session["Username"]);
+            List<string> StreamCodes = new DataAccess.RepresentativeDAL().JobStreamCodes(RepName);
             ViewBag.JobDomainL = StreamCodes;
             return View();
         }
@@ -78,13 +100,22 @@ namespace SeekYourCareer.Controllers
 
         //.........................................................................................................................
 
-        public ActionResult SelectJobCandidate(string applicantid)
+        [HttpPost]
+        public ActionResult SelectJobCandidate(int applicantId)
         {
-            int n = new DataAccess.RepresentativeDAL().AddSelectedApplicant(applicantid);
+            int returnValue = new DataAccess.RepresentativeDAL().SelectJobApplicant(applicantId);
 
+            return Json(returnValue);
 
-            return View();
         }
-     
+
+        [HttpPost]
+        public ActionResult RejectJobCandidate(int applicantId)
+        {
+            int returnValue = new DataAccess.RepresentativeDAL().RejectJobApplicant(applicantId);
+            
+            return Json(returnValue);
+        }
+
     }
 }

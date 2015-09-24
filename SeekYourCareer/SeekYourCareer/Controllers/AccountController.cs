@@ -41,13 +41,11 @@ namespace SeekYourCareer.Controllers
                 bool result = new DataAccess.DataObj().validateUser(model.UserName, model.Password, model.TypeOfUser);
                 if (result == true)
                 {
-                    int userid = new DataAccess.DataObj().GetUserID(model.UserName);
-                    string name = new DataAccess.DataObj().GetName(model.UserName);
+                   
                     Session["Username"] = model.UserName;
                     Session["TypeOfUser"] = model.TypeOfUser;
                     FormsAuthentication.SetAuthCookie(model.UserName, true);
-                    Session["UserID"] = userid;
-                    Session["Name"] = name;
+                    
 
                     //Session["Username"] = "akasha";
                     return RedirectToAction("Index","Home");
@@ -66,9 +64,12 @@ namespace SeekYourCareer.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            WebSecurity.Logout();
-
-            return RedirectToAction("Index", "Home");
+            //WebSecurity.Logout();
+            Session["Username"] = "";
+            Session["TypeOfUser"] = "";
+            Session["UserID"] ="";
+            Session["Name"] ="";
+            return RedirectToAction("Login", "Account");
         }
 
         //

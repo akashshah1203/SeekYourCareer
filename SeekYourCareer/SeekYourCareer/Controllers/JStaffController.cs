@@ -24,6 +24,16 @@ namespace SeekYourCareer.Controllers
         [HttpGet]
         public ActionResult StSelJobCanDD()
         {
+            string type = (string)Session["TypeOfUser"];
+            if (type == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else if (type.CompareTo("Admin") != 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             List<string> companynames = new DataAccess.StaffDAL().CompanyNames();
 
             ViewBag.CompanyNameL = companynames;
@@ -52,6 +62,16 @@ namespace SeekYourCareer.Controllers
         [HttpGet]
         public ActionResult StVwJobApp()
         {
+            string type = (string)Session["TypeOfUser"];
+            if (type == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else if (type.CompareTo("Admin") != 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             List<string> companynames = new DataAccess.StaffDAL().CompanyNames();
             
             ViewBag.JobCompanyNameL = companynames;

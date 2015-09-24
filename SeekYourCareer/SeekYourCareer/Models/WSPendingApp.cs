@@ -8,6 +8,7 @@ namespace SeekYourCareer.Models
     public class WSPendingApp
     {
         public int UserId { get; set; }
+        public int ApplicantId { get; set; }
         public string Name { get; set; }
         public double GradPercent { get; set; }
         public double PGPercent { get; set; }
