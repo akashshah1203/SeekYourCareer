@@ -24,6 +24,10 @@ namespace SeekYourCareer.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            if (Session["Username"] != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -45,7 +49,7 @@ namespace SeekYourCareer.Controllers
                     Session["Username"] = model.UserName;
                     Session["TypeOfUser"] = model.TypeOfUser;
                     FormsAuthentication.SetAuthCookie(model.UserName, true);
-                    
+                   
 
                     //Session["Username"] = "akasha";
                     return RedirectToAction("Index","Home");
@@ -65,10 +69,10 @@ namespace SeekYourCareer.Controllers
         public ActionResult LogOff()
         {
             //WebSecurity.Logout();
-            Session["Username"] = "";
-            Session["TypeOfUser"] = "";
-            Session["UserID"] ="";
-            Session["Name"] ="";
+            Session["Username"] = null;
+            Session["TypeOfUser"] = null;
+            Session["UserID"] = null;
+            Session["Name"] = null;
             return RedirectToAction("Login", "Account");
         }
 
