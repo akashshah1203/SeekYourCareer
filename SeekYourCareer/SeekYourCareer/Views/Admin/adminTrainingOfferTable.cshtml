@@ -36,7 +36,7 @@
     {
         trainid = trainidhere;
         $(".DetailSection").show();
-        acceptancehere = "Accepted";
+        acceptancehere = "Approved";
     }
     function RejectButton(trainidhere)
     {
@@ -60,7 +60,7 @@
                 $(".DetailSection").hide();
                 $(newstring).hide();
                 newstring = "#" + trainid;
-                if (acceptancehere == "Accepted")
+                if (acceptancehere == "Approved")
                     $(newstring).css("background-color", "lightgreen");
                 else
                     $(newstring).css("background-color", "lightblue");
