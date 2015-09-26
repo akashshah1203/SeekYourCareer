@@ -12,7 +12,7 @@ namespace SeekYourCareer.Models
         [Required]
         [Display(Name="User Name")]
         [StringLength(20, MinimumLength = 6, ErrorMessage = "Minimum 6 and atmost 20 characters allowed.")]
-        [RegularExpression(@"^[a-zA-Z_]*$", ErrorMessage = "Only alphabets and numbers allowed.")]
+        [RegularExpression(@"^[a-zA-Z_]*$", ErrorMessage = "Only alphabets and underscore allowed.")]
         public string UserName { get; set; }
 
 
@@ -100,7 +100,7 @@ namespace SeekYourCareer.Models
 
         [Required]
         [Display(Name = "Work Experience ")]
-        [Range(0, Int32.MaxValue, ErrorMessage = "Only between 0-100.")]
+        [Range(0, Int32.MaxValue, ErrorMessage = "Only an Integer is allowed.")]
         public int WorkExperience { get; set; }
 
 

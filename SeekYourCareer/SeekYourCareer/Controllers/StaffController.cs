@@ -9,6 +9,8 @@ using System.Data.SqlClient;
 
 using SeekYourCareer.Models;
 using SeekYourCareer.ViewModels;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace SeekYourCareer.Controllers
 {
@@ -180,5 +182,14 @@ namespace SeekYourCareer.Controllers
                 return View();
             }
         }
+
+
+
+
+
+       
+
+
+       
     }
 }

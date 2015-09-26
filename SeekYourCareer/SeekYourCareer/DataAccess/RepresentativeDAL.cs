@@ -6,6 +6,7 @@ using System.Web;
 
 using SeekYourCareer.Models;
 using SeekYourCareer.ViewModels;
+using System.Configuration;
 
 namespace SeekYourCareer.DataAccess
 {
@@ -659,5 +660,181 @@ namespace SeekYourCareer.DataAccess
             return JobApps;
         }
 
+
+        public string Connstr()
+        {
+            //"Data Source=(localdb)\Projects;Initial Catalog=SeekYCareer;Integrated Security=True;"
+            string connectionString = "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;" + "Integrated Security=True";
+            connectionString = ConfigurationManager.ConnectionStrings["ConnectToDb"].ToString();
+            return connectionString;
+        }
+        
+        public int addWorkshopOffer(RepresentativeAddWorkshopOffer obj,int repid)
+        {
+            string connectionString = Connstr();
+
+            int locid = 0;
+            if (obj.Location.CompareTo("Bangalore") == 0)
+                locid = 1;
+            else if (obj.Location.CompareTo("Delhi") == 0)
+                locid = 2;
+            else if (obj.Location.CompareTo("Kolkata") == 0)
+                locid = 3;
+            else if (obj.Location.CompareTo("Pune") == 0)
+                locid = 4;
+            else if (obj.Location.CompareTo("Jaipur") == 0)
+                locid = 5;
+
+            string staffStatus = "Pending";
+
+            string queryString = null;
+            queryString = "INSERT INTO WorkshopDetails(RepId,Domain,FromDate,ToDate,NoOfSeats,MinGradPct,MinPGPct,MinExperience,WorkshopDesc,LocationID,Location,StaffApproval) " +
+               "values(@rep,@domain,@from,@to,@seats,@mingrad,@minpost,@exp,@desc,@locid,@loc,@staff) ;";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@rep", repid);
+                command.Parameters.AddWithValue("@domain", obj.domain);
+                command.Parameters.AddWithValue("@from", obj.fromDate);
+                command.Parameters.AddWithValue("@to", obj.toDate);
+                command.Parameters.AddWithValue("@seats", obj.noOfSeats);
+                command.Parameters.AddWithValue("@mingrad", obj.GraduationPercentage);
+                command.Parameters.AddWithValue("@minpost", obj.PostGraduationPercentage);
+                command.Parameters.AddWithValue("@exp", obj.Experience);
+                command.Parameters.AddWithValue("@desc", obj.description);
+                command.Parameters.AddWithValue("@locid", locid);
+                command.Parameters.AddWithValue("@loc", obj.Location);
+                command.Parameters.AddWithValue("@staff", staffStatus);
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+
+                
+            }
+            return repid;
+        }
+
+        public int addJobOffer(RepresentativeAddJobOffer obj,int repID)
+        {
+            string connectionString = Connstr();
+            int value = -1;
+
+
+            int locid=0;
+            if (obj.Location.CompareTo("Bangalore") == 0)
+                locid = 1;
+            else if (obj.Location.CompareTo("Delhi") == 0)
+                locid = 2;
+            else if (obj.Location.CompareTo("Kolkata") == 0)
+                locid = 3;
+            else if (obj.Location.CompareTo("Pune") == 0)
+                locid = 4;
+            else if (obj.Location.CompareTo("Jaipur") == 0)
+                locid = 5;
+
+            string staffStatus = "Pending";
+            string queryString = null;
+            queryString = "INSERT INTO JobDetails(JobId,RepId,StreamCode,JobType,MinSSCPercent,MinHSCPercent,MinGradAvg,MinPGAvg,SalPerMonth,Experience,AppLastDate,LocationID,Location,StaffApprovalStatus) " +
+               "values(@job,@rep,@stream,@type,@minssc,@minhsc,@mingrad,@minpost,@sal,@exp,@app,@locid,@loc,@staff) ;";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@job", obj.jobOfferID);
+                command.Parameters.AddWithValue("@rep", repID);
+                command.Parameters.AddWithValue("@stream", obj.streamName);
+                command.Parameters.AddWithValue("@type", obj.jobType);
+                command.Parameters.AddWithValue("@minssc", obj.SscPercentage);
+                command.Parameters.AddWithValue("@minhsc", obj.HscPercentage);
+                command.Parameters.AddWithValue("@mingrad", obj.GraduationPercentage);
+                command.Parameters.AddWithValue("@minpost", obj.PostGraduationPercentage);
+                command.Parameters.AddWithValue("@sal", obj.monthlySalary);
+                command.Parameters.AddWithValue("@exp", obj.Experience);
+                command.Parameters.AddWithValue("@app", obj.LastDate);
+                command.Parameters.AddWithValue("@locid", locid);
+                command.Parameters.AddWithValue("@loc", obj.Location);
+                command.Parameters.AddWithValue("@staff",staffStatus);
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+
+               
+            }
+            return value;
+        }
+
+        public int addTrainingOffer(RepresentativeAddTrainingOffer obj,int repid)
+        {
+            string connectionString = Connstr();
+            string queryString = null;
+
+            int locid = 0;
+            if (obj.Location.CompareTo("Bangalore") == 0)
+                locid = 1;
+            else if (obj.Location.CompareTo("Delhi") == 0)
+                locid = 2;
+            else if (obj.Location.CompareTo("Kolkata") == 0)
+                locid = 3;
+            else if (obj.Location.CompareTo("Pune") == 0)
+                locid = 4;
+            else if (obj.Location.CompareTo("Jaipur") == 0)
+                locid = 5;
+
+
+            string staffStatus = "Pending";
+            queryString = "INSERT INTO TrainingDetails(TrainingID,RepId,CompanyName,Domain,Graduation,PG,PastExp,StartingDate,Duration,NoOfSeat,TrainingDesc,LocationID,Location,StaffApproval) " +
+               "values(@train,@rep,@company,@domain,@grad,@post,@exp,@start,@duration,@seats,@desc,@locid,@loc,@staff) ;";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+
+                //Generate a six lettered random string
+
+                SqlConnection connectionCheck = new SqlConnection(connectionString);
+                String querycheck = "SELECT count(*) from TrainingDetails Where TrainingID=@trainid COLLATE Latin1_General_CS_AS;";
+                SqlCommand commandcheck = new SqlCommand(querycheck, connectionCheck);
+                int checkExist = 1;
+                string trainid="";
+                while (checkExist != 0)
+                {
+                    trainid = RandomString();
+                    commandcheck.Parameters.AddWithValue("@trainid", trainid);
+                    connectionCheck.Open();
+                    checkExist = (int)commandcheck.ExecuteScalar();
+                    connectionCheck.Close();
+                }
+
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@train", trainid);
+                command.Parameters.AddWithValue("@rep", repid);
+                command.Parameters.AddWithValue("@company", obj.Company);
+                command.Parameters.AddWithValue("@domain", obj.domain);
+                command.Parameters.AddWithValue("@grad", obj.graduation);
+                command.Parameters.AddWithValue("@post", obj.postGraduation);
+                command.Parameters.AddWithValue("@exp", obj.Experience);
+                command.Parameters.AddWithValue("@start", obj.startDate);
+                command.Parameters.AddWithValue("@duration", obj.duration);
+                command.Parameters.AddWithValue("@seats", obj.noOfSeats);
+                command.Parameters.AddWithValue("@desc", obj.description);
+                command.Parameters.AddWithValue("@locid", locid);
+                command.Parameters.AddWithValue("@loc", obj.Location);
+                command.Parameters.AddWithValue("@staff", staffStatus);
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+
+                
+            }
+            return repid;
+        }
+
+
+        public static string RandomString()
+        {
+            int length = 6;
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var random = new Random();
+            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+        }
     }
 }

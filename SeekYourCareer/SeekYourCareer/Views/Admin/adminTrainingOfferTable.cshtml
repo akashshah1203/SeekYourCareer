@@ -1,0 +1,144 @@
+﻿@model IEnumerable<SeekYourCareer.ViewModels.staffPostTrainingTable>
+
+
+
+
+<script>
+
+    var trainid=null;
+    var acceptancehere = null;
+
+    function DetailsButton(trainidhere)
+    {
+        trainid = trainidhere;
+        var url = "/Admin/adminTrainingOfferDetails";
+        $.ajax({
+            url: url,
+            data: { trainingID: trainidhere },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                //window.location.assign("/Applicant/Index");
+                alert("in here");
+                $(".partialviewdetails").html("");
+
+                $(".partialviewdetails").html(data);
+
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+
+    }
+    function PostButton(trainidhere)
+    {
+        trainid = trainidhere;
+        $(".DetailSection").show();
+        acceptancehere = "Accepted";
+    }
+    function RejectButton(trainidhere)
+    {
+        trainid = jobidhere;
+        $(".DetailSection").show();
+        acceptancehere = "Rejected";
+    }
+
+    function YesButton()
+    {
+        var url = "/Admin/adminAcceptTrainingOffer";
+        
+        $.ajax({
+            url: url,
+            data: { trainID: trainid, acceptance: acceptancehere },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                //window.location.assign("/Applicant/Index");
+                var newstring = "." + trainid;
+                $(".DetailSection").hide();
+                $(newstring).hide();
+                newstring = "#" + trainid;
+                if (acceptancehere == "Accepted")
+                    $(newstring).css("background-color", "lightgreen");
+                else
+                    $(newstring).css("background-color", "lightblue");
+
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+    }
+    function NoButton()
+    {
+        $(".DetailSection").hide();
+
+    }
+</script>
+
+
+
+
+
+
+
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.trainingId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.location)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.startDate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr id="@item.trainingId">
+        <td>
+            @Html.DisplayFor(modelItem => item.trainingId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.location)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.startDate)
+        </td>
+        <td>
+            <button id="DetailsButton" class="@item.trainingId" onclick="javascript: DetailsButton('@item.trainingId')">Details</button>
+        </td>
+        <td>
+            <button id="PostButton" class="@item.trainingId" onclick="javascript: PostButton('@item.trainingId')">Post</button>
+        </td>
+        <td>
+            <button id="RejectButton" class="@item.trainingId" onclick="javascript: RejectButton('@item.trainingId')">Reject</button>
+        </td>
+    </tr>
+}
+
+</table>
+
+<div class="partialviewdetails" >
+
+</div>
+
+<div class="DetailSection"  hidden>
+   <p > Are You Sure ???????</p>
+    <table>
+        <tr>
+            <td >
+                <button id="YesButton" onclick="javascript: YesButton()">Yes</button>
+            </td>
+            <td >
+                <button id="NoButton" onclick="javascript: NoButton()">No</button>
+            </td>
+
+        </tr>
+</table>
+</div>

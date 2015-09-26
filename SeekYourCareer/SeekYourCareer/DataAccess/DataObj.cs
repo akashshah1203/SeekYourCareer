@@ -144,6 +144,23 @@ namespace SeekYourCareer.DataAccess
 
             return id;
         }
+        public int GetRepID(string company)
+        {
+            int id = 0;
+            string connectionString = Connstr();
+            SqlConnection connection = new SqlConnection(connectionString);
+            string queryString = null;
+            queryString = "Select RepID from RepDetails where CompanyName=@company COLLATE Latin1_General_CS_AS";
+            SqlCommand command = new SqlCommand(queryString, connection);
+            command.Parameters.AddWithValue("@company", company);
+            connection.Open();
+            id = (int)command.ExecuteScalar();
+            connection.Close();
+
+            connection.Open();
+
+            return id;
+        }
        
         public string GetName(string Username)
         {

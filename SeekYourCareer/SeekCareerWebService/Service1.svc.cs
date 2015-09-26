@@ -28,7 +28,7 @@ namespace SeekCareerWebService
             {
                 using (SqlConnection sqlDBConnection = new SqlConnection(ConnectionString))
                 {
-                    StringBuilder sqlstmt = new StringBuilder("select count(*) from UserDetails where UserName = @userName COLLATE Latin1_General_CS_AS ");
+                    StringBuilder sqlstmt = new StringBuilder("select count(*) from UserDetails where UserName COLLATE Latin1_General_CS_AS = @userName  ");
                     //sqlstmt.Append(Convert.ToString(userid));
                     SqlCommand myCommand = new SqlCommand(sqlstmt.ToString(), sqlDBConnection);
                     myCommand.CommandType = CommandType.Text;

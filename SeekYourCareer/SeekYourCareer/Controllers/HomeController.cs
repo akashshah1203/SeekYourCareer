@@ -37,7 +37,10 @@ namespace SeekYourCareer.Controllers
             }
             else if (usertype.CompareTo("Representative") == 0)
             {
-
+                string username = (string)Session["Username"];
+                int userid = new DataAccess.DataObj().GetRepID(username);
+                Session["UserID"] = userid;
+                Session["Name"] = username;
                 return RedirectToAction("Index", "Representative");
             }
             return View();

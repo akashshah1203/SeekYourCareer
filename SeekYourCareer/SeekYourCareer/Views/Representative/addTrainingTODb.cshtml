@@ -1,0 +1,160 @@
+﻿@model SeekYourCareer.Models.RepresentativeAddTrainingOffer
+
+@{
+    ViewBag.Title = "addTrainingTODb";
+}
+
+<script>
+    function checkPublishDate() {
+        var EnteredDate = $('input[type=date]').val(); // For JQuery
+
+        var date = EnteredDate.substring(8, 10);
+        var month = EnteredDate.substring(5, 7);
+        var year = EnteredDate.substring(0, 4);
+
+        var myDate = new Date(year, month - 1, date);
+
+        var today = new Date();
+
+        if (myDate < today) {
+            //$("#errorPanel").html("<h3 style='color:red'>Entered date should be greater than today's date!</h3> ");
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+
+    function buttonclick()
+    {
+        var dat = $("#startDate");
+        var verify = checkPublishDate();
+        alert(verify);
+        if (verify == false) {
+            var str = "Please enter Date in the future";
+            $("#errors").html(str);
+            alert(str);
+
+        }
+        else
+        {
+            alert("successfully added Offer");
+        }
+        return verify;
+    }
+
+</script>
+
+<style>
+    .editor-field input[type="radio"] 
+    {
+        width:50px;
+    }
+    </style>
+<h2>Add Training Offer</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>RepresentativeAddTrainingOffer</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Company)
+        </div>
+        <div class="editor-field">
+           @ViewBag.companyname
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Location)
+        </div>
+        <div class="editor-field">
+            @Html.RadioButtonFor(model => model.Location, "Bangalore",new { @checked = "checked" }) Bangalore
+            @Html.RadioButtonFor(model => model.Location, "Delhi") Delhi
+            @Html.RadioButtonFor(model => model.Location, "Pune") Pune
+            @Html.RadioButtonFor(model => model.Location, "Kolkata") Kolkata
+            @Html.RadioButtonFor(model => model.Location, "Jaipur") Jaipur
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.domain)
+        </div>
+        <div class="editor-field">
+            @Html.RadioButtonFor(model => model.domain, "Engineering",new { @checked = "checked" }) Engineering
+            @Html.RadioButtonFor(model => model.domain, "Finance") Finance
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.graduation)
+        </div>
+        <div class="editor-field">
+            @Html.RadioButtonFor(model => model.graduation, "O",new { @checked = "checked" }) Optional
+            @Html.RadioButtonFor(model => model.graduation, "M") Mandatory
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.postGraduation)
+        </div>
+        <div class="editor-field">
+             @Html.RadioButtonFor(model => model.postGraduation, "O",new { @checked = "checked" }) Optional
+            @Html.RadioButtonFor(model => model.postGraduation, "M") Mandatory
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Experience)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Experience)
+            @Html.ValidationMessageFor(model => model.Experience)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.startDate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.startDate)
+            @Html.ValidationMessageFor(model => model.startDate)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.duration)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.duration)
+            @Html.ValidationMessageFor(model => model.duration)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.noOfSeats)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.noOfSeats)
+            @Html.ValidationMessageFor(model => model.noOfSeats)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.description)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.description)
+            @Html.ValidationMessageFor(model => model.description)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" onclick="return buttonclick()" />
+        </p>
+    
+    </fieldset>
+}
+
+
+<div id="errors">
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
