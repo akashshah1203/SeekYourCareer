@@ -233,7 +233,7 @@ namespace SeekYourCareer.DataAccess
             string connectionString = Connstr();
             SqlConnection connection = new SqlConnection(connectionString);
             string queryString = null;
-            queryString = "Select count(*) from TrainingAppln where UserID=@user COLLATE Latin1_General_CS_AS";
+            queryString = "Select count(*) from TrainingAppln where UserID=@user";
             SqlCommand command = new SqlCommand(queryString, connection);
             command.Parameters.AddWithValue("@user", userid);
             connection.Open();
@@ -250,7 +250,7 @@ namespace SeekYourCareer.DataAccess
             string connectionString = Connstr();
             SqlConnection connection = new SqlConnection(connectionString);
             string queryString = null;
-            queryString = "Select count(*) from JobApplications where UserID=@user COLLATE Latin1_General_CS_AS";
+            queryString = "Select count(*) from JobApplications where UserID=@user ";
             SqlCommand command = new SqlCommand(queryString, connection);
             command.Parameters.AddWithValue("@user", userid);
             connection.Open();
@@ -267,7 +267,7 @@ namespace SeekYourCareer.DataAccess
             string connectionString = Connstr();
             SqlConnection connection = new SqlConnection(connectionString);
             string queryString = null;
-            queryString = "Select count(*) from WorkshopAppln where UserId=@user COLLATE Latin1_General_CS_AS";
+            queryString = "Select count(*) from WorkshopAppln where UserId=@user";
             SqlCommand command = new SqlCommand(queryString, connection);
             command.Parameters.AddWithValue("@user", userid);
             connection.Open();
@@ -342,8 +342,38 @@ namespace SeekYourCareer.DataAccess
             connection.Open();
             return num;
         }
+        public int representativeTotalTrainingApplication(int repID)
+        {
+            int num = 0;
+            string connectionString = Connstr();
+            SqlConnection connection = new SqlConnection(connectionString);
+            string queryString = null;
+            queryString = "Select count(*) from TrainingAppln T1,TrainingDetails T2 Where T1.TrainingId=T2.TrainingID and T2.RepId=@repid";
+            SqlCommand command = new SqlCommand(queryString, connection);
+            command.Parameters.AddWithValue("@repid", repID);
+            connection.Open();
+            num = (int)command.ExecuteScalar();
+            connection.Close();
 
+            connection.Open();
+            return num;
+        }
+        public int representativeTotalWorkshopApplication(int repID)
+        {
+            int num = 0;
+            string connectionString = Connstr();
+            SqlConnection connection = new SqlConnection(connectionString);
+            string queryString = null;
+            queryString = "Select count(*) from WorkshopAppln T1,WorkshopDetails T2 Where T1.WorkshopId=T2.WorkshopId and T2.RepId=@repid";
+            SqlCommand command = new SqlCommand(queryString, connection);
+            command.Parameters.AddWithValue("@repid", repID);
+            connection.Open();
+            num = (int)command.ExecuteScalar();
+            connection.Close();
 
+            connection.Open();
+            return num;
+        }
 
         public string GetHashedText(string inputData)
         {

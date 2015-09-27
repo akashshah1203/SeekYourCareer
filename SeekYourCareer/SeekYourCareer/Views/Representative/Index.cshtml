@@ -34,41 +34,19 @@
     };
 </script>
 
-<nav id="topNav" onmouseover="fun()" style="position:center">
-    <ul>
-        @*<li>@Html.ActionLink("Home", "Index", "Admin")</li>*@
-        
-        
-        <li>
-            <a href="#">Job</a>
-            <ul>
-                <li><a href="/JobRepresentative/JobApplicantByCompany">View Job Applicants</a></li>
-                <li><a href="/JobRepresentative/JobCandidateByCompany">View Shortlisted Job Candidates</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="#">Workshop</a>
-            <ul>
-                <li><a href="/WorkshopRepresentative/WorkshopApplicantByCompany">View Workshop Applicants</a></li>
-                <li><a href="/WorkshopRepresentative/WorkshopCandidateByCompany">View Shortlisted Workshop Applicant</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="#">Training</a>
-            <ul>
-                <li><a href="/TrainingRepresentative/TrainingApplicantByCompany">View Training Applicants</a></li>
-                <li><a href="/TrainingRepresentative/TrainingCandidateByCompany">View Shortlisted Training Candidates</a></li>
-            </ul>
-        </li>
-        
-        <li>
-            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
-            {
-                @Html.AntiForgeryToken()
-                <a href="javascript:document.getElementById('logoutForm').submit()">Logout</a>
-            }
-    </li>
-    </ul>
-</nav>
+
+<h1>Welcome ---    @Session["Name"]</h1>
+<table style="font-family:Arial ; font-size:25px">
+    <tr>
+          <td> Number Of Jobs Posted : </td> <td>@ViewBag.jobs</td>
+    </tr>
+    <tr>
+          <td> Number Of Workshops Posted :</td> <td>@ViewBag.work </td>
+    </tr>
+    <tr>
+        <td> Number Of Training Posted :</td> <td>@ViewBag.train </td>
+    </tr>
+</table>    
+
 
 

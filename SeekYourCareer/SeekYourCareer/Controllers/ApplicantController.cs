@@ -23,7 +23,15 @@ namespace SeekYourCareer.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-           
+            int userID=(int)Session["UserID"];
+            int jobs=new DataAccess.DataObj().applicantAppliedJob(userID);
+            int workshop=new DataAccess.DataObj().applicantAppliedWorkshop(userID);
+            int training = new DataAccess.DataObj().applicantAppliedTraining(userID);
+
+            ViewBag.job = Convert.ToString(jobs);
+            ViewBag.works = Convert.ToString(workshop);
+            ViewBag.train = Convert.ToString(training);
+
             return View();
         }
 
