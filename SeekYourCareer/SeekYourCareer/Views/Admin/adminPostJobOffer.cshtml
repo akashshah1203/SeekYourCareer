@@ -94,7 +94,7 @@
 <div>
     <p>Select Company Name</p> 
     
-    @Html.DropDownList("CompanyName", new SelectList(@ViewBag.List), "--Select--", new { @id = "CompanyName", @style = "width:200px;" , @onchange = "javascript:CompanySelect(this.value);" }) 
+    @Html.DropDownList("CompanyName", new SelectList(@ViewBag.List), "--Select--", new { @id = "CompanyName", @style = "width:200px;" , @onchange = "javascript:CompanySelect(this.value);",@class="search_categories" }) 
       
 </div>
 

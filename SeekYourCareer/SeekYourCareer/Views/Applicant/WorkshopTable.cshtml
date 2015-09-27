@@ -1,5 +1,10 @@
 ﻿@model IEnumerable<SeekYourCareer.Models.WorkshopTable>
 
+@{
+    Layout = "~/Views/Shared/ApplicantLayout.cshtml"; 
+    
+    }
+
 <script>
     function DetailsButton(details)
     {
@@ -33,7 +38,7 @@
 }
 else
 {
-<table>
+<table class="CSSTableGenerator">
     <tr>
         <th>
             Company
@@ -91,10 +96,10 @@ else
             @Html.DisplayFor(modelItem => item.MinPostGrad)
         </td>
         <td>
-            <button id="DetailsButton" onclick="javascript: DetailsButton('@item.Details')">Details</button>
+            <button id="DetailsButton" class="button" onclick="javascript: DetailsButton('@item.Details')">Details</button>
         </td>
         <td>
-            <button id="ApplyButton" onclick="javascript: ApplyButton('@item.WorkshopID','@item.Location')">Apply</button>
+            <button id="ApplyButton" class="button" onclick="javascript: ApplyButton('@item.WorkshopID','@item.Location')">Apply</button>
         </td>
     </tr>
     }

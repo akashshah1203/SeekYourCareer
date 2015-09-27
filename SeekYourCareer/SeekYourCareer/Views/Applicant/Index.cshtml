@@ -1,11 +1,10 @@
 ﻿@{
     ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/ApplicantLayout.cshtml"; 
+    
 }
-@section scripts
-{
-    <script type="text/javascript" src="~/Scripts/jquery-1.7.1.js"></script>
-    <script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
-}
+
+
 <h2>Welcome -- @Session["Name"]</h2>
 <script>
     //$(document).ready(function () {

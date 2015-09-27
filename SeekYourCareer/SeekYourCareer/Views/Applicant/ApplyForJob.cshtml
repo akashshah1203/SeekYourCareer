@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "ApplyForJob";
+    Layout = "~/Views/Shared/ApplicantLayout.cshtml"; 
 }
 
 <style>
@@ -113,7 +114,7 @@
                     str = "Correspondance Address <input type=\"text\" id=\"correspondAddr\" name=\"CorrespondAddr\" value=\""+addr+"\" maxlength=\"50\"/>";
                     $('#correspAddr').html("");
                     $('#correspAddr').append(str);
-                    str = "<input type=\"submit\" value=\"Apply For Job\" onclick=\"return OnSubmit()\"/>";
+                    str = "<input type=\"submit\" class=\"button\" value=\"Apply For Job\" onclick=\"return OnSubmit()\"/>";
                     $('#addbutton').html("");
                     $('#addbutton').append(str);
                 }
@@ -164,7 +165,7 @@
 <div>
     <p>Select Company Name</p> 
     
-    @Html.DropDownList("CompanyName", new SelectList(@ViewBag.list), "--Select--", new { @id = "CompanyName", @style = "width:200px;" , @onchange = "javascript:SelectStream(this.value);" }) 
+    @Html.DropDownList("CompanyName", new SelectList(@ViewBag.list), "--Select--", new { @id = "CompanyName", @style = "width:200px;" , @onchange = "javascript:SelectStream(this.value);", @class="search_categories"}) 
       
 </div>
 
@@ -172,7 +173,7 @@
 <div id="SelectStream" class="editor-field">
      
 </div>
-<table id="showtable" class="display">
+<table id="showtable"  class="CSSTableGenerator">
           
     <tbody>
         </tbody>
@@ -186,7 +187,7 @@
 <div id="addbutton">
     @*<input type="button" value="Apply For Job" onclick="return func3()"/>*@
 </div>
-    <div id="errormessage" style="font-size:40px ; color:darkblue">
+    <div id="errormessage" @*style="font-size:40px ; color:darkblue"*@>
 
     </div>
 </form> 
