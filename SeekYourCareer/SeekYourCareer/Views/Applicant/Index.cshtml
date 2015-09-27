@@ -1,9 +1,10 @@
 ﻿@{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/ApplicantLayout.cshtml";
+    Layout = "~/Views/Shared/ApplicantLayout.cshtml"; 
+    
 }
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<h2>Welcome -- @Session["Name"]</h2>
+
+
 <script>
     //$(document).ready(function () {
     function fun(){
@@ -31,21 +32,17 @@
     };
 </script>
 
-<nav id="topNav" onmouseover="fun()" style="position:center">
-    <ul>
-        @*<li>@Html.ActionLink("Home", "Index", "Admin")</li>*@
-        
-        
-        
-            <ul>
-                <li><a href="/Applicant/ApplyForJob">Apply for Job</a></li>
-                <li><a href="/Applicant/SearchForTraining">Apply for Training</a></li>
-                <li><a href="/Applicant/WorkshopHome">Apply for Workshop</a></li>
-
-            </ul>
-                        
-      
-    </ul>
-</nav>
 
 
+<h1>Welcome ---    @Session["Username"]</h1>
+<table style="font-family:Arial ; font-size:25px">
+    <tr>
+          <td> Number Of Jobs Applied To : </td> <td>@ViewBag.job</td>
+    </tr>
+    <tr>
+          <td> Number Of Workshops Applied To :</td> <td>@ViewBag.works </td>
+    </tr>
+    <tr>
+        <td> Number Of Training Applied To :</td> <td>@ViewBag.train </td>
+    </tr>
+</table>    

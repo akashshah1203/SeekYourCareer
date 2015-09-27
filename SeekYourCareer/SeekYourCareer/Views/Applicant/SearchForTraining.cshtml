@@ -1,5 +1,7 @@
 ﻿@{
     ViewBag.Title = "SearchForTraining";
+    Layout = "~/Views/Shared/ApplicantLayout.cshtml"; 
+    
 }
 
 
@@ -35,7 +37,7 @@
                 success: function (data) {
                     //console.log(data);
                     var html;
-                    html = "<br/><br/>Location  <br/> <select onchange =\"DomainNameSelected(this.value,'" + domainname + "')\" id =\"DomainList\" style=\"width:200px\">";
+                    html = "<br/><br/>Location  <br/> <select class=\"search_categories\" onchange =\"DomainNameSelected(this.value,'" + domainname + "')\" id =\"DomainList\" style=\"width:200px\">";
                     html += "<option  value =\"\" >--Select--</option>";
                     for (var i = 0; i < data.length; i++) {
                         html += "<option  value =\"" + data[i] + "\">" + data[i] + "</option>";
@@ -47,7 +49,7 @@
                 },
                 error: function (reponse) {
 
-                    alert("error : " + reponse);
+                    Alert.render("error : " + reponse);
                 }
             });
         }
@@ -65,7 +67,7 @@
 
         }
         else {
-            html = "<input type=\"button\" value=\"SEARCH\"onclick=\"Search('" + locationname + "','" + domainname + "')\">";
+            html = "<input type=\"button\" class=\"button\" value=\"SEARCH\"onclick=\"Search('" + locationname + "','" + domainname + "')\">";
             $('#SearchButton').html("");
             $('#SearchButton').append(html);
         }
@@ -90,13 +92,12 @@
                 else
                 {
                     var html;
-                    html = "  <tr><th>Training ID</th><th>Company </th><th>Description</th></tr> ";
+                    html = "  <tr><th>Training ID</th><th>Company </th><th>Description</th><th>Details</th><th>Apply</th></tr> ";
                     for (var i = 0; i < data.length; i++) {
                         html += "<tr> <td  >" + data[i].TrainingID + "</td> <td> " + data[i].Company + "</td> <td> " + data[i].Description + " </td> " +
-                      " <td><input type=\"button\"  value=\"Get Details\" onclick=\"CompanyDetails('" + data[i].Company + "','"
-                      + data[i].TrainingID
-                      + "')\" value=\"Get Details\" > </td>"
-                      + " <td><button type=\"submit\" name=\"TrainingID\"  value=\"" + data[i].TrainingID + "\">Apply</button></td>" +
+                      " <td><input type=\"button\" class=\"button\" value=\"Get Details\" onclick=\"CompanyDetails('" + data[i].Company + "','"
+                      + data[i].TrainingID + "')\" value=\"Get Details\" > </td>"
+                      + " <td><button type=\"submit\" class=\"button\" name=\"TrainingID\"  value=\"" + data[i].TrainingID + "\">Apply</button></td>" +
                       + " </tr>";
                     }
 
@@ -115,7 +116,7 @@
 
     function CompanyDetails(company, trainingid)
     {
-        alert("In company details");
+        //Alert.render("In company details");
         var html;
         $('#CompanyDetails').html("");
 
@@ -128,18 +129,18 @@
             success: function (data)
             {
                 html = " <h3>Company Details </h3> <br/>";
-                html += "<tr><td>Company Name</td><td>     " + data.CompanyName + " </td></tr><br/> ";
-                html += "<tr><td>Address</td><td>   " + data.Address + " </td></tr><br/> ";
-                html += "<tr><td>Email ID</td><td>  " + data.EmailID + " </td></tr><br/> ";
-                html += "<tr><td>Phone Number</td><td>  " + data.Phone + " </td></tr> <br/>";
-                html += "<br/><br/> <h3>Training Details </h3><br/> ";
+                html += "<table class=\"CSSInfoTable\"><tr><td>Company Name</td><td>     " + data.CompanyName + " </td></tr> ";
+                html += "<tr><td>Address</td><td>   " + data.Address + " </td></tr> ";
+                html += "<tr><td>Email ID</td><td>  " + data.EmailID + " </td></tr> ";
+                html += "<tr><td>Phone Number</td><td>  " + data.Phone + " </td></tr></table> ";
+                html += "<br/> <h3>Training Details </h3><br/> ";
                 var datestart = new Date(parseInt((data.StartDate).substr(6)));
-                html += "<tr><td>Starting Date</td><td>     " + datestart + " </td></tr><br/> ";
-                html += "<tr><td>Duration</td><td>  " + data.Duration + " </td></tr><br/> ";
-                html += "<tr><td>Graduation</td><td>    " + data.Graduation + " </td></tr><br/> ";
-                html += "<tr><td>Post Graduation</td><td>   " + data.PostGraduation + " </td></tr> <br/>";
-                html += "<tr><td>Past Experience</td><td>   " + data.PastExp + " </td></tr> <br/>";
-                html += "<tr><td>No. Of Seats Available</td><td>     " + data.SeatsAvailable + " </td></tr> <br/>";
+                html += "<table class=\"CSSInfoTable\"><tr><td>Starting Date</td><td>     " + datestart + " </td></tr> ";
+                html += "<tr><td>Duration</td><td>  " + data.Duration + " </td></tr>";
+                html += "<tr><td>Graduation</td><td>    " + data.Graduation + " </td></tr> ";
+                html += "<tr><td>Post Graduation</td><td>   " + data.PostGraduation + " </td></tr>";
+                html += "<tr><td>Past Experience</td><td>   " + data.PastExp + " </td></tr>";
+                html += "<tr><td>No. Of Seats Available</td><td>     " + data.SeatsAvailable + " </td></tr></table>";
                 $('#CompanyDetails').append(html);
 
             },
@@ -176,7 +177,7 @@
 <div>
     <p>Select Domain Name</p> 
     
-    @Html.DropDownList("DomainName", new SelectList(@ViewBag.List), "--Select--", new { @id = "DomainName", @style = "width:200px;" , @onchange = "javascript:LocationDropdown(this.value);" }) 
+    @Html.DropDownList("DomainName", new SelectList(@ViewBag.List), "--Select--", new { @class="search_categories",  @id = "DomainName", @style = "width:200px;" , @onchange = "javascript:LocationDropdown(this.value);" }) 
       
 </div>
 
@@ -188,7 +189,7 @@
 <div id="SearchButton">
 </div>
 
-<table id="showtable" class="display">
+<table id="showtable" class="CSSTableGenerator">
 
 <tbody>
 </tbody>
@@ -204,3 +205,12 @@
 <div id="errormessage">
 </div>
 </form> 
+
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+  <div>
+    <div id="dialogboxhead"></div>
+    <div id="dialogboxbody"></div>
+    <div id="dialogboxfoot"></div>
+  </div>
+</div>

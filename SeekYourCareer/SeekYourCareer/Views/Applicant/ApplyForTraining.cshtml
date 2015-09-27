@@ -1,7 +1,9 @@
 ﻿
 @{
     ViewBag.Title = "ApplyForTraining";
-}
+    Layout = "~/Views/Shared/ApplicantLayout.cshtml"; 
+
+    }
 
 
 <style type="text/css">
@@ -108,7 +110,7 @@
     
     function ApplyButton()
     {
-        alert("applying");
+        //alert("applying");
         var url = "/Applicant/AddTrainingToDb";
         var userid1 =@ViewBag.ApplyJob.UserID ;
         var trainingid1 ="@ViewBag.ApplyJob.TrainingID" ;
@@ -142,17 +144,17 @@
                 type: "POST",
                 success: function (data) 
                 {
-                    var str="You have successfully Applied for the job !!!!!";
+                    var str="CONGRATULATIONS!!!  You have successfully Applied for the training !!!!!";
                     $("#message").html("");
                     $("#message").html(str);
                     $("#ApplyButton").remove();
-                    alert(str);
+                    Alert.render(str);
                     window.location.assign("/Applicant/Index");
 
                 },
                 error: function (reponse) {
 
-                    alert("error : " + reponse);
+                    Alert.render("error : " + reponse);
                 }
             });
         }
@@ -169,9 +171,9 @@
 <h2 style="text-align:center">Apply For Training</h2>
 <div class="form-style-5">
 
-<h2 class="number">Personal Details</h2>
+<h2><span class="number">1</span>Personal Details</h2>
 
-<table">
+<table class="CSSInfoTable">
     <tr>
         <td>
             Applicant Name
@@ -245,9 +247,9 @@
     </tr>
 </table>
 
-<h2 class="number">Educational Details</h2>
+<h2><span class="number">2</span>Educational Details</h2>
 
-<table>
+<table class="CSSInfoTable">
     <tr>
         <td>SSC Percentage</td>
         <td>@ViewBag.ApplyJob.SSCPercentage</td>
@@ -271,8 +273,8 @@
 </table>
 
 
-<h2 class="number">Training Details</h2>
-<table>
+<h2><span class="number">3</span>Training Details</h2>
+<table class="CSSInfoTable">
     <tr>
         <td>Company</td>
         <td>@ViewBag.ApplyJob.Company</td>
@@ -296,9 +298,9 @@
 </table>
 
 <br />
-<div class="Buttons">
-<button id="ApplyButton" onclick="javascript: ApplyButton()">Apply</button>
-<button onclick="location.href= '@Url.Action("SearchForTraining", "Applicant")'">Back</button>
+<div class="buttons">
+<button class="buttons" id="ApplyButton" onclick="javascript: ApplyButton()">Apply</button>
+<button class="buttons" onclick="location.href= '@Url.Action("SearchForTraining", "Applicant")'">Back</button>
 </div>
 
 
@@ -306,3 +308,14 @@
 
 </div>
 </div>
+
+
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+  <div>
+    <div id="dialogboxhead"></div>
+    <div id="dialogboxbody"></div>
+    <div id="dialogboxfoot"></div>
+  </div>
+</div>
+

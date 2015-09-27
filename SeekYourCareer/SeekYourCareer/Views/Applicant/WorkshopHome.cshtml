@@ -1,5 +1,7 @@
 ﻿@{
     ViewBag.Title = "WorkshopHome";
+    Layout = "~/Views/Shared/ApplicantLayout.cshtml"; 
+    
 }
 
 
@@ -59,7 +61,7 @@
 
     function domain_table(domain, company)//comes here after selecting the radio button
     {
-        alert("in domain-table");
+        //alert("in domain-table");
         var url = "/Applicant/WorkshopTable";
         $.ajax({
             url: url,
@@ -98,7 +100,7 @@
 <div>
     <p>Select Domain Name</p> 
     
-    @Html.DropDownList("DomainName", new SelectList(@ViewBag.List), "--Select--", new { @id = "DomainName", @style = "width:200px;" , @onchange = "javascript:DomainSelect(this.value);" }) 
+    @Html.DropDownList("DomainName", new SelectList(@ViewBag.List), "--Select--", new { @id = "DomainName", @style = "width:200px;" , @onchange = "javascript:DomainSelect(this.value);", @class="search_categories" }) 
       
 </div>
 

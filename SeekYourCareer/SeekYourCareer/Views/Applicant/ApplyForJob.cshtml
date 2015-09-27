@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "ApplyForJob";
+    Layout = "~/Views/Shared/ApplicantLayout.cshtml"; 
 }
 
 <style>
@@ -65,7 +66,7 @@
 
     function stream_table(stream, company)
     {
-        alert(stream);
+        //alert(stream);
 
         var url = "/Applicant/ApplyForJob1";
         $("#errormessage").html("");
@@ -80,8 +81,8 @@
             cache: false,
             type: "POST",
             success: function (data) {
-                console.log(data);
-                alert(data);
+                //console.log(data);
+                //Alert.render(data);
                 $('#showtable').html("");
                 $("#errormessage").html("");
 
@@ -95,10 +96,8 @@
                 }
                 else {
                     html = "  <tr><th>Job Type</th><th>Min SSC Percentage</th><th>Min HSC Percentage</th><th>Min Grad Avg</th> <th>Min Post Grad Avg</"
-                                + "th><th>Salary Per Month</th><th>Location</th><th>Experience</th><th>LastDate</th></tr> ";
+                                + "th><th>Salary Per Month</th><th>Location</th><th>Experience</th><th>LastDate</th><th>Select any one</th></tr> ";
                     addr = data[0].CorrespondanceAddress;
-                    console.log(data);
-                    console.log(addr);
 
                     for (var i = 0; i < data.length; i++)
                     {
@@ -113,7 +112,7 @@
                     str = "Correspondance Address <input type=\"text\" id=\"correspondAddr\" name=\"CorrespondAddr\" value=\""+addr+"\" maxlength=\"50\"/>";
                     $('#correspAddr').html("");
                     $('#correspAddr').append(str);
-                    str = "<input type=\"submit\" value=\"Apply For Job\" onclick=\"return OnSubmit()\"/>";
+                    str = "<input type=\"submit\" class=\"button\" value=\"Apply For Job\" onclick=\"return OnSubmit()\"/>";
                     $('#addbutton').html("");
                     $('#addbutton').append(str);
                 }
@@ -127,7 +126,7 @@
 
     function OnSubmit()
     {
-        alert("button clicked");
+        //alert("button clicked");
         if ($("input[type=checkbox]:checked").length == 0)
         {
             str = "Select a Job From The List!!!!!!";
@@ -144,7 +143,8 @@
 
         }
         else if ($("input[type=checkbox]:checked").length == 1) {
-            alert("in fnc");
+            //alert("in fnc");
+            Alert.render("Congratulations !!!!   You Have Successfully Applied For The Job.....");
             return true;
         }
         else
@@ -164,7 +164,7 @@
 <div>
     <p>Select Company Name</p> 
     
-    @Html.DropDownList("CompanyName", new SelectList(@ViewBag.list), "--Select--", new { @id = "CompanyName", @style = "width:200px;" , @onchange = "javascript:SelectStream(this.value);" }) 
+    @Html.DropDownList("CompanyName", new SelectList(@ViewBag.list), "--Select--", new { @id = "CompanyName", @style = "width:200px;" , @onchange = "javascript:SelectStream(this.value);", @class="search_categories"}) 
       
 </div>
 
@@ -172,7 +172,7 @@
 <div id="SelectStream" class="editor-field">
      
 </div>
-<table id="showtable" class="display">
+<table id="showtable"  class="CSSTableGenerator">
           
     <tbody>
         </tbody>
@@ -186,7 +186,15 @@
 <div id="addbutton">
     @*<input type="button" value="Apply For Job" onclick="return func3()"/>*@
 </div>
-    <div id="errormessage" style="font-size:40px ; color:darkblue">
+    <div id="errormessage" @*style="font-size:40px ; color:darkblue"*@>
 
     </div>
 </form> 
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+  <div>
+    <div id="dialogboxhead"></div>
+    <div id="dialogboxbody"></div>
+    <div id="dialogboxfoot"></div>
+  </div>
+</div>
