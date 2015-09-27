@@ -2,14 +2,15 @@
 
 @{
     ViewBag.Title = "Shortlisted Job Candidates";
+    Layout = "~/Views/Shared/RepresentativeLayout.cshtml";
 }
 
-<script src="http://ajapx.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script>
     function GetApplicants(jobId) {
         $('#DetailsDiv').empty();
         if (jobId == '') {
-            Alert.render.render('Select Job Id');
+            Alert.render('Select Job Id');
             $('#DetailsDiv').empty();
             $('#mytable').empty();
         }
@@ -34,7 +35,7 @@
                             trhtml += "<tr> <td>" + data.JobApplications[i].ApplicantId + "</td> <td> " + data.JobApplications[i].UserID + "</td> <td> " + data.JobApplications[i].JobId + "</td> <td> " + data.JobApplications[i].AppDate + "</td> <td> " + data.JobApplications[i].Correspondance + "</td> <td> " + data.JobApplications[i].Status + "</td> <td> <input type=\"button\" class=\"button\" style=\"border: 2px solid orange\" value=\"Details\" onclick=\"GetDetails('" + data.JobApplications[i].Name + "','" + data.JobApplications[i].Age + "','" + data.JobApplications[i].Correspondance + "','" + data.JobApplications[i].ContactNo + "','" + data.JobApplications[i].EmailId + "')\" /> </td> </tr>";
                         }
                         trhtml += "</table>";
-                        $('#mytable tbody > tr').remove();
+                        //$('#mytable tbody > tr').remove();
                         $('#mytable').html(trhtml);
                     }
                 },
@@ -65,23 +66,13 @@
     
     @Html.DropDownList("ddljobid", new SelectList(@ViewBag.JobIdL), "--Select--", new { @id = "ddljobid", @style = "width:200px;", @class="search_categories", @onchange = "javascript:GetApplicants(this.value);" }) 
       
- <br /> 
-     <br /> 
  
- 
-  <table id ="mytable" class ="display"> 
-      <thead> 
-          
-      </thead> 
-      <tbody> 
- 
- 
- 
- 
-      </tbody> 
+ </div>
+  <div id ="mytable"> 
+      
 
-  </table> 
- </div> 
+  </div> 
+  
 
 
 

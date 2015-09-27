@@ -50,6 +50,7 @@
             $('#mytable').empty();
             $('#DetailsDiv').empty();
             $('#DetailsDiv').html("No records to display");
+            Alert.render("Please select training Id");
         }
         else {
 
@@ -62,7 +63,7 @@
                 type: "POST",
                 success: function (data) {
                     var trhtml;
-                    trhtml = "<table class=\"CSSInfoTable\"><tr><td align=\"left\"><b>Location</b></td><td align=\"left\">" + data.Location + "</td></tr>"
+                    trhtml = "<br/><br/><table class=\"CSSInfoTable\"><tr><td align=\"left\"><b>Location</b></td><td align=\"left\">" + data.Location + "</td></tr>"
                     trhtml += "<tr><td align=\"left\"><b>Domain</b></td><td align=\"left\">" + data.Domain + "</td></tr>"
                     trhtml += "<tr><td align=\"left\"><b>Graduation</b></td><td align=\"left\">" + data.Graduation + "</td></tr>"
                     trhtml += "<tr><td align=\"left\"><b>Postgraduation</b></td><td align=\"left\">" + data.PG + "</td></tr>"

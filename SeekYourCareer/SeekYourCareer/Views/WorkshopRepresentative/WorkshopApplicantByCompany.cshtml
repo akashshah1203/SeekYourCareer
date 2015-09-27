@@ -2,9 +2,10 @@
 
 @{
     ViewBag.Title = "View Workshop Applicants - Representative";
+    Layout = "~/Views/Shared/RepresentativeLayout.cshtml";
 }
 
-<script src="http://ajapx.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script>
     function GetWorkshopIDs(Domain) {
         $('#SelectWorkshop').empty();
@@ -12,7 +13,7 @@
         $('#ApplicantDev').empty();
         $('#ShowError').empty();
         if (Domain == '')
-            alert('Select Domain');
+            Alert.render('Select Domain');
         else {
             var url = "/WorkshopRepresentative/WorkshopApplicantIdList";
 
@@ -28,7 +29,7 @@
                     }
                     else {
                         var trhtml;
-                        trhtml = '<br/>Select Workshop Id <br/><br/><select name="DD" id="selectData" onchange="Caller()"><br/><br/>';
+                        trhtml = '<br/>Select Workshop Id <br/><br/><select name="DD" id="selectData" class="search_categories" onchange="Caller()"><br/><br/>';
                         trhtml += '<option value="">' + '--Select--' + '</option>';
                         for (var i = 0; i < data.length; i++) {
                             trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
@@ -41,8 +42,8 @@
                     }
                 },
                 error: function (reponse) {
-                    alert("Error");
-                    alert("error : " + reponse);
+                    Alert.render("Error");
+                    Alert.render("error : " + reponse);
                 }
             });
         }
@@ -54,7 +55,7 @@
         $('#ApplicantDev').empty();
         $('#ShowError').empty();
         if (wid == '') {
-            alert('Select Workshop Id');
+            Alert.render('Select Workshop Id');
             $('#ApplicantDiv').empty();
             $('#mytable').empty();
         }
@@ -77,16 +78,16 @@
             type: "POST",
             success: function (data) {
                 var trhtml;
-                trhtml = "<table><tr><td align=\"left\"><b>WorkshopId</b></td><td>:</td><td align=\"left\">" + data.WorkshopId + "</td></tr>"
-                trhtml += "<tr><td align=\"left\"><b>Min Graduation Percentage</b></td><td>:</td><td align=\"left\">" + data.MinGradPct + "</td></tr>"
-                trhtml += "<tr><td align=\"left\"><b>Min PostGrad Percentage</b></td><td>:</td><td align=\"left\">" + data.MinPGPct + "</td></tr>"
-                trhtml += "<tr><td align=\"left\"><b>MinExperience</b></td><td>:</td><td align=\"left\">" + data.MinExperience + "</td></tr></table>"
+                trhtml = "<table class=\"CSSInfoTable\"><tr><td align=\"left\"><b>WorkshopId</b></td><td align=\"left\">" + data.WorkshopId + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>Min Graduation Percentage</b></td><td align=\"left\">" + data.MinGradPct + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>Min PostGrad Percentage</b></td><td align=\"left\">" + data.MinPGPct + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>MinExperience</b></td><td align=\"left\">" + data.MinExperience + "</td></tr></table>"
 
                 $('#mytable').html(trhtml);
             },
             error: function (reponse) {
 
-                alert("error : " + reponse);
+                Alert.render("error : " + reponse);
             }
         });
     }
@@ -96,7 +97,7 @@
         $('#ApplicantDiv').empty();
         $('#mytable').empty();
         if (wsId == '') {
-            alert('Select Workshop Id');
+            Alert.render('Select Workshop Id');
             $('#ShowError').empty();
         }
         else {
@@ -112,11 +113,11 @@
                     if (data.PendingApps.length == 0)
                         $('#ShowError').html("<br/><br/>No records to display");
                     else {
-                        var trhtml = "<table><tr><th>User Name</th><th>Graduation %</th><th>Post Graduation %</th><th>Experience</th><th>Select Applicants</th><th>Reject Applicants</th></tr>";
+                        var trhtml = "<table class=\"CSSTableGenerator\"><tr><th>User Name</th><th>Graduation %</th><th>Post Graduation %</th><th>Experience</th><th>Select Applicants</th><th>Reject Applicants</th></tr>";
 
                         for (var i = 0; i < data.PendingApps.length; i++) {
 
-                            trhtml += "<tr> <td> " + data.PendingApps[i].Name + "</td> <td> " + data.PendingApps[i].GradPercent + "</td> <td> " + data.PendingApps[i].PGPercent + "</td> <td> " + data.PendingApps[i].WorkExpYears + "</td> <td> <input type=\"button\" value=\"Select\" onclick=\"Select('" + data.PendingApps[i].ApplicantId + "','" + wsId + "')\" /> </td> <td> <input type=\"button\" value=\"Reject\" onclick=\"Reject('" + data.PendingApps[i].ApplicantId + "','" + wsId + "')\" /> </td></tr>";
+                            trhtml += "<tr> <td> " + data.PendingApps[i].Name + "</td> <td> " + data.PendingApps[i].GradPercent + "</td> <td> " + data.PendingApps[i].PGPercent + "</td> <td> " + data.PendingApps[i].WorkExpYears + "</td> <td> <input type=\"button\" class=\"button\" style=\"border: 2px solid orange \" value=\"Select\" onclick=\"Select('" + data.PendingApps[i].ApplicantId + "','" + wsId + "')\" /> </td> <td> <input type=\"button\" class=\"button\" style=\"border: 2px solid orange \" value=\"Reject\" onclick=\"Reject('" + data.PendingApps[i].ApplicantId + "','" + wsId + "')\" /> </td></tr>";
                         }
                         trhtml += "</table>";
 
@@ -125,14 +126,14 @@
                 },
                 error: function (reponse) {
 
-                    alert("error : " + reponse);
+                    Alert.render("error : " + reponse);
                 }
             });
         }
     }
 
     function Select(userId, wsId) {
-        alert("Selected");
+        Alert.render("Selected");
         var url = "/WorkshopRepresentative/SelectWorkshopCandidate/";
         $.ajax({
             url: url,
@@ -146,13 +147,13 @@
             },
             error: function (reponse) {
 
-                alert("error : " + reponse);
+                Alert.render("error : " + reponse);
             }
         });
     }
 
     function Reject(userId, wsId) {
-        alert("Rejected");
+        Alert.render("Rejected");
         var url = "/WorkshopRepresentative/RejectWorkshopCandidate/";
         $.ajax({
             url: url,
@@ -166,7 +167,7 @@
             },
             error: function (reponse) {
 
-                alert("error : " + reponse);
+                Alert.render("error : " + reponse);
             }
         });
     }
@@ -179,7 +180,7 @@
 <div>
     <p>Domain</p> 
     
-    @Html.DropDownList("ddldomain", new SelectList(@ViewBag.WSDomainL), "--Select--", new { @id = "ddldomain", @style = "width:200px;" , @onchange = "javascript:GetWorkshopIDs(this.value);" }) 
+    @Html.DropDownList("ddldomain", new SelectList(@ViewBag.WSDomainL), "--Select--", new {@class="search_categories",  @id = "ddldomain", @style = "width:200px;" , @onchange = "javascript:GetWorkshopIDs(this.value);" }) 
 </div>
  
 <div id="SelectWorkshop" class="editor-field">
@@ -197,3 +198,12 @@
 <div id ="ShowError" class ="display"> 
     
 </div> 
+
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+  <div>
+    <div id="dialogboxhead"></div>
+    <div id="dialogboxbody"></div>
+    <div id="dialogboxfoot"></div>
+  </div>
+</div>

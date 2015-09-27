@@ -623,7 +623,7 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT * from dbo.TrainingAppln WHERE TrainingId = @filtervalue;";
+                "SELECT ApplicantId, UserID, Name, TrainingId, AppDate, CorrAddress, CorrContact, SelectionStatus  from dbo.TrainingAppln WHERE TrainingId = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {

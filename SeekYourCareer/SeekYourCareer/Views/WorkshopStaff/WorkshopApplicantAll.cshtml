@@ -13,7 +13,7 @@
         $('#ApplicantDiv').empty();
         $('#SelectWorkshop').empty();
         if (company == '') {
-            alert('Select Company');
+            Alert.render('Select Company');
             $('#SelectDomain').empty();
             $('#mytable').empty();
             $('#ApplicantDiv').empty();
@@ -33,7 +33,7 @@
                     }
                     else {
                         var trhtml;
-                        trhtml = '<br/>Domain <br/><br/><select name="DD" id="selectData" onchange="GetWorkshopIDs()">';
+                        trhtml = '<br/>Domain <br/><br/><select name="DD" id="selectData" class="search_categories" onchange="GetWorkshopIDs()">';
                         trhtml += '<option value="">' + '--Select--' + '</option>';
                         for (var i = 0; i < data.length; i++) {
                             trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
@@ -46,8 +46,8 @@
                     }
                 },
                 error: function (reponse) {
-                    alert("Error");
-                    alert("error : " + reponse);
+                    Alert.render("Error");
+                    Alert.render("error : " + reponse);
                 }
             });
         }
@@ -61,7 +61,7 @@
         companyName = document.getElementById("ddlcompany").value;
 
         if (Domain == '') {
-            alert('Select Domain');
+            Alert.render('Select Domain');
             $('#SelectWorkshop').empty();
             $('#ApplicantDiv').empty();
         }
@@ -77,7 +77,7 @@
                     $('#SelectWorkshop').html("<br/><br/>No records to display");
                 else{
                     var trhtml;
-                    trhtml = '<br/>Select Workshop Id <br/><br/><select name="DD" id="selectData1" onchange="Caller()">';
+                    trhtml = '<br/>Select Workshop Id <br/><br/><select name="DD" id="selectData1" class="search_categories" onchange="Caller()">';
                     trhtml += '<option value="">' + '--Select--' + '</option>';
                     for (var i = 0; i < data.length; i++) {
                         trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
@@ -90,8 +90,8 @@
                 }
             },
             error: function (reponse) {
-                alert("Error");
-                alert("error : " + reponse);
+                Alert.render("Error");
+                Alert.render("error : " + reponse);
             }
         });
     }
@@ -99,7 +99,7 @@
     function Caller() {
         wid = document.getElementById("selectData1").value;
         if (wid == '') {
-            alert('Select Workshop Id');
+            Alert.render('Select Workshop Id');
             $('#ApplicantDiv').empty();
             $('#mytable').empty();
         }
@@ -121,16 +121,16 @@
             type: "POST",
             success: function (data) {
                 var trhtml;
-                trhtml = "<table><tr><td align=\"left\"><b>WorkshopId</b></td><td>:</td><td align=\"left\">" + data.WorkshopId + "</td></tr>"
-                trhtml += "<tr><td align=\"left\"><b>Min Graduation Percentage</b></td><td>:</td><td align=\"left\">" + data.MinGradPct + "</td></tr>"
-                trhtml += "<tr><td align=\"left\"><b>Min PostGrad Percentage</b></td><td>:</td><td align=\"left\">" + data.MinPGPct + "</td></tr>"
-                trhtml += "<tr><td align=\"left\"><b>MinExperience</b></td><td>:</td><td align=\"left\">" + data.MinExperience + "</td></tr></table>"
+                trhtml = "<br/><br/><table class=\"CSSInfoTable\"><tr><td align=\"left\"><b>WorkshopId</b></td><td align=\"left\">" + data.WorkshopId + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>Min Graduation Percentage</b></td><td align=\"left\">" + data.MinGradPct + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>Min PostGrad Percentage</b></td><td align=\"left\">" + data.MinPGPct + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>MinExperience</b></td><td align=\"left\">" + data.MinExperience + "</td></tr></table>"
 
                 $('#mytable').html(trhtml);
             },
             error: function (reponse) {
 
-                alert("error : " + reponse);
+                Alert.render("error : " + reponse);
             }
         });
     }
@@ -146,7 +146,7 @@
             cache: false,
             type: "POST",
             success: function (data) {
-                var trhtml = "<table><tr><th>User Name</th><th>Graduation%</th><th>Post Graduation %</th><th>Experience</th></tr>";
+                var trhtml = "<table class=\"CSSTableGenerator\"><tr><th>User Name</th><th>Graduation%</th><th>Post Graduation %</th><th>Experience</th></tr>";
            
                 for (var i = 0; i < data.PendingApps.length; i++) {
 
@@ -159,17 +159,17 @@
             },
             error: function (reponse) {
 
-                alert("error : " + reponse);
+                Alert.render("error : " + reponse);
             }
         });
     }
 
        function Select() {
-           alert("Selected");
+           Alert.render("Selected");
        }
 
        function Reject() {
-           alert("Rejected");
+           Alert.render("Rejected");
        }
 </script> 
 
@@ -179,7 +179,7 @@
 <div>
     <p>Company</p> 
     
-    @Html.DropDownList("ddlcompany", new SelectList(@ViewBag.WSCompanyNameL), "--Select--", new { @id = "ddlcompany", @style = "width:200px;" , @onchange = "javascript:GetDomains(this.value);" }) 
+    @Html.DropDownList("ddlcompany", new SelectList(@ViewBag.WSCompanyNameL), "--Select--", new {@class="search_categories", @id = "ddlcompany", @style = "width:200px;" , @onchange = "javascript:GetDomains(this.value);" }) 
 </div>
 
 <div id="SelectDomain" class="editor-field">
@@ -197,3 +197,12 @@
 <div id="ApplicantDiv" name="DetailsDiv" align="center"> 
 
 </div> 
+
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+  <div>
+    <div id="dialogboxhead"></div>
+    <div id="dialogboxbody"></div>
+    <div id="dialogboxfoot"></div>
+  </div>
+</div>
