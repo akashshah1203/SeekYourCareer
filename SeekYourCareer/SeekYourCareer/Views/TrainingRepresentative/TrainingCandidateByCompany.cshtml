@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "Shortlisted Training Applicants - Representative";
-    Layout = "~/Views/Shared/MyLayout.cshtml";
+    Layout = "~/Views/Shared/RepresentativeLayout.cshtml";
 }
 
 <script src="http://ajapx.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -11,7 +11,7 @@
         $('#mytable').empty();
         $('#DetailsDiv').empty();
         if (trainingId == '')
-            alert("Select Training Id");
+            Alert.render("Select Training Id");
         else {
             var url = "/TrainingRepresentative/TrainingCandidateByCompany/";
 
@@ -24,11 +24,11 @@
                     if (data.TrainApplications.length == 0)
                         $('#mytable').html("No records to display");
                     else {
-                        var trhtml = "<table><tr><th>Applicant Id</th><th>Name</th></tr>";
+                        var trhtml = "<table class=\"CSSTableGenerator\"><tr><th>Applicant Id</th><th>Name</th></tr>";
 
                         for (var i = 0; i < data.TrainApplications.length; i++) {
 
-                            trhtml += "<tr> <td>" + data.TrainApplications[i].ApplicantId + "</td> <td> " + data.TrainApplications[i].Name + "</td> <td> <input type=\"button\" value=\"Details\" onclick=\"GetDetails('" + data.TrainApplications[i].ApplicantId + "','" + data.TrainApplications[i].TrainingId + "','" + data.TrainApplications[i].AppDate + "','" + data.TrainApplications[i].CorrAddress + "','" + data.TrainApplications[i].ContactNo + "','" + data.TrainApplications[i].SelectionStatus + "')\" /> </td> </tr>";
+                            trhtml += "<tr> <td>" + data.TrainApplications[i].ApplicantId + "</td> <td> " + data.TrainApplications[i].Name + "</td> <td> <input type=\"button\" class=\"button\" style=\"border: 2px solid orange \" value=\"Details\" onclick=\"GetDetails('" + data.TrainApplications[i].ApplicantId + "','" + data.TrainApplications[i].TrainingId + "','" + data.TrainApplications[i].AppDate + "','" + data.TrainApplications[i].CorrAddress + "','" + data.TrainApplications[i].ContactNo + "','" + data.TrainApplications[i].SelectionStatus + "')\" /> </td> </tr>";
                         }
 
                         $('#mytable tbody > tr').remove();
@@ -37,7 +37,7 @@
                 },
                 error: function (reponse) {
 
-                    alert("error : " + reponse);
+                    Alert.render("error : " + reponse);
                 }
             });
 
@@ -46,7 +46,7 @@
 
     function GetDetails(a,b,c,d,e,f) {
         
-        details = "<table><tr><td align=\"left\"><b>Applicant Id</b></td><td>:</td><td align=\"left\">" + a + "</td></tr>"
+        details = "<table class=\"CSSInfoTable\"><tr><td align=\"left\"><b>Applicant Id</b></td><td>:</td><td align=\"left\">" + a + "</td></tr>"
         details += "<tr><td align=\"left\"><b>Training Offer Id</b></td><td>:</td><td align=\"left\">" + b + "</td></tr>"
         details += "<tr><td align=\"left\"><b>Date of Application</b></td><td>:</td><td align=\"left\">" + c + "</td></tr>"
         details += "<tr><td align=\"left\"><b>Correspondence Address</b></td><td>:</td><td align=\"left\">" + d + "</td></tr>"
@@ -62,7 +62,7 @@
 <div>
     <p>Select Training Id</p> 
     
-    @Html.DropDownList("ddltrainid", new SelectList(@ViewBag.MyList), "--Select--", new { @id = "ddltrainid", @style = "width:200px;" , @onchange = "javascript:GetApplicants(this.value);" }) 
+    @Html.DropDownList("ddltrainid", new SelectList(@ViewBag.MyList), "--Select--", new { @class="search_categories", @id = "ddltrainid", @style = "width:200px;" , @onchange = "javascript:GetApplicants(this.value);" }) 
       
  <br /> 
      <br /> 
@@ -86,3 +86,12 @@
 
 <div id="DetailsDiv" name="DetailsDiv" align="center"> 
 </div> 
+
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+  <div>
+    <div id="dialogboxhead"></div>
+    <div id="dialogboxbody"></div>
+    <div id="dialogboxfoot"></div>
+  </div>
+</div>

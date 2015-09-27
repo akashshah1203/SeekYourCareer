@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "SelTrainCan";
-    Layout = "~/Views/Shared/MyLayout.cshtml";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
 <script src="http://ajapx.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -12,7 +12,7 @@
         $('#mytable').empty();
         $('#DetailsDiv').empty();
         if (companyName == '') {
-            alert('Select Company Name');
+            Alert.render('Select Company Name');
             $('#SelectStream').empty();
             $('#mytable').empty();
             $('#DetailsDiv').empty();
@@ -30,7 +30,7 @@
                         $('#mytable').html("No records to display");
                     else {
                         var trhtml;
-                        trhtml = '<br/>Job Offer Id <br/><br/><select name="DD" id="selectData" onchange="GetApplicants()">';
+                        trhtml = '<br/>Job Offer Id <br/><br/><select name="DD" id="selectData" class="search_categories" onchange="GetApplicants()">';
                         trhtml += '<option value="">' + '--Select--' + '</option>';
                         for (var i = 0; i < data.length; i++) {
                             trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
@@ -43,8 +43,8 @@
                     }
                 },
                 error: function (reponse) {
-                    alert("Error");
-                    alert("error : " + reponse);
+                    Alert.render("Error");
+                    Alert.render("error : " + reponse);
                 }
             });
         }
@@ -55,7 +55,7 @@
         $('#mytable').empty();
         jobId = document.getElementById("selectData").value;
         if (jobId == '') {
-            alert('Select Job Id');
+            Alert.render('Select Job Id');
             $('#DetailsDiv').empty();
             $('#mytable').empty();
         }
@@ -84,7 +84,7 @@
                 },
                 error: function (reponse) {
 
-                    alert("error : " + reponse);
+                    Alert.render("error : " + reponse);
                 }
             });
 
@@ -107,7 +107,7 @@
 
 <div>
     <p>Company</p>
-    @Html.DropDownList("ddlcompany", new SelectList(@ViewBag.CompanyNameL), "--Select--", new { @id = "ddlcompany", @style = "width:200px;" , @onchange = "javascript:GetJobId(this.value);" }) 
+    @Html.DropDownList("ddlcompany", new SelectList(@ViewBag.CompanyNameL), "--Select--", new { @class="search_categories",@id = "ddlcompany", @style = "width:200px;" , @onchange = "javascript:GetJobId(this.value);" }) 
 
           
  </div>
@@ -132,3 +132,12 @@
 
 <div id="DetailsDiv" name="DetailsDiv" align="center"> 
 </div> 
+
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+  <div>
+    <div id="dialogboxhead"></div>
+    <div id="dialogboxbody"></div>
+    <div id="dialogboxfoot"></div>
+  </div>
+</div>

@@ -24,6 +24,13 @@ namespace SeekYourCareer.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+
+            int work = new DataAccess.DataObj().adminTotalWorkshopApplication();
+            ViewBag.totalworkshopapplication = work;
+            int training = new DataAccess.DataObj().adminTotalTrainingApplication();
+            ViewBag.totaltrainingapplication = training;
+            int job = new DataAccess.DataObj().adminTotalJobApplication();
+            ViewBag.totaljobapplication = job;
             return View();
         }
 

@@ -9,7 +9,7 @@
     function GetApplicants(jobId) {
         $('#DetailsDiv').empty();
         if (jobId == '') {
-            alert('Select Job Id');
+            Alert.render.render('Select Job Id');
             $('#DetailsDiv').empty();
             $('#mytable').empty();
         }
@@ -27,11 +27,11 @@
                         $('#mytable').html(trhtml);
                     }
                     else {
-                        var trhtml = "<table><tr><th>Application Id</th><th>User Id</th><th>Job Offer Id</th><th>Applied Date</th><th>Correspondance Address</th><th>Approval Status</th></tr>";
+                        var trhtml = "<table class=\"CSSTableGenerator\"><tr><th>Application Id</th><th>User Id</th><th>Job Offer Id</th><th>Applied Date</th><th>Correspondance Address</th><th>Approval Status</th><th></th></tr>";
 
                         for (var i = 0; i < data.JobApplications.length; i++) {
 
-                            trhtml += "<tr> <td>" + data.JobApplications[i].ApplicantId + "</td> <td> " + data.JobApplications[i].UserID + "</td> <td> " + data.JobApplications[i].JobId + "</td> <td> " + data.JobApplications[i].AppDate + "</td> <td> " + data.JobApplications[i].Correspondance + "</td> <td> " + data.JobApplications[i].Status + "</td> <td> <input type=\"button\" value=\"Details\" onclick=\"GetDetails('" + data.JobApplications[i].Name + "','" + data.JobApplications[i].Age + "','" + data.JobApplications[i].Correspondance + "','" + data.JobApplications[i].ContactNo + "','" + data.JobApplications[i].EmailId + "')\" /> </td> </tr>";
+                            trhtml += "<tr> <td>" + data.JobApplications[i].ApplicantId + "</td> <td> " + data.JobApplications[i].UserID + "</td> <td> " + data.JobApplications[i].JobId + "</td> <td> " + data.JobApplications[i].AppDate + "</td> <td> " + data.JobApplications[i].Correspondance + "</td> <td> " + data.JobApplications[i].Status + "</td> <td> <input type=\"button\" class=\"button\" style=\"border: 2px solid orange\" value=\"Details\" onclick=\"GetDetails('" + data.JobApplications[i].Name + "','" + data.JobApplications[i].Age + "','" + data.JobApplications[i].Correspondance + "','" + data.JobApplications[i].ContactNo + "','" + data.JobApplications[i].EmailId + "')\" /> </td> </tr>";
                         }
                         trhtml += "</table>";
                         $('#mytable tbody > tr').remove();
@@ -40,7 +40,7 @@
                 },
                 error: function (reponse) {
 
-                    alert("error : " + reponse);
+                    Alert.render("error : " + reponse);
                 }
             });
         }
@@ -48,11 +48,11 @@
 
     function GetDetails(a,b,c,d,e) {
         
-        details = "<table><tr><td align=\"left\"><b>Name</b></td><td>:</td><td align=\"left\">" + a + "</td></tr>"
-        details += "<tr><td align=\"left\"><b>Age</b></td><td>:</td><td align=\"left\">" + b + "</td></tr>"
-        details += "<tr><td align=\"left\"><b>Address</b></td><td>:</td><td align=\"left\">" + c + "</td></tr>"
-        details += "<tr><td align=\"left\"><b>Contact No</b></td><td>:</td><td align=\"left\">" + d + "</td></tr>"
-        details += "<tr><td align=\"left\"><b>EmailId</b></td><td>:</td><td align=\"left\">" + e + "</td></tr></table>"
+        details = "<table class=\"CSSInfoTable\"><tr><td align=\"left\"><b>Name</b></td><td align=\"left\">" + a + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Age</b></td><td align=\"left\">" + b + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Address</b></td><td align=\"left\">" + c + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Contact No</b></td><td align=\"left\">" + d + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>EmailId</b></td><td align=\"left\">" + e + "</td></tr></table>"
         document.getElementById("DetailsDiv").innerHTML = details;
     }
 </script> 
@@ -63,7 +63,7 @@
 <div>
     <p>Job Offer Id</p> 
     
-    @Html.DropDownList("ddljobid", new SelectList(@ViewBag.JobIdL), "--Select--", new { @id = "ddljobid", @style = "width:200px;" , @onchange = "javascript:GetApplicants(this.value);" }) 
+    @Html.DropDownList("ddljobid", new SelectList(@ViewBag.JobIdL), "--Select--", new { @id = "ddljobid", @style = "width:200px;", @class="search_categories", @onchange = "javascript:GetApplicants(this.value);" }) 
       
  <br /> 
      <br /> 
