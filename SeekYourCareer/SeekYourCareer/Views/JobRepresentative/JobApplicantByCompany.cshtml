@@ -16,7 +16,7 @@
         $("#SelectJob").empty();
         $("#ShowError").empty();
         if (Domain == '') {
-            alert("Select a stream code");
+            Alert.render("Please select a stream code!");
             trhtml = '';
             
             $("#mytable").empty();
@@ -35,7 +35,7 @@
                 success: function (data) {
 
                     var trhtml = '';
-                    trhtml = '<br/>Select Job Offer Id <br/><br/> <select name="DD" id="selectData" onchange="Caller()">';
+                    trhtml = '<br/>Select Job Offer Id <br/><br/> <select name="DD" class="search_categories" id="selectData" onchange="Caller()">';
                     trhtml += '<option value="0">' + '--Select--' + '</option>';
                     for (var i = 0; i < data.length; i++) {
                         trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
@@ -47,8 +47,7 @@
                     
                 },
                 error: function (reponse) {
-                    alert("Error");
-                    alert("error : " + reponse);
+                    Alert.render("error : " + reponse);
                 }
             });
         }
@@ -66,7 +65,7 @@
         if (jid != 0)
             ViewApplicants(jid)
         else {
-            alert("Select Job Offer Id");
+            Alert.render("Please select Job Offer Id");
             JOfferId = '';
             trhtml = '';
             $('#ApplicantDiv').empty();
@@ -88,17 +87,17 @@
             
             success: function (data) {
                 
-                trhtml = "<table><tr><td align=\"left\"><b>Min SSC Percentage</b></td><td>:</td><td align=\"left\">" + data.MinSSCPercent + "</td></tr>"
-                trhtml += "<tr><td align=\"left\"><b>Min HSC Percentage</b></td><td>:</td><td align=\"left\">" + data.MinHSCPercent + "</td></tr>"
-                trhtml += "<tr><td align=\"left\"><b>Min Graduation Average</b></td><td>:</td><td align=\"left\">" + data.MinGradAvg + "</td></tr>"
-                trhtml += "<tr><td align=\"left\"><b>Min Post Graduation Average</b></td><td>:</td><td align=\"left\">" + data.MinPGAvg + "</td></tr>"
-                trhtml += "<tr><td align=\"left\"><b>Experience</b></td><td>:</td><td align=\"left\">" + data.Experience + "</td></tr></table>"
+                trhtml = "<table class=\"CSSInfoTable\"><tr><td align=\"left\"><b>Min SSC Percentage</b></td><td align=\"left\">" + data.MinSSCPercent + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>Min HSC Percentage</b></td><td align=\"left\">" + data.MinHSCPercent + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>Min Graduation Average</b></td><td align=\"left\">" + data.MinGradAvg + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>Min Post Graduation Average</b></td><td align=\"left\">" + data.MinPGAvg + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>Experience</b></td><td align=\"left\">" + data.Experience + "</td></tr></table>"
 
                 $('#mytable').append(trhtml);
             },
             error: function (reponse) {
 
-                alert("error : " + reponse);
+                Alert.render("error : " + reponse);
             }
         });
     }
@@ -108,7 +107,7 @@
         $("#mytable").empty();
         $('#ApplicantDiv').empty();
         if (jobId == '') {
-            alert('Select Job Id');
+            Alert.render('Select Job Id');
             $("#ShowError").empty();
             $("#mytable").empty();
             $('#ApplicantDiv').empty();
@@ -131,12 +130,12 @@
                     }
                     else {
                         var trhtml = '';
-                        trhtml += "<input type=\"button\" value=\"View Educational Requirements\" onclick= \"GetJobPreReq()\"/>";
+                        trhtml += "<input type=\"button\" class=\"button\" style=\"border: 2px solid orange \" value=\"View Educational Requirements\" onclick= \"GetJobPreReq()\"/>";
                         trhtml += "<br/><br/>";
-                        trhtml += "<table><tr><th>ApplicantId</th><th>Name</th><th>SSC Percentage</th><th>HSC Percentage</th><th>PG Percentage</th><th>Graduation Percentage</th><th>Experience</th><th>Select</th><th>Reject</th></tr>";
+                        trhtml += "<table class=\"CSSTableGenerator\"><tr><th>ApplicantId</th><th>Name</th><th>SSC Percentage</th><th>HSC Percentage</th><th>PG Percentage</th><th>Graduation Percentage</th><th>Experience</th><th>Select</th><th>Reject</th></tr>";
                         for (var i = 0; i < data.JobApplicants.length; i++) {
 
-                            trhtml += "<tr> <td> " + data.JobApplicants[i].ApplicantId + "</td> <td> " + data.JobApplicants[i].Name + "</td> <td> " + data.JobApplicants[i].SSCPercent + "</td> <td> " + data.JobApplicants[i].HSCPercent + "</td> <td> " + data.JobApplicants[i].GradPercent + "</td> <td> " + data.JobApplicants[i].PGPercent + "</td> <td> " + data.JobApplicants[i].HaveWorkExp + "</td> <td> <input type=\"button\" value=\"Select\" onclick=\"Select('" + data.JobApplicants[i].ApplicantId + "','" + jobId + "')\" /> </td> <td> <input type=\"button\" value=\"Reject\" onclick=\"Reject('" + data.JobApplicants[i].ApplicantId + "','" + jobId + "')\" /> </td></tr>";
+                            trhtml += "<tr> <td> " + data.JobApplicants[i].ApplicantId + "</td> <td> " + data.JobApplicants[i].Name + "</td> <td> " + data.JobApplicants[i].SSCPercent + "</td> <td> " + data.JobApplicants[i].HSCPercent + "</td> <td> " + data.JobApplicants[i].GradPercent + "</td> <td> " + data.JobApplicants[i].PGPercent + "</td> <td> " + data.JobApplicants[i].HaveWorkExp + "</td> <td> <input type=\"button\" class=\"button\" value=\"Select\" onclick=\"Select('" + data.JobApplicants[i].ApplicantId + "','" + jobId + "')\" /> </td> <td> <input type=\"button\" class=\"button\" value=\"Reject\" onclick=\"Reject('" + data.JobApplicants[i].ApplicantId + "','" + jobId + "')\" /> </td></tr>";
                         }
 
                         trhtml += "</table>";
@@ -145,7 +144,7 @@
                 },
                 error: function (reponse) {
 
-                    alert("error : " + reponse);
+                    Alert.render("error : " + reponse);
                 }
             });
         }
@@ -154,7 +153,7 @@
     
        function Select(userId,jobId) {
       
-           alert("Selected");
+           Alert.render("Candidate Selected and updated in database");
            var url = "/JobRepresentative/SelectJobCandidate/";
            $.ajax({
                url: url,
@@ -181,7 +180,7 @@
     */
 
        function Reject(userId,jobId) {
-           alert("Rejected");
+           Alert.render("Candidate Rejected and updated in database");
            var url = "/JobRepresentative/RejectJobCandidate/";
            $.ajax({
                url: url,
@@ -195,7 +194,7 @@
                },
                error: function (reponse) {
 
-                   alert("error : " + reponse);
+                   Alert.render("error : " + reponse);
                }
            });
        }
@@ -209,7 +208,7 @@
 <div>
     <p>Stream Code</p> 
     
-    @Html.DropDownList("ddldomain", new SelectList(@ViewBag.JobDomainL), "--Select--", new { @id = "ddldomain", @style = "width:200px;" , @onchange = "javascript:GetJobIDs(this.value);" }) 
+    @Html.DropDownList("ddldomain", new SelectList(@ViewBag.JobDomainL), "--Select--", new { @id = "ddldomain", @style = "width:200px;", @class="search_categories", @onchange = "javascript:GetJobIDs(this.value);" }) 
 </div>
  
 <div id="SelectJob" class="editor-field">
@@ -227,3 +226,12 @@
 <div id ="ShowError" class ="display"> 
     
 </div> 
+
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+  <div>
+    <div id="dialogboxhead"></div>
+    <div id="dialogboxbody"></div>
+    <div id="dialogboxfoot"></div>
+  </div>
+</div>
