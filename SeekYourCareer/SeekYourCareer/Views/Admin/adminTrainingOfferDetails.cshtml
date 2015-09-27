@@ -1,69 +1,84 @@
 ﻿@model SeekYourCareer.ViewModels.staffPostTrainingDetails
 
+
+
+
 <fieldset>
-    <legend>staffPostTrainingDetails</legend>
+    <legend>Post Training Details</legend>
+    <table class="CSSInfoTable">
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.location)
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.location)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.location)
-    </div>
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.location)
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.domain)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.domain)
-    </div>
+            </td>
+        </tr>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.graduation)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.graduation)
-    </div>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.domain)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.domain)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.graduation)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.graduation)
+            </td>
+        </tr>
+        <tr>
+            <td>Post Graduation
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.postgrad)
+            </td>
+        </tr>
+        <tr>
+            <td>Past Experience
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.experience)
+            </td>
+        </tr>
+        <tr>
+            <td>Starting Date
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.startDate)
+            </td>
+        </tr>
 
-    <div class="display-label">
-         Post Graduation
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.postgrad)
-    </div>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.duration)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.duration)
+            </td>
+        </tr>
+        <tr>
+            <td>No. Of Seats Available
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.seats)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.description)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.description)
+            </td>
+        </tr>
 
-    <div class="display-label">
-        Past Experience
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.experience)
-    </div>
-
-    <div class="display-label">
-            Starting Date    
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.startDate)
-    </div>
-
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.duration)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.duration)
-    </div>
-
-    <div class="display-label">
-            No. Of Seats Available
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.seats)
-    </div>
-
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.description)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.description)
-    </div>
+    </table>
 </fieldset>
 

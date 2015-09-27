@@ -1,15 +1,16 @@
 ﻿@model IEnumerable<SeekYourCareer.ViewModels.staffPostTrainingTable>
 
-
+@{
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
 
 
 <script>
 
-    var trainid=null;
+    var trainid = null;
     var acceptancehere = null;
 
-    function DetailsButton(trainidhere)
-    {
+    function DetailsButton(trainidhere) {
         trainid = trainidhere;
         var url = "/Admin/adminTrainingOfferDetails";
         $.ajax({
@@ -35,26 +36,23 @@
         });
 
     }
-    function PostButton(trainidhere)
-    {
+    function PostButton(trainidhere) {
         trainid = trainidhere;
-        
+
         $(".partialviewdetails").hide();
         $(".DetailSection").show();
         acceptancehere = "Approved";
     }
-    function RejectButton(trainidhere)
-    {
+    function RejectButton(trainidhere) {
         trainid = trainidhere;
         $(".partialviewdetails").hide();
         $(".DetailSection").show();
         acceptancehere = "Rejected";
     }
 
-    function YesButton()
-    {
+    function YesButton() {
         var url = "/Admin/adminAcceptTrainingOffer";
-        
+
         $.ajax({
             url: url,
             data: { trainID: trainid, acceptance: acceptancehere },
@@ -78,8 +76,7 @@
             }
         });
     }
-    function NoButton()
-    {
+    function NoButton() {
         $(".DetailSection").hide();
 
     }
@@ -91,7 +88,7 @@
 
 
 
-<table>
+<table class="CSSTableGenerator">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.trainingId)
@@ -102,49 +99,51 @@
         <th>
             @Html.DisplayNameFor(model => model.startDate)
         </th>
-        <th></th>
+        <th>Details</th>
+        <th>Post</th>
+        <th>Reject</th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr id="@item.trainingId">
-        <td>
-            @Html.DisplayFor(modelItem => item.trainingId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.location)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.startDate)
-        </td>
-        <td>
-            <button id="DetailsButton" class="@item.trainingId" onclick="javascript: DetailsButton('@item.trainingId')">Details</button>
-        </td>
-        <td>
-            <button id="PostButton" class="@item.trainingId" onclick="javascript: PostButton('@item.trainingId')">Post</button>
-        </td>
-        <td>
-            <button id="RejectButton" class="@item.trainingId" onclick="javascript: RejectButton('@item.trainingId')">Reject</button>
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr id="@item.trainingId">
+            <td>
+                @Html.DisplayFor(modelItem => item.trainingId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.location)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.startDate)
+            </td>
+            <td>
+                <button id="DetailsButton" class="@item.trainingId" onclick="javascript: DetailsButton('@item.trainingId')">Details</button>
+            </td>
+            <td>
+                <button id="PostButton" class="@item.trainingId" onclick="javascript: PostButton('@item.trainingId')">Post</button>
+            </td>
+            <td>
+                <button id="RejectButton" class="@item.trainingId" onclick="javascript: RejectButton('@item.trainingId')">Reject</button>
+            </td>
+        </tr>
+    }
 
 </table>
 
-<div class="partialviewdetails" >
-
+<div class="partialviewdetails">
 </div>
 
-<div class="DetailSection"  hidden>
-   <p > Are You Sure ???????</p>
+<div class="DetailSection" hidden>
+    <p>Are You Sure ???????</p>
     <table>
         <tr>
-            <td >
-                <button id="YesButton" onclick="javascript: YesButton()">Yes</button>
+            <td>
+                <button id="YesButton" class="button" onclick="javascript: YesButton()">Yes</button>
             </td>
-            <td >
-                <button id="NoButton" onclick="javascript: NoButton()">No</button>
+            <td>
+                <button class="button" id="NoButton" onclick="javascript: NoButton()">No</button>
             </td>
 
         </tr>
-</table>
+    </table>
 </div>

@@ -66,7 +66,7 @@
 
     function stream_table(stream, company)
     {
-        alert(stream);
+        //alert(stream);
 
         var url = "/Applicant/ApplyForJob1";
         $("#errormessage").html("");
@@ -81,8 +81,8 @@
             cache: false,
             type: "POST",
             success: function (data) {
-                console.log(data);
-                alert(data);
+                //console.log(data);
+                //Alert.render(data);
                 $('#showtable').html("");
                 $("#errormessage").html("");
 
@@ -96,10 +96,8 @@
                 }
                 else {
                     html = "  <tr><th>Job Type</th><th>Min SSC Percentage</th><th>Min HSC Percentage</th><th>Min Grad Avg</th> <th>Min Post Grad Avg</"
-                                + "th><th>Salary Per Month</th><th>Location</th><th>Experience</th><th>LastDate</th></tr> ";
+                                + "th><th>Salary Per Month</th><th>Location</th><th>Experience</th><th>LastDate</th><th>Select any one</th></tr> ";
                     addr = data[0].CorrespondanceAddress;
-                    console.log(data);
-                    console.log(addr);
 
                     for (var i = 0; i < data.length; i++)
                     {
@@ -128,7 +126,7 @@
 
     function OnSubmit()
     {
-        alert("button clicked");
+        //alert("button clicked");
         if ($("input[type=checkbox]:checked").length == 0)
         {
             str = "Select a Job From The List!!!!!!";
@@ -145,7 +143,7 @@
 
         }
         else if ($("input[type=checkbox]:checked").length == 1) {
-            alert("in fnc");
+            //alert("in fnc");
             return true;
         }
         else
@@ -191,3 +189,11 @@
 
     </div>
 </form> 
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+  <div>
+    <div id="dialogboxhead"></div>
+    <div id="dialogboxbody"></div>
+    <div id="dialogboxfoot"></div>
+  </div>
+</div>

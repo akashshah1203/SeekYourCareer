@@ -116,7 +116,7 @@
 
     function CompanyDetails(company, trainingid)
     {
-        Alert.render("In company details");
+        //Alert.render("In company details");
         var html;
         $('#CompanyDetails').html("");
 
@@ -129,18 +129,18 @@
             success: function (data)
             {
                 html = " <h3>Company Details </h3> <br/>";
-                html += "<table class=\"CSSInfoTable\"><tr><td>Company Name</td><td>     " + data.CompanyName + " </td></tr><br/> ";
-                html += "<tr><td>Address</td><td>   " + data.Address + " </td></tr><br/> ";
-                html += "<tr><td>Email ID</td><td>  " + data.EmailID + " </td></tr><br/> ";
-                html += "<tr><td>Phone Number</td><td>  " + data.Phone + " </td></tr></table> <br/>";
-                html += "<br/><br/> <h3>Training Details </h3><br/> ";
+                html += "<table class=\"CSSInfoTable\"><tr><td>Company Name</td><td>     " + data.CompanyName + " </td></tr> ";
+                html += "<tr><td>Address</td><td>   " + data.Address + " </td></tr> ";
+                html += "<tr><td>Email ID</td><td>  " + data.EmailID + " </td></tr> ";
+                html += "<tr><td>Phone Number</td><td>  " + data.Phone + " </td></tr></table> ";
+                html += "<br/> <h3>Training Details </h3><br/> ";
                 var datestart = new Date(parseInt((data.StartDate).substr(6)));
-                html += "<table class=\"CSSInfoTable\"><tr><td>Starting Date</td><td>     " + datestart + " </td></tr><br/> ";
-                html += "<tr><td>Duration</td><td>  " + data.Duration + " </td></tr><br/> ";
-                html += "<tr><td>Graduation</td><td>    " + data.Graduation + " </td></tr><br/> ";
-                html += "<tr><td>Post Graduation</td><td>   " + data.PostGraduation + " </td></tr> <br/>";
-                html += "<tr><td>Past Experience</td><td>   " + data.PastExp + " </td></tr> <br/>";
-                html += "<tr><td>No. Of Seats Available</td><td>     " + data.SeatsAvailable + " </td></tr></table> <br/>";
+                html += "<table class=\"CSSInfoTable\"><tr><td>Starting Date</td><td>     " + datestart + " </td></tr> ";
+                html += "<tr><td>Duration</td><td>  " + data.Duration + " </td></tr>";
+                html += "<tr><td>Graduation</td><td>    " + data.Graduation + " </td></tr> ";
+                html += "<tr><td>Post Graduation</td><td>   " + data.PostGraduation + " </td></tr>";
+                html += "<tr><td>Past Experience</td><td>   " + data.PastExp + " </td></tr>";
+                html += "<tr><td>No. Of Seats Available</td><td>     " + data.SeatsAvailable + " </td></tr></table>";
                 $('#CompanyDetails').append(html);
 
             },
