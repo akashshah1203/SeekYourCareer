@@ -47,7 +47,7 @@ namespace SeekYourCareer.Models
 
         [Required]
         [Display(Name = "Salary Per Month")]
-        [Range(0, Int32.MaxValue, ErrorMessage = "Only an Integer is allowed.")]
+        [Range(0, Int32.MaxValue, ErrorMessage = "Only positive Integer is allowed.")]
         public int monthlySalary { get; set; }
 
         [Display(Name = "Location")]
@@ -55,6 +55,7 @@ namespace SeekYourCareer.Models
     
         [Required]
         [Display(Name = "Experience")]
+        [Range(0, Int32.MaxValue, ErrorMessage = "Only positive Integer is allowed.")]
         public int Experience { get; set; }
 
 

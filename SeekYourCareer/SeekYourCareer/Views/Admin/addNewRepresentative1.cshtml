@@ -4,6 +4,14 @@
     ViewBag.Title = "addNewRepresentative";
 }
 
+@*<style>
+    .editor-field input[type="radio"] 
+    {
+        width:50px;
+    }
+    </style>*@
+
+
 <style type="text/css">
 .form-style-5{
     max-width: 500px;
@@ -95,32 +103,18 @@
 
 
 
-<script>
-    function checkIfAllNo()
-    {
-        var train=$("#Training:checked").val();
-        //alert(train);
-        var result="False";
-        var work=$("#Training:checked").val();
-        var job=$("#Training:checked").val();
-        var intern=$("#Training:checked").val();
-        if(train==result && work==result && job==result && intern==result)
-            return false;
-        return true;
-    }
-
-</script>
 
 <h2 style="text-align:center">Add A New Representative</h2>
+
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 <div class="form-style-5">
-
     <fieldset>
         <legend>AddNewRepresentative</legend>
-         <br />
+        
+        <br />
         <br />
         
         <h2><span class="number">1</span>Account Details</h2>
@@ -141,7 +135,6 @@
             @Html.EditorFor(model => model.ConfirmPassword)
             @Html.ValidationMessageFor(model => model.ConfirmPassword)
         </div>
-
         <br />
         <br />
         
@@ -149,7 +142,6 @@
         <br />
         <br />
         
-
         <div class="editor-label">
             @Html.LabelFor(model => model.companyName)
         </div>
@@ -202,7 +194,7 @@
             @Html.LabelFor(model => model.Workshop)
         </div>
         <div class="editor-field">
-            @Html.RadioButtonFor(model => model.Workshop, true) Yes
+              @Html.RadioButtonFor(model => model.Workshop, true) Yes
             @Html.RadioButtonFor(model => model.Workshop, false) No
             @Html.ValidationMessageFor(model => model.Workshop)
         </div>
@@ -220,19 +212,18 @@
             @Html.LabelFor(model => model.Internship)
         </div>
         <div class="editor-field">
-             @Html.RadioButtonFor(model => model.Internship, true) Yes
+            @Html.RadioButtonFor(model => model.Internship, true) Yes
             @Html.RadioButtonFor(model => model.Internship, false) No
             @Html.ValidationMessageFor(model => model.Internship)
         </div>
 
-       <p>
-            <input type="submit" value="Register" style="text-align:center" onclick="return checkIfAllNo()"/>
+        <p>
+            <input type="submit" value="Register" style="text-align:center" />
             <input type="button" onclick="location.href= '@Url.Action("SearchForTraining", "Applicant")'"  value="Cancel"/>
         </p>
     </fieldset>
 </div>
 }
-
 
 
 @section Scripts {

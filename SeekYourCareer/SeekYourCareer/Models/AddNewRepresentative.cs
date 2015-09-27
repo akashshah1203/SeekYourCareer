@@ -25,7 +25,8 @@ namespace SeekYourCareer.Models
 
         [Required]
         [Display(Name = "Company Name")]
-        [StringLength(30, ErrorMessage = "Atmost 30 characters allowed.")]
+        [RegularExpression(@"^[a-zA-Z_]*$", ErrorMessage = "Only alphabets and underscore allowed.")]
+        [StringLength(20, MinimumLength = 6, ErrorMessage = "Minimum 6 and atmost 20 characters allowed.")]
         public string companyName { get; set; }
 
         [Required]

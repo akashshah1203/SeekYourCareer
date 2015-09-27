@@ -90,8 +90,10 @@ namespace SeekYourCareer.DataAccess
                 {
                     //queryString = "Select count(UserName) from UserDetails where UserName=@usern and Password=@Pass";
                     String adminUser, adminpass;
-                    adminUser = ConfigurationManager.AppSettings["Username"];
-                    adminpass = ConfigurationManager.AppSettings["Password"];
+                    //adminUser = ConfigurationManager.AppSettings["Username"];
+                    //adminpass = ConfigurationManager.AppSettings["Password"];
+                    adminUser = "admin_user";
+                    adminpass = "password123";
                     if (Username.CompareTo(adminUser) == 0 && Password.CompareTo(adminpass) == 0)
                     {
                         
@@ -190,7 +192,8 @@ namespace SeekYourCareer.DataAccess
         {
             string connectionString = Connstr();
 
-
+            oldPassword = GetHashedText(oldPassword);
+            newPassword = GetHashedText(newPassword);
             SqlConnection connection = new SqlConnection(connectionString);
             string queryString = null;
             connection.Open();

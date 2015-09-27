@@ -3,12 +3,89 @@
     ViewBag.Title = "ApplyForTraining";
 }
 
-<style>
-    .Buttons  {
-        text-align: center;
-    }
-</style>
 
+<style type="text/css">
+.form-style-5{
+    max-width: 500px;
+    padding: 10px 20px;
+    background: #f4f7f8;
+    margin: 10px auto;
+    padding: 20px;
+    background: #f4f7f8;
+    border-radius: 8px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+}
+.form-style-5 fieldset{
+    border: none;
+}
+.form-style-5 legend {
+    font-size: 1.4em;
+    margin-bottom: 10px;
+}
+.form-style-5 label {
+    display: block;
+    margin-bottom: 8px;
+}
+.form-style-5 .editor-field {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    background: rgba(255,255,255,.1);
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    margin: 0;
+    outline: 0;
+    padding: 7px;
+    width: 100%;
+    box-sizing: border-box; 
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box; 
+    background-color: #e8eeef;
+    color:#8a97a0;
+    -webkit-box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+    margin-bottom: 30px;
+    
+}
+.form-style-5 .editor-field:focus{
+    background: #d2d9dd;
+}
+
+
+.form-style-5 .number {
+    background: #1abc9c;
+    color: #fff;
+    height: 30px;
+    width: 30px;
+    display: inline-block;
+    font-size: 0.8em;
+    margin-right: 4px;
+    line-height: 30px;
+    text-align: center;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+    border-radius: 15px 15px 15px 0px;
+}
+
+.form-style-5 .Buttons
+{
+    position: relative;
+    display: block;
+    padding: 19px 39px 18px 39px;
+    color: #FFF;
+    margin: 0 auto;
+    background: #1abc9c;
+    font-size: 18px;
+    text-align: center;
+    font-style: normal;
+    width: 80%;
+    border: 1px solid #16a085;
+    border-width: 1px 1px 3px;
+    margin-bottom: 10px;
+}
+.form-style-5 .Buttons:hover
+{
+    background: #109177;
+}
+</style>
 <script>
     function Checktoggle()
     {
@@ -89,11 +166,12 @@
 
 
 
-<h2>Apply For Training</h2>
+<h2 style="text-align:center">Apply For Training</h2>
+<div class="form-style-5">
 
-<h3>Personal Details</h3>
+<h2 class="number">Personal Details</h2>
 
-<table>
+<table">
     <tr>
         <td>
             Applicant Name
@@ -106,7 +184,7 @@
         <td>
             Address:  
         </td>
-        <td>
+        <td class="editor-field">
             <input type="text" id="address" value="@ViewBag.ApplyJob.Address" maxlength="50">
         </td>
     </tr>
@@ -122,7 +200,7 @@
         <td>
             EmailId:
         </td>
-        <td>
+        <td  class="editor-field">
             <input type="text" id="emailid" value="@ViewBag.ApplyJob.EmailID">
         </td>
     </tr>
@@ -130,7 +208,7 @@
         <td>
             Contact No.:
         </td>
-        <td>
+        <td class="editor-field">
             <input type="text" id="contact" value="@ViewBag.ApplyJob.Contact">
         </td>
     </tr>
@@ -153,21 +231,21 @@
         <td>
             Correspondance Address:
         </td>
-        <td>
+        <td class="editor-field">
             <input type="text" id="Corraddr" name="CorrespondAddr"  >
         </td>
     </tr>
       <tr>
-        <td>
+        <td class="editor-field">
             Correspondance Contact No.:
         </td>
-        <td>
+        <td class="editor-field">
             <input type="text" id="Corrcontact" name="CorrespondAddr"  >
         </td>
     </tr>
 </table>
 
-<h2>Educational Details</h2>
+<h2 class="number">Educational Details</h2>
 
 <table>
     <tr>
@@ -193,7 +271,7 @@
 </table>
 
 
-<h2>Training Details</h2>
+<h2 class="number">Training Details</h2>
 <table>
     <tr>
         <td>Company</td>
@@ -226,4 +304,5 @@
 
 <div id="message" style="font-size:40px ; color:darkblue">
 
+</div>
 </div>

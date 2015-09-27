@@ -153,7 +153,12 @@ namespace SeekYourCareer.Controllers
 
         public ActionResult ManagePassword()
         {
-
+            string type = (string)Session["TypeOfUser"];
+            if (type == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            
             return View();
         }
 

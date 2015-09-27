@@ -29,6 +29,7 @@ namespace SeekYourCareer.Models
 
         [Required]
         [Display(Name = "Experience")]
+        [Range(0, Int32.MaxValue, ErrorMessage = "Greater Than 0.")]
         public int Experience { get; set; }
 
         [Required]

@@ -19,9 +19,12 @@
             type: "POST",
             success: function (data) {
                 //window.location.assign("/Applicant/Index");
-                alert("in here");
-                $(".partialviewdetails").html("");
+                //alert("in here");
+                $(".partialviewdetails").show();
 
+                $(".partialviewdetails").html("");
+                //console.log(data);
+                //alert(data);
                 $(".partialviewdetails").html(data);
 
             },
@@ -35,12 +38,15 @@
     function PostButton(trainidhere)
     {
         trainid = trainidhere;
+        
+        $(".partialviewdetails").hide();
         $(".DetailSection").show();
         acceptancehere = "Approved";
     }
     function RejectButton(trainidhere)
     {
-        trainid = jobidhere;
+        trainid = trainidhere;
+        $(".partialviewdetails").hide();
         $(".DetailSection").show();
         acceptancehere = "Rejected";
     }

@@ -97,7 +97,6 @@ namespace SeekYourCareer.Controllers
 
         //
         // POST: /Admin/Delete/5
-
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
@@ -112,6 +111,11 @@ namespace SeekYourCareer.Controllers
                 return View();
             }
         }
+        //------------------------------------------------------------------------------------------------------
+        //---------------------------Add new rep----------------------------------------------------
+        //------------------------------------------------------------------------------------------------------
+
+        
 
 
         public ActionResult addNewRepresentative()
@@ -139,7 +143,7 @@ namespace SeekYourCareer.Controllers
             }
             else
             {
-                ViewBag.message = "Successfull in adding the representative ..../n/nRepresentativeId = " + value;
+                ViewBag.message = "Successfull in adding the representative ....<br/><br/>RepresentativeId = " + value;
             }
             return View("successNewRepresentative");
         }

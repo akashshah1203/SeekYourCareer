@@ -9,11 +9,14 @@
         $("#SelectStreams").html("");
         $("#partialview").html("");
         $("#errormessage").html("");
+        $('#partialviewdetails').html("");
 
         var url = "/Admin/adminPostJobStream";
         if (companyname == "") {
             str = "Select a Company Name From The List!!!!!!";
             $("#errormessage").append(str);
+            $('#partialview').html("");
+
         }
         else {
 
@@ -48,30 +51,32 @@
     {
         //alert("in domain-table");
         var url = "/Admin/adminTrainingOfferTable";
-        $.ajax({
-            url: url,
-            data: { company: companyname},
-            cache: false,
-            type: "POST",
-            success: function (data) {
+        
+            $.ajax({
+                url: url,
+                data: { company: companyname },
+                cache: false,
+                type: "POST",
+                success: function (data) {
 
-                if (data == "") {
-                    str = "Currently No Trainings Availabe For The Current Selection !!!!!";
-                    $("#errormessage").html("");
-                    $("#errormessage").append(str);
+                    if (data == "") {
+                        str = "Currently No Trainings Availabe For The Current Selection !!!!!";
+                        $("#errormessage").html("");
+                        $("#errormessage").append(str);
+                    }
+                    else {
+                        $("#partialview").html(data);
+                    }
+
+                },
+                error: function (reponse) {
+                    alert(" not success");
+
+                    alert("error : " + reponse);
                 }
-                else {
-                    $("#partialview").html(data);
-                }
-
-            },
-            error: function (reponse) {
-                alert(" not success");
-
-                alert("error : " + reponse);
-            }
-        });
-    }
+            });
+        
+      }
 </script>
 
 
