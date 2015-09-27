@@ -27,7 +27,12 @@
     }
 </script>
 
-
+ @if (Model.Count() == 0)
+{ 
+        <div style="font-size:40px ; color:darkblue ; text-align:center" >Nothing To Display</div>
+}
+else
+{
 <table>
     <tr>
         <th>
@@ -59,8 +64,9 @@
         </th>
         <th></th>
     </tr>
-
-@foreach (var item in Model) {
+   
+    @foreach (var item in Model) 
+    {
     <tr>
         
         <td>
@@ -91,9 +97,11 @@
             <button id="ApplyButton" onclick="javascript: ApplyButton('@item.WorkshopID','@item.Location')">Apply</button>
         </td>
     </tr>
+    }
+</table>
 }
 
-</table>
+
 
 <div id="DetailSection" style="font-size:40px ; color:red">
 

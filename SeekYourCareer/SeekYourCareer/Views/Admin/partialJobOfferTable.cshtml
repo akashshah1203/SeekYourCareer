@@ -1,0 +1,150 @@
+﻿@model IEnumerable<SeekYourCareer.ViewModels.staffPostJobTable>
+
+
+
+<script>
+
+    var jobid=null;
+    var acceptancehere=null;
+    function PostButton(jobidhere)
+    {
+        jobid = jobidhere;
+        $(".DetailSection").show();
+        acceptancehere = "Approved";
+    }
+    function RejectButton(jobidhere)
+    {
+        jobid = jobidhere;
+        $(".DetailSection").show();
+        acceptancehere = "Rejected";
+    }
+
+    function YesButton()
+    {
+        var url = "/Admin/adminAcceptJobOffer";
+        
+        $.ajax({
+            url: url,
+            data: { jobid: jobid, acceptance: acceptancehere },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                //window.location.assign("/Applicant/Index");
+                var newstring = "." + jobid;
+                $(".DetailSection").hide();
+                $(newstring).hide();
+                newstring = "#" + jobid;
+                if (acceptancehere == "Approved")
+                    $(newstring).css("background-color", "lightgreen");
+                else
+                    $(newstring).css("background-color", "lightblue");
+
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+    }
+    function NoButton()
+    {
+        $(".DetailSection").hide();
+
+    }
+</script>
+
+<table >
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.jobType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MinSSCPercent)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MinHSCPercent)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MinGradAvg)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MinPostAvg)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SalPerMonth)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Experience)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LocationID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastDate)
+        </th>
+        <th>
+            Post
+        </th>
+        <th>
+            Reject
+        </th>
+    </tr>
+   
+@foreach (var item in Model) {
+    
+    <tr id="@item.jobID" >
+        <td >
+            @Html.DisplayFor(modelItem => item.jobType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MinSSCPercent)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MinHSCPercent)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MinGradAvg)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MinPostAvg)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SalPerMonth)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Experience)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LocationID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastDate)
+        </td>
+        <td>
+            <button id="PostButton" class="@item.jobID" onclick="javascript: PostButton('@item.jobID')">Post</button>
+        </td>
+        <td>
+            <button id="RejectButton" class="@item.jobID" onclick="javascript: RejectButton('@item.jobID')">Reject</button>
+        </td>
+       
+    </tr>
+}
+
+</table>
+
+
+<div class="DetailSection"  hidden>
+   <p > Are You Sure ???????</p>
+    <table>
+        <tr>
+            <td >
+                <button id="YesButton" onclick="javascript: YesButton()">Yes</button>
+            </td>
+            <td >
+                <button id="NoButton" onclick="javascript: NoButton()">No</button>
+            </td>
+
+        </tr>
+</table>
+</div>
+

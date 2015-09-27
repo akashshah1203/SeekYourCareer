@@ -227,16 +227,21 @@
     </Compile>
     <Compile Include="MinimumValueAttribute.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\AddNewRepresentative.cs" />
     <Compile Include="Models\Applicant.cs" />
-    <Compile Include="Models\Applicant1.cs" />
     <Compile Include="Models\ApplyForTraining.cs" />
-    <Compile Include="Models\ChangePassword.cs" />
+    <Compile Include="Models\PasswordChange.cs" />
     <Compile Include="Models\Job.cs" />
     <Compile Include="Models\JobApplicant.cs" />
     <Compile Include="Models\JobApplication.cs" />
     <Compile Include="Models\JobPrerequisite.cs" />
     <Compile Include="Models\LoginPage.cs" />
+    <Compile Include="Models\RegisterModelTest.cs" />
     <Compile Include="Models\Representative.cs" />
+    <Compile Include="Models\RepresentativeAddJobOffer.cs" />
+    <Compile Include="Models\RepresentativeAddTrainingOffer.cs" />
+    <Compile Include="Models\RepresentativeAddWorkshopOffer.cs" />
+    <Compile Include="Models\Required.cs" />
     <Compile Include="Models\SelectedTrainees.cs" />
     <Compile Include="Models\SelJobApplicants.cs" />
     <Compile Include="Models\TrainApplicant.cs" />
@@ -255,6 +260,9 @@
     <Compile Include="ViewModels\JobApplicantViewModel.cs" />
     <Compile Include="ViewModels\SelJCanViewModel.cs" />
     <Compile Include="ViewModels\SelTCanViewModel.cs" />
+    <Compile Include="ViewModels\staffPostJobTable.cs" />
+    <Compile Include="ViewModels\staffPostTrainingDetails.cs" />
+    <Compile Include="ViewModels\staffPostTrainingTable.cs" />
     <Compile Include="ViewModels\TrainApplicantsViewModel.cs" />
     <Compile Include="ViewModels\TrainingIdViewModel.cs" />
     <Compile Include="ViewModels\ViewJobOffers.cs" />
@@ -359,9 +367,6 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
-    <Content Include="Views\Account\Login1.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\Home\AdminLoginPage.cshtml" />
     <Content Include="Views\Home\RepresentativeLoginPage.cshtml" />
     <Content Include="Views\Home\ApplicantLoginPage.cshtml" />
@@ -371,7 +376,7 @@
     <Content Include="Views\Applicant\ApplyForJob.cshtml" />
     <Content Include="Views\Applicant\SearchForTraining.cshtml" />
     <Content Include="Views\Applicant\ApplyForTraining.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Login1.cshtml" />
     <Content Include="Views\JobRepresentative\JobCandidateByCompany.cshtml" />
     <Content Include="Views\JobRepresentative\JobApplicantByCompany.cshtml" />
     <Content Include="Views\JobStaff\JobCandidateAll.cshtml" />
@@ -389,6 +394,20 @@
     <Content Include="Views\WorkshopRepresentative\WorkshopCandidateByCompany.cshtml" />
     <Content Include="Views\WorkshopStaff\WorkshopCandidateAll.cshtml" />
     <Content Include="Views\Shared\MyLayout.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\ManagePassword.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Admin\addNewRepresentative1.cshtml" />
+    <Content Include="Views\Admin\successNewRepresentative.cshtml" />
+    <Content Include="Views\Admin\adminPostJobOffer.cshtml" />
+    <Content Include="Views\Admin\partialJobOfferTable.cshtml" />
+    <Content Include="Views\Representative\addJobsTODb.cshtml" />
+    <Content Include="Views\Representative\addTrainingTODb.cshtml" />
+    <Content Include="Views\Representative\addWorkshopTODb.cshtml" />
+    <Content Include="Views\Admin\adminTrainingOfferDetails.cshtml" />
+    <Content Include="Views\Admin\adminTrainingOfferTable.cshtml" />
+    <Content Include="Views\Admin\adminPostTrainingOffer.cshtml" />
+    <Content Include="Views\Admin\addNewRepresentative.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

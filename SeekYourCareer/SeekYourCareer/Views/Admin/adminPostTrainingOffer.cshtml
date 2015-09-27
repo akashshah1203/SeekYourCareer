@@ -1,0 +1,105 @@
+﻿@{
+    ViewBag.Title = "adminPostTrainingOffer";
+}
+
+
+<script>
+    function CompanySelect(companyname)//comes here after selecting a company name from the dropdown
+    {
+        $("#SelectStreams").html("");
+        $("#partialview").html("");
+        $("#errormessage").html("");
+        $('#partialviewdetails').html("");
+
+        var url = "/Admin/adminPostJobStream";
+        if (companyname == "") {
+            str = "Select a Company Name From The List!!!!!!";
+            $("#errormessage").append(str);
+            $('#partialview').html("");
+
+        }
+        else {
+
+            $.ajax({
+                url: url,
+                data: { company: companyname },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    //console.log(data);
+                    var html;
+                    html = "Streams:  ";
+                    for (var i = 0; i < data.length; i++) {
+                        html += "<input class=\"streamcheckbox\" id=\"checkB\" type=\"radio\" onclick=\"jobTable('" + data[i] + "','" + companyname + "')\" name=\"stream\" value=\"" + data[i] + "\">" + data[i];
+
+                    }
+                    //alert("appending");
+                    $('#SelectStreams').html("");
+                    $('#SelectStreams').append(html);
+
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
+                }
+            });
+        }
+
+    }
+
+    function CompanySelect(companyname)//comes here after selecting the radio button
+    {
+        //alert("in domain-table");
+        var url = "/Admin/adminTrainingOfferTable";
+        
+            $.ajax({
+                url: url,
+                data: { company: companyname },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+
+                    if (data == "") {
+                        str = "Currently No Trainings Availabe For The Current Selection !!!!!";
+                        $("#errormessage").html("");
+                        $("#errormessage").append(str);
+                    }
+                    else {
+                        $("#partialview").html(data);
+                    }
+
+                },
+                error: function (reponse) {
+                    alert(" not success");
+
+                    alert("error : " + reponse);
+                }
+            });
+        
+      }
+</script>
+
+
+
+
+<h2 style="text-align:center">Post Training Offer</h2>
+
+<div>
+    <p>Select Company Name</p> 
+    
+    @Html.DropDownList("CompanyName", new SelectList(@ViewBag.List), "--Select--", new { @id = "CompanyName", @style = "width:200px;" , @onchange = "javascript:CompanySelect(this.value);" }) 
+      
+</div>
+
+<div id="partialview">
+
+
+</div>
+
+<div class="partialviewdetails" >
+
+</div>
+
+<div id="errormessage" style="font-size:40px ; color:darkblue">
+
+</div>

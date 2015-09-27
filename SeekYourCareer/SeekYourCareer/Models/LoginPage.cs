@@ -14,7 +14,7 @@ namespace SeekYourCareer.Models
 
         [Required]
         [Display(Name = "User Name")]
-        [RegularExpression(@"^[a-zA-Z0-9_]*$", ErrorMessage = "Only alphabets, numbers and underscore allowed.")]
+        [RegularExpression(@"^[a-zA-Z_]*$", ErrorMessage = "Only alphabets and underscore allowed.")]
         [StringLength(20, MinimumLength = 6, ErrorMessage = "Minimum 6 and atmost 20 characters allowed.")]
         public string UserName { get; set; }
 
@@ -22,7 +22,7 @@ namespace SeekYourCareer.Models
         [Required]
         [Display(Name = "Password")]
         [DataType(DataType.Password)]
-        [RegularExpression(@"^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]+$", ErrorMessage = "Only alphabets, numbers and underscore allowed.")]
+        [RegularExpression(@"^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]+$", ErrorMessage = "Only alphabets and numbers allowed. Must contain atleast 1 alphabet and 1 number.")]
         [StringLength(20, MinimumLength = 6, ErrorMessage = "Minimum 6 and atmost 20 characters allowed.")]
         public string Password { get; set; }
     }

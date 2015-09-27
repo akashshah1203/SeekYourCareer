@@ -73,6 +73,7 @@ namespace SeekYourCareer.Controllers
             Session["TypeOfUser"] = null;
             Session["UserID"] = null;
             Session["Name"] = null;
+            Session.RemoveAll();
             return RedirectToAction("Login", "Account");
         }
 
@@ -82,7 +83,11 @@ namespace SeekYourCareer.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            Applicant obj = new Applicant();
+            obj.WorkExperience = 0;
+            obj.PostGraduationPercentage = 0;
+            obj.GraduationPercentage = 0;
+            return View(obj);
         }
 
         //
@@ -100,8 +105,8 @@ namespace SeekYourCareer.Controllers
                 // Attempt to register the user
                 try
                 {
-                    int n = new DataAccess.DataObj().InsertUser(model);
-                    Session["UserID"] = n;
+                    int userid = new DataAccess.DataObj().InsertUser(model);
+                    Session["UserID"] = userid;
                     return RedirectToAction("Index", "Home");
                 }
                 catch (MembershipCreateUserException e)
@@ -146,9 +151,14 @@ namespace SeekYourCareer.Controllers
         //
         // GET: /Account/Manage
 
-        public ActionResult Manage()
+        public ActionResult ManagePassword()
         {
-
+            string type = (string)Session["TypeOfUser"];
+            if (type == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            
             return View();
         }
 
@@ -157,16 +167,20 @@ namespace SeekYourCareer.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage(ChangePassword model)
+        public ActionResult ManagePassword(PasswordChange model)
         {
             if (ModelState.IsValid)
             {
                 // ChangePassword will throw an exception rather than return false in certain failure scenarios.
                 string username = (string)(Session["Username"]);
-                bool n = new DataAccess.DataObj().ChangePassword(username, model.OldPassword, model.NewPassword);
-
+                string usertype=(string)Session["TypeOfUser"];
+                bool val = new DataAccess.DataObj().ChangePassword(username, model.OldPassword, model.NewPassword,usertype);
+                if (val == false)
+                { 
+                    //go to error page
+                }
             }
-            return View(model);
+            return RedirectToAction("Login");
         }
 
         //
@@ -296,6 +310,11 @@ namespace SeekYourCareer.Controllers
             ViewBag.ShowRemoveButton = externalLogins.Count > 1 || OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
             return PartialView("_RemoveExternalLoginsPartial", externalLogins);
         }
+
+
+
+
+
 
         #region Helpers
         private ActionResult RedirectToLocal(string returnUrl)

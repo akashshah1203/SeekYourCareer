@@ -14,6 +14,16 @@ namespace SeekYourCareer.Controllers
 
         public ActionResult Index()
         {
+            string type = (string)Session["TypeOfUser"];
+            if (type == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else if (type.CompareTo("Applicant") != 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+           
             return View();
         }
 
@@ -31,8 +41,17 @@ namespace SeekYourCareer.Controllers
 
         public ActionResult ApplyForJob()
         {
-
+            string type = (string)Session["TypeOfUser"];
+            if (type == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else if (type.CompareTo("Applicant") != 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             List<string> CompanyNames = new List<string>();
+            
             CompanyNames = new DataAccess.ApplicantDAL().GetCompanyNames();
             if (CompanyNames.Count > 0)
             {
@@ -69,7 +88,15 @@ namespace SeekYourCareer.Controllers
         [HttpGet]
         public ActionResult AddJobToDb(String CompanyName, String stream, String SelectedCheck, String CorrespondAddr)
         {
-
+            string type = (string)Session["TypeOfUser"];
+            if (type == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else if (type.CompareTo("Applicant") != 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             int userid = (int)Session["UserID"];
             //userid = 1002;
             string name=(string)Session["Name"];
@@ -88,6 +115,15 @@ namespace SeekYourCareer.Controllers
         //***************************************************************************************************************************************
         public ActionResult SearchForTraining()
         {
+            string type = (string)Session["TypeOfUser"];
+            if (type == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else if (type.CompareTo("Applicant") != 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             //Get Domain Names
             //Session["UserID"] = 1002;
             List<string> DomainNames = new DataAccess.ApplicantDAL().GetDomainNames();
@@ -126,6 +162,15 @@ namespace SeekYourCareer.Controllers
         [HttpGet]
         public ActionResult ApplyForTraining(string TrainingID)
         {
+            string type = (string)Session["TypeOfUser"];
+            if (type == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else if (type.CompareTo("Applicant") != 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             String Username = (string)Session["Username"];
             //Username = "akasha";
             ApplyForTraining app1 = new ApplyForTraining();
@@ -134,9 +179,10 @@ namespace SeekYourCareer.Controllers
             return View();
         }
 
-
+        [HttpPost]
         public ActionResult AddTrainingToDb(int userid,string trainingid,string corraddr,string corrcont)
         {
+            
             string name = (string)Session["Name"];
             int ret = new DataAccess.ApplicantDAL().AddTraining(userid, trainingid, corraddr, corrcont,name);
             return Json(ret);
@@ -156,6 +202,15 @@ namespace SeekYourCareer.Controllers
        
         public ActionResult WorkshopHome()
         {
+            string type = (string)Session["TypeOfUser"];
+            if (type == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else if (type.CompareTo("Applicant") != 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             List<string> CompanyNames = new List<string>();
             CompanyNames = new DataAccess.ApplicantDAL().GetCompanyNamesWorkshop();
             if (CompanyNames.Count > 0)

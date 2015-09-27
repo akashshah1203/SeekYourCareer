@@ -13,7 +13,7 @@ namespace SeekYourCareer.DataAccess
     {
         public string Connstr()
         {
-
+                                      //"Data Source=(localdb)\Projects;Initial Catalog=SeekYCareer;Integrated Security=True;"
             string connectionString = "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;" + "Integrated Security=True";
             connectionString = ConfigurationManager.ConnectionStrings["ConnectToDb"].ToString();
             return connectionString;
@@ -28,7 +28,7 @@ namespace SeekYourCareer.DataAccess
             string connectionString = Connstr();
             List<string> companynames=new List<string>();
             string queryString = null;
-            queryString = "SELECT distinct T1.CompanyName from dbo.RepDetails T1, dbo.JobDetails T2 Where T1.RepId=T2.RepId";
+            queryString = "SELECT distinct T1.CompanyName from dbo.RepDetails T1, dbo.JobDetails T2 Where T1.RepId=T2.RepId COLLATE Latin1_General_CS_AS";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
@@ -49,7 +49,7 @@ namespace SeekYourCareer.DataAccess
             string connectionString = Connstr();
             List<string> streams = new List<string>();
             string queryString = null;
-            queryString = "SELECT distinct T2.StreamCode from dbo.RepDetails T1, dbo.JobDetails T2 Where (T1.RepId=T2.RepId and T1.CompanyName=@company)";
+            queryString = "SELECT distinct T2.StreamCode from dbo.RepDetails T1, dbo.JobDetails T2 Where (T1.RepId=T2.RepId and T1.CompanyName=@company) COLLATE Latin1_General_CS_AS";
             
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -71,10 +71,10 @@ namespace SeekYourCareer.DataAccess
             string connectionString = Connstr();
             List<Job> job1 = new List<Job>();
             string queryString = null;
+
             
-            String str1 = "T4.UserID=T3.UserID and T4.JobId=T2.JobId and T4.Status<>\"Applied\"";
             queryString = "SELECT T2.JobType,T2.MinSSCPercent,T2.MinHSCPercent,T2.MinGradAvg,T2.MinPGAvg,T2.SalPerMonth,T2.Experience,T2.AppLastDate,T2.JobId"                             + ",T3.Address,T2.Location from dbo.RepDetails T1, dbo.JobDetails T2,dbo.UserDetails T3 "
-                               + " Where T1.RepID=T2.RepId and T1.CompanyName=@company and T2.StreamCode=@stream and T3.UserName=@username and T3.UserID=@userid and T3.SSCPercent>=T2.MinSSCPercent and T3.HSCPercent>=T2.MinHSCPercent and T3.GradPercent>=T2.MinGradAvg and T3.PGPercent>=T2.MinPGAvg and T3.WorkExpYears >= T2.Experience and T2.StaffApprovalStatus='Approved'";
+                               + " Where T1.RepID=T2.RepId and T1.CompanyName=@company and T2.StreamCode=@stream and T3.UserName=@username and T3.UserID=@userid and T3.SSCPercent>=T2.MinSSCPercent and T3.HSCPercent>=T2.MinHSCPercent and T3.GradPercent>=T2.MinGradAvg and T3.PGPercent>=T2.MinPGAvg and T3.WorkExpYears >= T2.Experience and T2.StaffApprovalStatus='Approved' and T2.AppLastDate >= GETDATE() COLLATE Latin1_General_CS_AS";
             //Add Date to the query
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -104,7 +104,7 @@ namespace SeekYourCareer.DataAccess
                     j1.Location = Convert.ToString(reader[10]);
                     string queryString1 = null;
                     SqlConnection connection1 = new SqlConnection(connectionString);
-                    queryString1 = "Select COUNT(*) FROM dbo.JobApplications WHERE UserID=@userid and JobId=@jobid";
+                    queryString1 = "Select COUNT(*) FROM dbo.JobApplications WHERE UserID=@userid and JobId=@jobid COLLATE Latin1_General_CS_AS";
                     SqlCommand command1 = new SqlCommand(queryString1, connection1);
                     
                     command1.Parameters.AddWithValue("@userid",userid);
@@ -135,7 +135,7 @@ namespace SeekYourCareer.DataAccess
             string location = "";
             int LocID = 0;
 
-            queryString = "Select Location,LocationID FROM JobDetails where JobId=@jobid";
+            queryString = "Select Location,LocationID FROM JobDetails where JobId=@jobid COLLATE Latin1_General_CS_AS";
 
             using (SqlConnection connection1 = new SqlConnection(connectionString))
             {
@@ -157,7 +157,7 @@ namespace SeekYourCareer.DataAccess
 
 
             queryString = "INSERT INTO dbo.JobApplications(UserID,JobId,AppDate,Correspondance,Status,Name,Location,LocationID) " +
-                "values( @userid,@jobid,@appdate,@corr,@status,@name,@loc,@locid);";
+                "values( @userid,@jobid,@appdate,@corr,@status,@name,@loc,@locid) ;";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
@@ -173,7 +173,7 @@ namespace SeekYourCareer.DataAccess
                 connection.Open();
                 command.ExecuteNonQuery();
                 connection.Close();
-                queryString = "Select ApplicantId from JobApplications where UserID=@useri and JobId=@jobid1";
+                queryString = "Select ApplicantId from JobApplications where UserID=@useri and JobId=@jobid1 COLLATE Latin1_General_CS_AS";
 
                 SqlCommand command1 = new SqlCommand(queryString, connection);
                 command1.Parameters.AddWithValue("@useri", UserID);
@@ -195,7 +195,7 @@ namespace SeekYourCareer.DataAccess
 
             string connectionString = Connstr();
             string queryString = null;
-            queryString = "Select DISTINCT(Domain) FROM TrainingDetails";
+            queryString = "Select DISTINCT(Domain) FROM TrainingDetails COLLATE Latin1_General_CS_AS";
             
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -219,7 +219,7 @@ namespace SeekYourCareer.DataAccess
 
             string connectionString = Connstr();
             string queryString = null;
-            queryString = "Select DISTINCT(Location) FROM TrainingDetails WHERE Domain=@domain";
+            queryString = "Select DISTINCT(Location) FROM TrainingDetails WHERE Domain=@domain COLLATE Latin1_General_CS_AS";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -244,7 +244,7 @@ namespace SeekYourCareer.DataAccess
             string connectionString = Connstr();
             string queryString = null;
 
-            queryString = "Select TrainingID,TrainingDesc,RepId FROM TrainingDetails WHERE Location=@location and Domain=@domain";
+            queryString = "Select TrainingID,TrainingDesc,RepId FROM TrainingDetails WHERE Location=@location and Domain=@domain and StartingDate>=GETDATE() ";
             
 
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -262,7 +262,7 @@ namespace SeekYourCareer.DataAccess
                     EntryIntoTable.Description = Convert.ToString(reader[1]);
                     
                     int RepId = Convert.ToInt32(reader[2]);
-                    string queryString1 = "Select CompanyName FROM RepDetails WHERE RepID=@repid";
+                    string queryString1 = "Select CompanyName FROM RepDetails WHERE RepID=@repid COLLATE Latin1_General_CS_AS";
                     SqlConnection connection1 = new SqlConnection(connectionString);
                     SqlCommand command1 = new SqlCommand(queryString1, connection1);
                     command1.Parameters.AddWithValue("@repid",RepId);
@@ -274,7 +274,7 @@ namespace SeekYourCareer.DataAccess
                     EntryIntoTable.Company = CompanyName;
 
                     //----------------------------------------------------------------------------------------------------------------
-                    string queryString2 = "Select count(*) FROM TrainingAppln WHERE UserID=@userid and TrainingId=@train";
+                    string queryString2 = "Select count(*) FROM TrainingAppln WHERE UserID=@userid and TrainingId=@train COLLATE Latin1_General_CS_AS";
                     SqlConnection connection2 = new SqlConnection(connectionString);
                     SqlCommand command2 = new SqlCommand(queryString2, connection2);
                     command2.Parameters.AddWithValue("@train", EntryIntoTable.TrainingID);
@@ -428,7 +428,7 @@ namespace SeekYourCareer.DataAccess
             string queryString = null;
             string location="";
             int LocID=0;
-            queryString = "Select Location,LocationID FROM TrainingDetails where TrainingID=@trainid";
+            queryString = "Select Location,LocationID FROM TrainingDetails where TrainingID=@trainid COLLATE Latin1_General_CS_AS";
 
             using (SqlConnection connection1 = new SqlConnection(connectionString))
             {
@@ -534,7 +534,7 @@ namespace SeekYourCareer.DataAccess
             string connectionString = Connstr();
             string queryString = null;
             queryString = "Select Location,FromDate,Todate,NoOfSeats,MinGradPct,MinPGPct,WorkshopDesc,WorkshopId" +
-                            " FROM WorkshopDetails as T1,RepDetails as T2 WHERE Domain=@domain and T1.RepId=T2.RepID and T2.CompanyName=@company";
+                            " FROM WorkshopDetails as T1,RepDetails as T2 WHERE Domain=@domain and T1.RepId=T2.RepID and T2.CompanyName=@company and T1.FromDate>=GETDATE()";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -629,7 +629,6 @@ namespace SeekYourCareer.DataAccess
                 return (true);
             }
 
-            return false;
         }
 
     }

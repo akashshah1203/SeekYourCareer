@@ -1,5 +1,6 @@
 ﻿@if (Session["Username"] != null) {
     <text>
+        Hello, @Html.ActionLink(User.Identity.Name, "Index", "Home", routeValues: null, htmlAttributes: new { @class = "username", title = "HomePage" })!
         Hello, @Html.ActionLink(User.Identity.Name, "Index", "Home", routeValues: null, htmlAttributes: new { @class = "username", title = "Home" })!
         @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" })) {
             @Html.AntiForgeryToken()

@@ -6,11 +6,22 @@ using System.Web;
 
 using SeekYourCareer.Models;
 using SeekYourCareer.ViewModels;
+using System.Configuration;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace SeekYourCareer.DataAccess
 {
     public class StaffDAL
     {
+
+        public string Connstr()
+        {
+            //"Data Source=(localdb)\Projects;Initial Catalog=SeekYCareer;Integrated Security=True;"
+            string connectionString = "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;" + "Integrated Security=True";
+            connectionString = ConfigurationManager.ConnectionStrings["ConnectToDb"].ToString();
+            return connectionString;
+        }
         public int ApproveWorkshop(int workshopId)
         {
             string connectionString = "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;" + "Integrated Security=True";
@@ -683,5 +694,304 @@ namespace SeekYourCareer.DataAccess
             return wsoffers;
         }
 
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
+        //--------------------------------------------------Add New Representative-----------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
+
+        public int addNewRepresent(AddNewRepresentative represent)
+        {
+
+            string connectionString = Connstr();
+            int repid=-1;
+            string queryString = null;
+            queryString = "INSERT INTO RepDetails(CompanyName,Password,Address,PhoneNumber,EmailID,Training,Workshop,Job,Internship) " +
+               "values(@company,@pass,@addr,@phone,@email,@train,@workshop,@job,@intern) ;";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                char train = (represent.Training == true) ? 'Y' : 'N';
+                char workshop = (represent.Workshop == true) ? 'Y' : 'N';
+                char job = (represent.Job == true) ? 'Y' : 'N';
+                char intern = (represent.Internship == true) ? 'Y' : 'N';
+                string password = GetHashedText(represent.Password);
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@company",represent.companyName);
+                command.Parameters.AddWithValue("@pass", password);
+                command.Parameters.AddWithValue("@addr", represent.Address);
+                command.Parameters.AddWithValue("@phone", represent.phoneNumber);
+                command.Parameters.AddWithValue("@email", represent.EmailId);
+                command.Parameters.AddWithValue("@train", train);
+                command.Parameters.AddWithValue("@workshop", workshop);
+                command.Parameters.AddWithValue("@job", job);
+                command.Parameters.AddWithValue("@intern", intern);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+
+                queryString = "SELECT RepID from RepDetails Where CompanyName=@name COLLATE Latin1_General_CS_AS;";
+                SqlCommand command1 = new SqlCommand(queryString, connection);
+                command1.Parameters.AddWithValue("@name", represent.companyName);
+                connection.Open();
+                repid = (int)command1.ExecuteScalar();
+
+                connection.Close();
+            }
+            return repid;
+        }
+        //------------------------------------------------------------------------------------------------------
+        //---------------------------Posting Job Offers----------------------------------------------------
+        //------------------------------------------------------------------------------------------------------
+
+        public List<string> postJobCompany()
+        {
+            string connectionString = Connstr();
+            List<string> companynames = new List<string>();
+            string queryString = null;
+            string status = "Pending";
+            queryString = "SELECT distinct T1.CompanyName from RepDetails T1, JobDetails T2 Where T1.RepID=T2.RepId and T2.StaffApprovalStatus=@status and T2.AppLastDate >= GETDATE()";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@status",status);
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    companynames.Add(Convert.ToString(reader[0]));
+                }
+                reader.Close();
+            }
+            return companynames;
+        }
+
+        public List<string> postJobStream(string company)
+        {
+            string connectionString = Connstr();
+            List<string> streams = new List<string>();
+            string status = "Pending";
+            string queryString = null;
+            queryString = "SELECT distinct T2.StreamCode from dbo.RepDetails T1, dbo.JobDetails T2 Where T1.RepID=T2.RepId and T1.CompanyName=@company and " + "T2.StaffApprovalStatus=@status and T2.AppLastDate >= GETDATE()";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@status", status);
+                command.Parameters.AddWithValue("@company", company);
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    streams.Add(Convert.ToString(reader[0]));
+                }
+                reader.Close();
+            }
+            return streams;
+        
+        }
+
+        public List<staffPostJobTable> postJobTable(string company, string stream)
+        {
+            string connectionString = Connstr();
+            List<staffPostJobTable> tableElements = new List<staffPostJobTable>();
+            string queryString = null;
+
+
+            queryString = "SELECT T2.JobType,T2.MinSSCPercent,T2.MinHSCPercent,T2.MinGradAvg,T2.MinPGAvg,T2.SalPerMonth,T2.Experience,T2.LocationID, " +                                        "T2.AppLastDate,T2.JobId" + 
+                                " from dbo.RepDetails T1, dbo.JobDetails T2 "
+                               + " Where T1.RepID=T2.RepId and T1.CompanyName=@company and T2.StreamCode=@stream and T2.StaffApprovalStatus='Pending' and "+
+                               "T2.AppLastDate >= GETDATE() ";
+            //Add Date to the query
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                command.Parameters.AddWithValue("@company", company);
+                command.Parameters.AddWithValue("@stream", stream);
+                
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    staffPostJobTable table = new staffPostJobTable();
+                    table.jobType = Convert.ToString(reader[0]);
+                    table.MinSSCPercent = Convert.ToDecimal(reader[1]);
+                    table.MinHSCPercent = Convert.ToDecimal(reader[2]);
+                    table.MinGradAvg = Convert.ToDecimal(reader[3]);
+                    table.MinPostAvg = Convert.ToDecimal(reader[4]);
+                    table.SalPerMonth = Convert.ToInt32(reader[5]);
+                    table.Experience = Convert.ToInt32(reader[6]);
+                    table.LocationID = Convert.ToInt32(reader[7]);
+                    table.LastDate = Convert.ToDateTime(reader[8]);
+                    table.jobID = Convert.ToString(reader[9]);
+                    tableElements.Add(table);
+                }
+                connection.Close();
+
+                reader.Close();
+            }
+            return (tableElements);
+        
+        }
+
+        public bool updatePostJobOffer(string jobid,string acceptance)
+        {
+            string connectionString = Connstr();
+            string queryString = null;
+            queryString = "Update JobDetails Set StaffApprovalStatus=@staff Where JobId=@jobid";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@staff", acceptance);
+                command.Parameters.AddWithValue("@jobid", jobid);
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                connection.Close();
+
+            }
+            return false;
+        }
+
+        //------------------------------------------------------------------------------------------------------
+        //---------------------------Posting Training Offers----------------------------------------------------
+        //------------------------------------------------------------------------------------------------------
+
+        public List<string> postTrainingCompany()
+        {
+            string connectionString = Connstr();
+            List<string> companynames = new List<string>();
+            string queryString = null;
+            string status = "Pending";
+            queryString = "SELECT distinct T1.CompanyName from RepDetails T1, TrainingDetails T2 Where T1.RepID=T2.RepId and T2.StaffApproval=@status and T2.StartingDate >= GETDATE()";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@status", status);
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    companynames.Add(Convert.ToString(reader[0]));
+                }
+                reader.Close();
+            }
+            return companynames;
+        }
+
+       
+
+        public List<staffPostTrainingTable> postTrainingTable(string company)
+        {
+            string connectionString = Connstr();
+            List<staffPostTrainingTable> tableElements = new List<staffPostTrainingTable>();
+            string queryString = null;
+
+
+            queryString = "SELECT T2.TrainingID,T2.Location,T2.StartingDate" +
+                                " from dbo.RepDetails T1, dbo.TrainingDetails T2 "
+                               + " Where T1.RepID=T2.RepId and T1.CompanyName=@company and T2.StaffApproval='Pending' and " +
+                               "T2.StartingDate >= GETDATE() ";
+            //Add Date to the query
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                command.Parameters.AddWithValue("@company", company);
+
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    staffPostTrainingTable table = new staffPostTrainingTable();
+                    table.trainingId = Convert.ToString(reader[0]);
+                    table.location = Convert.ToString(reader[1]);
+                    table.startDate = Convert.ToDateTime(reader[2]);
+                    tableElements.Add(table);
+                }
+                connection.Close();
+
+                reader.Close();
+            }
+            return (tableElements);
+
+        }
+
+        public staffPostTrainingDetails postTrainingDetails(string trainingID)
+        {
+            staffPostTrainingDetails details = new staffPostTrainingDetails();
+            string connectionString = Connstr();
+            string queryString = null;
+
+
+            queryString = "SELECT Location,Domain,Graduation,PG,PastExp,StartingDate,Duration,NoOfSeat,TrainingDesc" +
+                                " from TrainingDetails  "
+                               + " Where TrainingID=@train and StaffApproval='Pending' and " +
+                               "StartingDate >= GETDATE() ";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@train", trainingID);
+                
+
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    details.location = Convert.ToString(reader[0]);
+                    details.domain = Convert.ToString(reader[1]);
+                    details.graduation = Convert.ToChar(reader[2]);
+                    details.postgrad = Convert.ToChar(reader[3]);
+                    details.experience = Convert.ToInt32(reader[4]);
+                    details.startDate = Convert.ToDateTime(reader[5]);
+                    details.duration = Convert.ToInt32(reader[6]);
+                    details.seats = Convert.ToInt32(reader[7]);
+                    details.description = Convert.ToString(reader[8]);
+
+                }
+                connection.Close();
+
+                reader.Close();
+            }
+            return details;
+        }
+
+        public bool updatePostTrainingOffer(string trainid, string acceptance)
+        {
+            string connectionString = Connstr();
+            string queryString = null;
+            queryString = "Update TrainingDetails Set StaffApproval=@staff Where TrainingID=@train";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@staff", acceptance);
+                command.Parameters.AddWithValue("@train", trainid);
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                connection.Close();
+
+            }
+            return false;
+        }
+        
+        //------------------------------------------------------------------------------------------------------
+        //----------------------------------Hashing----------------------------------------------
+        //------------------------------------------------------------------------------------------------------
+
+        public string GetHashedText(string inputData)
+        {
+            byte[] tmpSource;
+            byte[] tmpData;
+            tmpSource = ASCIIEncoding.ASCII.GetBytes(inputData);
+            tmpData = new MD5CryptoServiceProvider().ComputeHash(tmpSource);
+            return Convert.ToBase64String(tmpData);
+        }
+    
+    
+    
+    
     }
 }
