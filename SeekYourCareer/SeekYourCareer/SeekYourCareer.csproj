@@ -210,14 +210,13 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ApplicantController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\JRepController.cs" />
-    <Compile Include="Controllers\JStaffController.cs" />
+    <Compile Include="Controllers\JobRepresentativeController.cs" />
+    <Compile Include="Controllers\JobStaffController.cs" />
     <Compile Include="Controllers\RepresentativeController.cs" />
-    <Compile Include="Controllers\StaffController.cs" />
-    <Compile Include="Controllers\TRepController.cs" />
-    <Compile Include="Controllers\TStaffController.cs" />
-    <Compile Include="Controllers\WRepController.cs" />
-    <Compile Include="Controllers\WStaffController.cs" />
+    <Compile Include="Controllers\TrainingRepresentativeController.cs" />
+    <Compile Include="Controllers\TrainingStaffController.cs" />
+    <Compile Include="Controllers\WorkshopRepresentativeController.cs" />
+    <Compile Include="Controllers\WorkshopStaffController.cs" />
     <Compile Include="DataAccess\ApplicantDAL.cs" />
     <Compile Include="DataAccess\DataObj.cs" />
     <Compile Include="DataAccess\RepresentativeDAL.cs" />
@@ -264,6 +263,13 @@
     <Compile Include="ViewModels\WSSelectedAppsVM.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\images\Icon1.jpg" />
+    <Content Include="Content\images\Icon2.png" />
+    <Content Include="Content\images\icon_minus.png" />
+    <Content Include="Content\images\icon_plus.png" />
+    <Content Include="Content\images\pattern.png" />
+    <Content Include="Content\script.js" />
+    <Content Include="Content\styles.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -366,23 +372,23 @@
     <Content Include="Views\Applicant\SearchForTraining.cshtml" />
     <Content Include="Views\Applicant\ApplyForTraining.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\JRep\RSelJobCan.cshtml" />
-    <Content Include="Views\JRep\RVwJobApp.cshtml" />
-    <Content Include="Views\JRep\SelJobCan.cshtml" />
-    <Content Include="Views\JStaff\StSelJobCanDD.cshtml" />
-    <Content Include="Views\JStaff\StVwJobApp.cshtml" />
-    <Content Include="Views\Staff\Index.cshtml" />
-    <Content Include="Views\Staff\SelTrainCan.cshtml" />
-    <Content Include="Views\TRep\RVwTrainCan.cshtml" />
-    <Content Include="Views\TStaff\StVwTrainCan.cshtml" />
-    <Content Include="Views\WRep\RVwWSApp.cshtml" />
-    <Content Include="Views\WStaff\StVwWSApp.cshtml" />
+    <Content Include="Views\JobRepresentative\JobCandidateByCompany.cshtml" />
+    <Content Include="Views\JobRepresentative\JobApplicantByCompany.cshtml" />
+    <Content Include="Views\JobStaff\JobCandidateAll.cshtml" />
+    <Content Include="Views\JobStaff\JobApplicantAll.cshtml" />
+    <Content Include="Views\TrainingStaff\TrainingCandidateAll.cshtml" />
+    <Content Include="Views\TrainingRepresentative\TrainingApplicantByCompany.cshtml" />
+    <Content Include="Views\TrainingStaff\TrainingApplicantAll.cshtml" />
+    <Content Include="Views\WorkshopRepresentative\WorkshopApplicantByCompany.cshtml" />
+    <Content Include="Views\WorkshopStaff\WorkshopApplicantAll.cshtml" />
     <Content Include="Views\RepresentativeHome\RepresentativeIndex.cshtml" />
     <Content Include="Views\Applicant\WorkshopHome.cshtml" />
-    <Content Include="Views\Staff\RSelTrainCan.cshtml" />
-    <Content Include="Views\WStaff\PostWorkshop.cshtml" />
+    <Content Include="Views\TrainingRepresentative\TrainingCandidateByCompany.cshtml" />
+    <Content Include="Views\WorkshopStaff\PostWorkshop.cshtml" />
     <Content Include="Views\Applicant\WorkshopTable.cshtml" />
-    <Content Include="Views\WRep\SelectedWorkshopApp.cshtml" />
+    <Content Include="Views\WorkshopRepresentative\WorkshopCandidateByCompany.cshtml" />
+    <Content Include="Views\WorkshopStaff\WorkshopCandidateAll.cshtml" />
+    <Content Include="Views\Shared\MyLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

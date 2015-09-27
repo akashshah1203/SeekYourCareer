@@ -165,7 +165,7 @@ namespace SeekYourCareer.DataAccess
                 command.Parameters.AddWithValue("@jobid", JobId);
                 command.Parameters.AddWithValue("@appdate", AppDate);
                 command.Parameters.AddWithValue("@corr", Correspondance);
-                command.Parameters.AddWithValue("@status", "Applied");
+                command.Parameters.AddWithValue("@status", "Pending");
                 command.Parameters.AddWithValue("@name", name);
                 command.Parameters.AddWithValue("@loc", location);
                 command.Parameters.AddWithValue("@locid", LocID);

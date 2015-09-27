@@ -107,7 +107,7 @@ namespace SeekYourCareer.DataAccess
             return (0);
         }
 
-        public List<int> WorkshopIdList()
+        public List<int> WorkshopIdList(string companyName)
         {
             List<int> WorkshopIds = new List<int>();
             string connectionString =
@@ -115,11 +115,12 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT WorkshopId from dbo.WorkshopDetails;";
+                "SELECT A.WorkshopId from dbo.WorkshopDetails A, dbo.RepDetails B WHERE A.RepId = B.RepID AND B.CompanyName=@filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@filtervalue", companyName);
 
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -142,7 +143,7 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT A.ApplicantId, A.WorkshopId, convert(varchar, A.AppDate), B.Name, B.DOB, B.Address, B.ContactNumber, B.EmailID from dbo.WorkshopAppln A, dbo.UserDetails B WHERE A.UserId = B.UserID and A.Status = 'Selected' and A.WorkshopId = @filtervalue;";
+                "SELECT A.ApplicantId, A.WorkshopId, convert(varchar, A.AppDate), B.Name, CONVERT(int, ROUND(DATEDIFF(hour,B.DOB,GETDATE())/8766.0,0)), B.Address, B.ContactNumber, B.EmailID from dbo.WorkshopAppln A, dbo.UserDetails B WHERE A.UserId = B.UserID and A.Status = 'Selected' and A.WorkshopId = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -158,7 +159,7 @@ namespace SeekYourCareer.DataAccess
                     wsappdetail.WorkshopId = Convert.ToInt32(reader[1]);
                     wsappdetail.AppDate = Convert.ToString(reader[2]);
                     wsappdetail.Name = Convert.ToString(reader[3]);
-                    wsappdetail.DOB = Convert.ToDateTime(reader[4]);
+                    wsappdetail.Age = Convert.ToInt32(reader[4]);
                     wsappdetail.Address = Convert.ToString(reader[5]);
                     wsappdetail.ContactNo = Convert.ToString(reader[6]);
                     wsappdetail.EmailId = Convert.ToString(reader[7]);

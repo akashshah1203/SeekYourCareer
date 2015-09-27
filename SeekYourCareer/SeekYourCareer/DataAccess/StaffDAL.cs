@@ -11,6 +11,102 @@ namespace SeekYourCareer.DataAccess
 {
     public class StaffDAL
     {
+        public int ApproveWorkshop(int workshopId)
+        {
+            string connectionString = "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;" + "Integrated Security=True";
+
+            string queryString = "Update WorkshopDetails SET StaffApproval='Approved' where WorkshopId=@offer";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@offer", workshopId);
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            return (0);
+        }
+
+        public int RejectWorkshop(int workshopId)
+        {
+            string connectionString = "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;" + "Integrated Security=True";
+
+            string queryString = "Update WorkshopDetails SET StaffApproval='Rejected' where WorkshopId=@offer";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@offer", workshopId);
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            return (0);
+        }
+
+        public List<int> WorkshopIdList(string companyName)
+        {
+            List<int> WorkshopIds = new List<int>();
+            string connectionString =
+                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
+                + "Integrated Security=True";
+
+            string queryString =
+                "SELECT B.WorkshopId from dbo.WorkshopDetails A, dbo.WorkshopAppln B, dbo.RepDetails C WHERE A.WorkshopId = B.WorkshopId AND A.RepId = C.RepID AND B.Status = 'Selected' AND C.CompanyName = @filtervalue;";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@filtervalue", companyName);
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    WorkshopIds.Add(Convert.ToInt32(reader[0]));
+                }
+                reader.Close();
+            }
+            return WorkshopIds;
+        }
+
+        public WSSelectedAppsVM SelectedWSApplicantsD(int wid)
+        {
+            WSSelectedAppsVM selwsapps = new WSSelectedAppsVM();
+            selwsapps.WSSelectedApps = new List<WSSelectedApp>();
+
+            string connectionString =
+                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
+                + "Integrated Security=True";
+
+            string queryString =
+                "SELECT A.ApplicantId, A.WorkshopId, convert(varchar, A.AppDate), B.Name, CONVERT(int, ROUND(DATEDIFF(hour,B.DOB,GETDATE())/8766.0,0)), B.Address, B.ContactNumber, B.EmailID from dbo.WorkshopAppln A, dbo.UserDetails B WHERE A.UserId = B.UserID and A.Status = 'Selected' and A.WorkshopId = @filtervalue;";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@filtervalue", wid);
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    WSSelectedApp wsappdetail = new WSSelectedApp();
+                    wsappdetail.ApplicantId = Convert.ToInt32(reader[0]);
+                    wsappdetail.WorkshopId = Convert.ToInt32(reader[1]);
+                    wsappdetail.AppDate = Convert.ToString(reader[2]);
+                    wsappdetail.Name = Convert.ToString(reader[3]);
+                    wsappdetail.Age = Convert.ToInt32(reader[4]);
+                    wsappdetail.Address = Convert.ToString(reader[5]);
+                    wsappdetail.ContactNo = Convert.ToString(reader[6]);
+                    wsappdetail.EmailId = Convert.ToString(reader[7]);
+
+                    selwsapps.WSSelectedApps.Add(wsappdetail);
+                }
+                reader.Close();
+            }
+            return selwsapps;
+        }
+
         //List of all company names used for drop down
         public List<string> CompanyNames()
         {
@@ -355,7 +451,7 @@ namespace SeekYourCareer.DataAccess
             return Domains;
         }
 
-        public List<string> PendingWSByDomain(string domain)
+        public List<string> PendingWSByDomain(string domain, string companyName)
         {
             List<string> WIDs = new List<string>();
 
@@ -364,12 +460,13 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT A.WorkshopId from dbo.WorkshopDetails A, dbo.WorkshopAppln B WHERE A.WorkshopId = B.WorkshopId AND B.Status = 'Pending' AND A.Domain = @filtervalue;";
+                "SELECT A.WorkshopId from dbo.WorkshopDetails A, dbo.WorkshopAppln B, dbo.RepDetails C WHERE A.WorkshopId = B.WorkshopId AND A.RepId = C.RepID AND B.Status = 'Pending' AND A.Domain = @filtervalue AND C.CompanyName=@filter;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
                 command.Parameters.AddWithValue("@filtervalue", domain);
+                command.Parameters.AddWithValue("@filter", companyName);
 
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -483,8 +580,8 @@ namespace SeekYourCareer.DataAccess
                 "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
                 + "Integrated Security=True";
 
-            //string queryString = "SELECT distinct A.TrainingId from dbo.TrainingAppln A, dbo.TrainingDetails B WHERE A.TrainingId = B.TrainingID AND B.CompanyName=@filtervalue";
-            string queryString = "SELECT distinct A.TrainingId from dbo.TrainingAppln A";
+            string queryString = "SELECT distinct A.TrainingId, B.RepId from dbo.TrainingAppln A, dbo.TrainingDetails B, dbo.RepDetails C WHERE A.TrainingId = B.TrainingID AND B.RepId = C.RepID AND C.CompanyName=@filtervalue";
+            
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -497,7 +594,7 @@ namespace SeekYourCareer.DataAccess
                 {
                     TrainingL obj = new TrainingL();
                     obj.TrainingId = Convert.ToString(reader[0]);
-                    //obj.RepId = Convert.ToString(reader[1]);
+                    obj.RepId = Convert.ToInt32(reader[1]);
                     trainings.Add(obj);
                 }
                 reader.Close();
@@ -544,7 +641,7 @@ namespace SeekYourCareer.DataAccess
             return trainingapplns;
         }
 
-        public WorkshopViewModel ListWorkshopsBy(string domain)
+        public WorkshopViewModel ListWorkshopsBy(string domain, string companyName)
         {
             WorkshopViewModel wsoffers = new WorkshopViewModel();
             wsoffers.WorkshopDetail = new List<Workshop>();
@@ -553,12 +650,13 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT WorkshopId, RepId, Domain, FromDate, ToDate, NoOfSeats, MinGradPct, MinPGPct, WorkshopDesc, StaffApproval, Location, MinExperience from dbo.WorkshopDetails WHERE Domain = @filtervalue;";
+                "SELECT A.WorkshopId, A.RepId, A.Domain, A.FromDate, A.ToDate, A.NoOfSeats, A.MinGradPct, A.MinPGPct, A.WorkshopDesc, A.StaffApproval, A.Location, A.MinExperience from dbo.WorkshopDetails A, dbo.RepDetails B WHERE A.RepId = B.RepID AND B.CompanyName=@filter AND StaffApproval = 'Pending' AND Domain = @filtervalue AND A.FromDate>getdate() AND A.ToDate>getdate()";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
                 command.Parameters.AddWithValue("@filtervalue", domain);
+                command.Parameters.AddWithValue("@filter", companyName);
 
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();

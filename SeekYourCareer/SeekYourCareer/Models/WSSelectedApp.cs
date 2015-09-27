@@ -12,7 +12,7 @@ namespace SeekYourCareer.Models
         public string AppDate { get; set; }
 
         public string Name { get; set; }
-        public DateTime DOB { get; set; }
+        public int Age { get; set; }
         public string Address { get; set; }
         public string ContactNo { get; set; }
         public string EmailId { get; set; }
