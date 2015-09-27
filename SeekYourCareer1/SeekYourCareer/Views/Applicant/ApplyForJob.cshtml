@@ -1,0 +1,183 @@
+﻿@{
+    ViewBag.Title = "ApplyForJob";
+}
+
+<style>
+    .editor-field input[type="radio"] {
+        width:50px;
+    }
+    </style>
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<script src="~/Scripts/jquery-ui-1.8.24.js"></script>
+
+@*<script src="http://ajapx.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>*@
+<script>
+    function SelectStream(companyname)
+    {
+        $("#errormessage").html("");
+        $("#SelectStream").html("");
+        $('#showtable').html("");
+        $('#correspAddr').html("");
+        $('#addbutton').html("");
+
+
+        var url = "/Applicant/ApplyForJob";
+        if (companyname == "")
+        {
+            str = "Select a Company Name From The List!!!!!!";
+            $("#errormessage").html("");
+            $("#SelectStream").html("");
+            $('#showtable').html("");
+            $('#correspAddr').html("");
+            $('#addbutton').html("");
+           
+            $("#errormessage").append(str);
+        }
+        else
+        {
+            $("#errormessage").html("");
+
+            $.ajax({
+                url: url,
+                data: { CompanyName: companyname },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    //console.log(data);
+                    var html;
+                    html = "Stream ";
+                    for (var i = 0; i < data.length; i++) {
+                        html += "<input class=\"stream\" id=\"" + data[i] + "\" type=\"radio\" onclick=\"stream_table('" + data[i] + "','" + companyname + "')\" name=\"stream\" value=\"" + data[i] + "\">" + data[i];
+
+                    }
+                    //alert("appending");
+                    $('#SelectStream').html("");
+                    $('#SelectStream').append(html);
+
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
+                }
+            });
+        }
+    }
+    function stream_table(stream,company)
+    {
+        alert(stream);
+
+        var url = "/Applicant/ApplyForJob1";
+        $("#errormessage").html("");
+        $('#showtable').html("");
+        $('#correspAddr').html("");
+        $('#addbutton').html("");
+
+        //alert("in here");
+        $.ajax({
+            url: url,
+            data: { stream: stream, company : company },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                console.log(data);
+                alert(data);
+                $('#showtable').html("");
+                $("#errormessage").html("");
+
+                var html;
+                if (data == "")
+                {
+                    str = "Currently No Job Offers Exist From Your Selection !!!!!!";
+                    $("#errormessage").html("");
+
+                    $("#errormessage").append(str);
+                }
+                else {
+                    html = "  <tr><th>Job Type</th><th>Min SSC Percentage</th><th>Min HSC Percentage</th><th>Min Grad Avg</th> <th>Min Post Grad Avg</"
+                                + "th><th>Salary Per Month</th><th>Location</th><th>Experience</th><th>LastDate</th></tr> ";
+                    addr = data[0].CorrespondanceAddress;
+                    console.log(data);
+                    console.log(addr);
+
+                    for (var i = 0; i < data.length; i++)
+                    {
+                        var date = new Date(parseInt((data[i].AppLastDate).substr(6)));
+                        html += "<tr> <td>" + data[i].JobType + "</td> <td> " + data[i].MinSSCPercent + "</td> <td> " + data[i].MinHSCPercent + "</td> <td> "                             + data[i].MinGradAvg + "</td> <td> " + data[i].MinPGAvg + "</td> <td> " + data[i].SalPerMonth + "</td> <td> " +  data[i].Location                    +"</td> <td> "+ data[i].Experience + "</td> <td> " + date + "</td> <td><input type=\"checkbox\" name=\"SelectedCheck\" value=\""                                 + data[i].JobId + "\" > Select only 1</td></tr>";
+
+                    }
+                    //alert("almost");
+                    $('#showtable  tr').remove();
+                    
+                    $('#showtable').append(html);
+                    str = "Correspondance Address <input type=\"text\" name=\"CorrespondAddr\" value=\""+addr+"\" maxlength=\"50\"/>";
+                    $('#correspAddr').html("");
+                    $('#correspAddr').append(str);
+                    str = "<input type=\"submit\" value=\"Apply For Job\" onclick=\"return OnSubmit()\"/>";
+                    $('#addbutton').html("");
+                    $('#addbutton').append(str);
+                }
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+    }
+
+    function OnSubmit()
+    {
+        alert("button clicked");
+        if ($("input[type=checkbox]:checked").length == 0)
+        {
+            str = "Select a Job From The List!!!!!!";
+            $('#errormessage').html("");
+            $('#errormessage').append(str);
+
+        }
+        else if ($("input[type=checkbox]:checked").length == 1) {
+            alert("in fnc");
+            return true;
+        }
+        else
+        {
+            str = "Select ONLY 1 Job AT A TIME From The List!!!!!!";
+            $('#errormessage').html("");
+            $('#errormessage').append(str);
+        }
+            return false;
+    }
+</script>
+
+<form action="/Applicant/AddJobToDb">
+<h2>Apply For Job</h2>
+
+    
+<div>
+    <p>Select Company Name</p> 
+    
+    @Html.DropDownList("CompanyName", new SelectList(@ViewBag.list), "--Select--", new { @id = "CompanyName", @style = "width:200px;" , @onchange = "javascript:SelectStream(this.value);" }) 
+      
+</div>
+
+
+<div id="SelectStream" class="editor-field">
+     
+</div>
+<table id="showtable" class="display">
+          
+    <tbody>
+        </tbody>
+  
+</table>
+    
+<div id="correspAddr">
+    @*Correspondance Address <input type="text" name="CorrespondAddr" maxlength="50"/>*@
+</div>
+    
+<div id="addbutton">
+    @*<input type="button" value="Apply For Job" onclick="return func3()"/>*@
+</div>
+    <div id="errormessage">
+
+    </div>
+</form> 

@@ -1,0 +1,89 @@
+﻿@model SeekYourCareer.ViewModels.SelJCanViewModel
+
+@{
+    ViewBag.Title = "Shortlisted Job Candidates";
+}
+
+<script src="http://ajapx.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+    function GetApplicants(jobId) {
+        $('#DetailsDiv').empty();
+        if (jobId == '') {
+            alert('Select Job Id');
+            $('#DetailsDiv').empty();
+            $('#mytable').empty();
+        }
+        else {
+            var url = "/JobRepresentative/JobCandidateByCompany/";
+
+            $.ajax({
+                url: url,
+                data: { jobId: jobId },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    if (data.JobApplications.length == 0) {
+                        trhtml = "No records to display";
+                        $('#mytable').html(trhtml);
+                    }
+                    else {
+                        var trhtml = "<table><tr><th>Application Id</th><th>User Id</th><th>Job Offer Id</th><th>Applied Date</th><th>Correspondance Address</th><th>Approval Status</th></tr>";
+
+                        for (var i = 0; i < data.JobApplications.length; i++) {
+
+                            trhtml += "<tr> <td>" + data.JobApplications[i].ApplicantId + "</td> <td> " + data.JobApplications[i].UserID + "</td> <td> " + data.JobApplications[i].JobId + "</td> <td> " + data.JobApplications[i].AppDate + "</td> <td> " + data.JobApplications[i].Correspondance + "</td> <td> " + data.JobApplications[i].Status + "</td> <td> <input type=\"button\" value=\"Details\" onclick=\"GetDetails('" + data.JobApplications[i].Name + "','" + data.JobApplications[i].Age + "','" + data.JobApplications[i].Correspondance + "','" + data.JobApplications[i].ContactNo + "','" + data.JobApplications[i].EmailId + "')\" /> </td> </tr>";
+                        }
+                        trhtml += "</table>";
+                        $('#mytable tbody > tr').remove();
+                        $('#mytable').html(trhtml);
+                    }
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
+                }
+            });
+        }
+    }
+
+    function GetDetails(a,b,c,d,e) {
+        
+        details = "<table><tr><td align=\"left\"><b>Name</b></td><td>:</td><td align=\"left\">" + a + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Age</b></td><td>:</td><td align=\"left\">" + b + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Address</b></td><td>:</td><td align=\"left\">" + c + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Contact No</b></td><td>:</td><td align=\"left\">" + d + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>EmailId</b></td><td>:</td><td align=\"left\">" + e + "</td></tr></table>"
+        document.getElementById("DetailsDiv").innerHTML = details;
+    }
+</script> 
+
+
+<h2>VIEW SHORTLISTED CANDIDATES</h2>
+
+<div>
+    <p>Job Offer Id</p> 
+    
+    @Html.DropDownList("ddljobid", new SelectList(@ViewBag.JobIdL), "--Select--", new { @id = "ddljobid", @style = "width:200px;" , @onchange = "javascript:GetApplicants(this.value);" }) 
+      
+ <br /> 
+     <br /> 
+ 
+ 
+  <table id ="mytable" class ="display"> 
+      <thead> 
+          
+      </thead> 
+      <tbody> 
+ 
+ 
+ 
+ 
+      </tbody> 
+
+  </table> 
+ </div> 
+
+
+
+<div id="DetailsDiv" name="DetailsDiv" align="center"> 
+</div> 

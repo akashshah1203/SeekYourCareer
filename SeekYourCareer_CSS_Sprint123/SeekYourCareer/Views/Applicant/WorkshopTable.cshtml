@@ -1,0 +1,101 @@
+﻿@model IEnumerable<SeekYourCareer.Models.WorkshopTable>
+
+<script>
+    function DetailsButton(details)
+    {
+        $("#DetailSection").html("");
+        $("#DetailSection").html(details);
+    }
+    function ApplyButton(workshopid,location)
+    {
+        var url = "/Applicant/AddWorkshopToDb";
+
+        $.ajax({
+            url: url,
+            data: { WorkshopID:workshopid,Location:location },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                window.location.assign("/Applicant/Index");
+                
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+    }
+</script>
+
+
+<table>
+    <tr>
+        <th>
+            Company
+        </th>
+        <th>
+            Location
+        </th>
+        <th>
+            From Date
+        </th>
+        <th>
+            To Date
+        </th>
+        <th>
+            No.Of Seats
+        </th>
+        <th>
+            Min Graduation %
+        </th>
+        <th>
+            Min Post Graduation %
+        </th>
+        <th>
+            Details
+        </th>
+        <th>
+            Apply
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.CompanyName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Location)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FromDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ToDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NoOfSeats)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MinGrad)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MinPostGrad)
+        </td>
+        <td>
+            <button id="DetailsButton" onclick="javascript: DetailsButton('@item.Details')">Details</button>
+        </td>
+        <td>
+            <button id="ApplyButton" onclick="javascript: ApplyButton('@item.WorkshopID','@item.Location')">Apply</button>
+        </td>
+    </tr>
+}
+
+</table>
+
+<div id="DetailSection" style="font-size:40px ; color:red">
+
+</div>
+

@@ -1,0 +1,156 @@
+﻿@model SeekYourCareer.Models.Training
+
+@{
+    ViewBag.Title = "View Training Applicants - Representative";
+}
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script> 
+<script>
+    function GetTraining(trainingId) {
+        $('#DetailsDiv').empty();
+        $('#mytable').empty();
+        if (trainingId == '') {
+            alert("Select Training Id");
+            $('#mytable').empty();
+        }
+        else {
+            
+            var url = "/TrainingRepresentative/TrainingApplicantByCompany/";
+            
+            $.ajax({
+                url: url,
+                data: { trainingId: trainingId },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    var trhtml;
+                    trhtml = "<table><tr><td align=\"left\"><b>Location</b></td><td>:</td><td align=\"left\">" + data.Location + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Domain</b></td><td>:</td><td align=\"left\">" + data.Domain + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Graduation</b></td><td>:</td><td align=\"left\">" + data.Graduation + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Postgraduation</b></td><td>:</td><td align=\"left\">" + data.PG + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Past Experience</b></td><td>:</td><td align=\"left\">" + data.PastExp + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Starting Date</b></td><td>:</td><td align=\"left\">" + new Date(parseInt((data.StartingDate).substring(6))) + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Duration in Days</b></td><td>:</td><td align=\"left\">" + data.Duration + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Description</b></td><td>:</td><td align=\"left\">" + data.TrainingDesc + "</td></tr></table>"
+
+                    trhtml += "<input type=\"button\" value=\"View Applicants\" onclick= \"ViewApplicants('" + trainingId + "')\"/>";
+                    $('#DetailsDiv').html(trhtml);
+
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
+                }
+            });
+        }
+
+    }
+    //$.datepicker.formatDate('yy-mm-dd', new Date(data.StartingDate))
+    //new Date(data.StartingDate).toISOString().substring(0,10)
+    //new Date(parseInt((data.StartingDate).substring(6)))
+    //new Date((data.StartingDate).substring(0,10))
+
+       function ViewApplicants(trainingId) {
+           $('#mytable').empty();
+           var url = "/TrainingRepresentative/TrainingApplicantDetail/";
+        
+        $.ajax({
+            url: url,
+            data: { trainingId: trainingId },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                if (data.TrainApplicants.length == 0) {
+                    trhtml = "No records to display";
+                    $('#mytable').html(trhtml);
+                }
+                else {
+                    var trhtml;
+                    trhtml = "<table><tr><th>Applicant Id</th><th>Name</th><th>Date of Application</th><th>SSC Percentage</th><th>HSC Percentage</th><th>Grad Percentage</th><th>PG Percentage</th><th>Experience in Months</th></tr>";
+                    for (var i = 0; i < data.TrainApplicants.length; i++) {
+
+                        trhtml += "<tr> <td>" + data.TrainApplicants[i].ApplicantId + "</td> <td>" + data.TrainApplicants[i].Name + "</td> <td>" + data.TrainApplicants[i].AppDate + "</td> <td> " + data.TrainApplicants[i].SSCPercent + "</td> <td> " + data.TrainApplicants[i].HSCPercent + "</td> <td> " + data.TrainApplicants[i].GradPercent + "</td> <td> " + data.TrainApplicants[i].PGPercent + "</td> <td> " + data.TrainApplicants[i].Experience + "</td> <td> <input type=\"button\" value=\"Select\" onclick=\"Select('" + data.TrainApplicants[i].ApplicantId + "','" + trainingId + "')\" /> </td> <td> <input type=\"button\" value=\"Reject\" onclick=\"Reject('" + data.TrainApplicants[i].ApplicantId + "','" + trainingId + "')\" /> </td></tr>";
+                    }
+
+                    trhtml += "</table>";
+                    $('#mytable').html(trhtml);
+                }
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+    }
+
+       function Select(userId, trainId) {
+           alert("Selected");
+           var url = "/TrainingRepresentative/SelectTrainingCandidate/";
+           $.ajax({
+               url: url,
+               data: { applicantId: userId },
+               cache: false,
+               type: "POST",
+               success: function (data) {
+
+                   ViewApplicants(trainId);
+
+               },
+               error: function (reponse) {
+
+                   alert("error : " + reponse);
+               }
+           });
+       }
+
+       function Reject(userId, trainId) {
+           alert("Rejected");
+           var url = "/TrainingRepresentative/RejectTrainingCandidate/";
+           $.ajax({
+               url: url,
+               data: { applicantId: userId },
+               cache: false,
+               type: "POST",
+               success: function (data) {
+
+                   ViewApplicants(trainId);
+
+               },
+               error: function (reponse) {
+
+                   alert("error : " + reponse);
+               }
+           });
+       }
+
+</script> 
+
+
+<h2>VIEW TRAINING APPLICANTS</h2>
+
+<div>
+    <p>Training Offer Id</p> 
+    
+    @Html.DropDownList("ddltrainid", new SelectList(@ViewBag.TrainIdL), "--Select--", new { @id = "ddljobid", @style = "width:200px;" , @onchange = "javascript:GetTraining(this.value);" }) 
+      
+ <br /> 
+     <br /> 
+ </div>
+
+<div id="DetailsDiv" name="DetailsDiv" align="center"> 
+</div> 
+ 
+  <div id ="mytable" class ="display"> 
+      
+
+  </div> 
+  
+<div id ="ShowError" class ="display"> 
+      
+
+</div> 
+
+
+

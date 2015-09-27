@@ -1,0 +1,88 @@
+﻿@model SeekYourCareer.ViewModels.SelTCanViewModel
+
+@{
+    ViewBag.Title = "Shortlisted Training Applicants - Representative";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+
+<script src="http://ajapx.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+    function GetApplicants(trainingId) {
+        $('#mytable').empty();
+        $('#DetailsDiv').empty();
+        if (trainingId == '')
+            alert("Select Training Id");
+        else {
+            var url = "/TrainingRepresentative/TrainingCandidateByCompany/";
+
+            $.ajax({
+                url: url,
+                data: { trainingId: trainingId },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    if (data.TrainApplications.length == 0)
+                        $('#mytable').html("No records to display");
+                    else {
+                        var trhtml = "<table><tr><th>Applicant Id</th><th>Name</th></tr>";
+
+                        for (var i = 0; i < data.TrainApplications.length; i++) {
+
+                            trhtml += "<tr> <td>" + data.TrainApplications[i].ApplicantId + "</td> <td> " + data.TrainApplications[i].Name + "</td> <td> <input type=\"button\" value=\"Details\" onclick=\"GetDetails('" + data.TrainApplications[i].ApplicantId + "','" + data.TrainApplications[i].TrainingId + "','" + data.TrainApplications[i].AppDate + "','" + data.TrainApplications[i].CorrAddress + "','" + data.TrainApplications[i].ContactNo + "','" + data.TrainApplications[i].SelectionStatus + "')\" /> </td> </tr>";
+                        }
+
+                        $('#mytable tbody > tr').remove();
+                        $('#mytable').append(trhtml);
+                    }
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
+                }
+            });
+
+        }
+    }
+
+    function GetDetails(a,b,c,d,e,f) {
+        
+        details = "<table><tr><td align=\"left\"><b>Applicant Id</b></td><td>:</td><td align=\"left\">" + a + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Training Offer Id</b></td><td>:</td><td align=\"left\">" + b + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Date of Application</b></td><td>:</td><td align=\"left\">" + c + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Correspondence Address</b></td><td>:</td><td align=\"left\">" + d + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Phone Number</b></td><td>:</td><td align=\"left\">" + e + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Approval Status</b></td><td>:</td><td align=\"left\">" + f + "</td></tr></table>"
+        document.getElementById("DetailsDiv").innerHTML = details;
+    }
+</script> 
+
+
+<h2>Shortlisted Training Candidates</h2>
+
+<div>
+    <p>Select Training Id</p> 
+    
+    @Html.DropDownList("ddltrainid", new SelectList(@ViewBag.MyList), "--Select--", new { @id = "ddltrainid", @style = "width:200px;" , @onchange = "javascript:GetApplicants(this.value);" }) 
+      
+ <br /> 
+     <br /> 
+ 
+ 
+  <table id ="mytable" class ="display"> 
+      <thead> 
+          
+      </thead> 
+      <tbody> 
+ 
+ 
+ 
+ 
+      </tbody> 
+
+  </table> 
+ </div> 
+
+
+
+<div id="DetailsDiv" name="DetailsDiv" align="center"> 
+</div> 

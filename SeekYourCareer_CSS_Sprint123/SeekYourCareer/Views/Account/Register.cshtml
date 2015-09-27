@@ -1,0 +1,156 @@
+﻿@model SeekYourCareer.Models.Applicant
+
+@{
+    ViewBag.Title = "Register";
+}
+
+<h2>Register</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Applicant</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.UserName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.UserName)
+            @Html.ValidationMessageFor(model => model.UserName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Password)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Password)
+            @Html.ValidationMessageFor(model => model.Password)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ConfirmPassword)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ConfirmPassword)
+            @Html.ValidationMessageFor(model => model.ConfirmPassword)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DateOfBirth)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.DateOfBirth)
+            @Html.ValidationMessageFor(model => model.DateOfBirth)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ContactNumber)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ContactNumber)
+            @Html.ValidationMessageFor(model => model.ContactNumber)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.EmailId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.EmailId)
+            @Html.ValidationMessageFor(model => model.EmailId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Address)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Address)
+            @Html.ValidationMessageFor(model => model.Address)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.SscPercentage)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.SscPercentage)
+            @Html.ValidationMessageFor(model => model.SscPercentage)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.HscPercentage)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.HscPercentage)
+            @Html.ValidationMessageFor(model => model.HscPercentage)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CompletedGraduation)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CompletedGraduation)
+            @Html.ValidationMessageFor(model => model.CompletedGraduation)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.GraduationPercentage)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.GraduationPercentage)
+            @Html.ValidationMessageFor(model => model.GraduationPercentage)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CompletedPostGraduation)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CompletedPostGraduation)
+            @Html.ValidationMessageFor(model => model.CompletedPostGraduation)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.PostGraduationPercentage)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.PostGraduationPercentage)
+            @Html.ValidationMessageFor(model => model.PostGraduationPercentage)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.PreviousWorkExperience)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.PreviousWorkExperience)
+            @Html.ValidationMessageFor(model => model.PreviousWorkExperience)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.WorkExperience)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.WorkExperience)
+            @Html.ValidationMessageFor(model => model.WorkExperience)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

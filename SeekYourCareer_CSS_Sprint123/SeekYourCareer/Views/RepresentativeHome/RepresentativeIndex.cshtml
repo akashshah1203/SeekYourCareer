@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+@section scripts
+{
+    <script type="text/javascript" src="~/Scripts/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+}
+<h2>Admin Home</h2>
+<script>
+    //$(document).ready(function () {
+    function fun(){
+
+        $(function () {
+            $('#topNav li' ).each(function () {
+            if ($(this).find("ul").length > 0) {
+                //show subnav on hover
+                $(this).mouseenter(function () {
+                    $(this).find("ul").stop(true, true).slideDown();
+                });
+
+                //hide submenus on exit
+                $(this).mouseleave(function () {
+                    $(this).find("ul").stop(true, true).slideUp();
+                });
+
+                $(this).find("ul").mousemove(function () {
+                    $(this).stop(true, true).show();
+                });
+            }
+        });
+    });
+        //Your code that references jQuery
+    };
+</script>
+
+<nav id="topNav" onmouseover="fun()" style="position:center">
+    <ul>
+        @*<li>@Html.ActionLink("Home", "Index", "Admin")</li>*@
+        <li>
+            <a href="#">Complaints</a>
+            <ul>
+                <li><a href="#">Take Action</a></li>
+            </ul>
+        </li>
+        <li><a href="#">View Customer Feedback</a></li>
+        <li>
+            <a href="#">Mobile Service Operations</a>
+            <ul>
+                <li><a href="/Mobile/ViewMobileServices">Mobile Services</a></li>
+                <li><a href="#">Mobile Schemes</a></li>
+                <li><a href="/Mobile/GenerateBill">Add Mobile Usage Details</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">DTH Service Operations</a>
+            <ul>
+                <li><a href="/DTH/Index">DTH Providers</a></li>
+                <li><a href="/DTH/ViewPackages">DTH Services</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">View Transactions</a>
+            <ul>
+                <li><a href="#">Mobile</a></li>
+                <li><a href="#">DTH</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="/General/ViewTelecomPoints">View Telecom Points</a>
+        </li>
+        <li>
+            <a href="/General/UserDetails">View Unapproved Users</a>
+        </li>
+        <li>
+            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+            {
+                @Html.AntiForgeryToken()
+                <a href="javascript:document.getElementById('logoutForm').submit()">Logout</a>
+            }
+    </li>
+    </ul>
+</nav>
+
+

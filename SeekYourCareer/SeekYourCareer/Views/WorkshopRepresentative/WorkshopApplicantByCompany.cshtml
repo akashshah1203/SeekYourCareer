@@ -1,0 +1,199 @@
+﻿@model SeekYourCareer.Models.WSPendingApp
+
+@{
+    ViewBag.Title = "View Workshop Applicants - Representative";
+}
+
+<script src="http://ajapx.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+    function GetWorkshopIDs(Domain) {
+        $('#SelectWorkshop').empty();
+        $('#mytable').empty();
+        $('#ApplicantDev').empty();
+        $('#ShowError').empty();
+        if (Domain == '')
+            alert('Select Domain');
+        else {
+            var url = "/WorkshopRepresentative/WorkshopApplicantIdList";
+
+            $.ajax({
+                url: url,
+                data: { domain: Domain },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    if (data.length == 0) {
+                        $('#SelectWorkshop').empty();
+                        $('#ShowError').html("<br/><br/>No pending workshop applicants");
+                    }
+                    else {
+                        var trhtml;
+                        trhtml = '<br/>Select Workshop Id <br/><br/><select name="DD" id="selectData" onchange="Caller()"><br/><br/>';
+                        trhtml += '<option value="">' + '--Select--' + '</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                        }
+                        trhtml += "</select>";
+
+
+                        $('#SelectWorkshop').append(trhtml);
+                        //$('body').on('change', '#selectData', Caller);
+                    }
+                },
+                error: function (reponse) {
+                    alert("Error");
+                    alert("error : " + reponse);
+                }
+            });
+        }
+    }
+
+    function Caller() {
+        wid = document.getElementById("selectData").value;
+        $('#mytable').empty();
+        $('#ApplicantDev').empty();
+        $('#ShowError').empty();
+        if (wid == '') {
+            alert('Select Workshop Id');
+            $('#ApplicantDiv').empty();
+            $('#mytable').empty();
+        }
+        else {
+            $('#mytable').empty();
+            $('#ApplicantDiv').empty();
+            GetWSPreReq(wid);
+            ViewApplicants(wid);
+        }
+    }
+
+    function GetWSPreReq(wsId) {
+        
+        var url = "/WorkshopRepresentative/WorkshopPrerequisite/";
+        
+        $.ajax({
+            url: url,
+            data: { wid: wsId },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                var trhtml;
+                trhtml = "<table><tr><td align=\"left\"><b>WorkshopId</b></td><td>:</td><td align=\"left\">" + data.WorkshopId + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>Min Graduation Percentage</b></td><td>:</td><td align=\"left\">" + data.MinGradPct + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>Min PostGrad Percentage</b></td><td>:</td><td align=\"left\">" + data.MinPGPct + "</td></tr>"
+                trhtml += "<tr><td align=\"left\"><b>MinExperience</b></td><td>:</td><td align=\"left\">" + data.MinExperience + "</td></tr></table>"
+
+                $('#mytable').html(trhtml);
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+    }
+    
+    function ViewApplicants(wsId) {
+        $('#ShowError').empty();
+        $('#ApplicantDiv').empty();
+        $('#mytable').empty();
+        if (wsId == '') {
+            alert('Select Workshop Id');
+            $('#ShowError').empty();
+        }
+        else {
+            var url = "/WorkshopRepresentative/WorkshopApplicantDetail/";
+
+            $.ajax({
+                url: url,
+                data: { wid: wsId },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+
+                    if (data.PendingApps.length == 0)
+                        $('#ShowError').html("<br/><br/>No records to display");
+                    else {
+                        var trhtml = "<table><tr><th>User Name</th><th>Graduation %</th><th>Post Graduation %</th><th>Experience</th><th>Select Applicants</th><th>Reject Applicants</th></tr>";
+
+                        for (var i = 0; i < data.PendingApps.length; i++) {
+
+                            trhtml += "<tr> <td> " + data.PendingApps[i].Name + "</td> <td> " + data.PendingApps[i].GradPercent + "</td> <td> " + data.PendingApps[i].PGPercent + "</td> <td> " + data.PendingApps[i].WorkExpYears + "</td> <td> <input type=\"button\" value=\"Select\" onclick=\"Select('" + data.PendingApps[i].ApplicantId + "','" + wsId + "')\" /> </td> <td> <input type=\"button\" value=\"Reject\" onclick=\"Reject('" + data.PendingApps[i].ApplicantId + "','" + wsId + "')\" /> </td></tr>";
+                        }
+                        trhtml += "</table>";
+
+                        $('#ApplicantDiv').html(trhtml);
+                    }
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
+                }
+            });
+        }
+    }
+
+    function Select(userId, wsId) {
+        alert("Selected");
+        var url = "/WorkshopRepresentative/SelectWorkshopCandidate/";
+        $.ajax({
+            url: url,
+            data: { applicantId: userId },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+
+                ViewApplicants(wsId);
+
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+    }
+
+    function Reject(userId, wsId) {
+        alert("Rejected");
+        var url = "/WorkshopRepresentative/RejectWorkshopCandidate/";
+        $.ajax({
+            url: url,
+            data: { applicantId: userId },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+
+                ViewApplicants(wsId);
+
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+    }
+
+</script> 
+
+
+<h2>VIEW WORKSHOP APPLICANTS</h2>
+
+<div>
+    <p>Domain</p> 
+    
+    @Html.DropDownList("ddldomain", new SelectList(@ViewBag.WSDomainL), "--Select--", new { @id = "ddldomain", @style = "width:200px;" , @onchange = "javascript:GetWorkshopIDs(this.value);" }) 
+</div>
+ 
+<div id="SelectWorkshop" class="editor-field">
+     
+</div>
+
+<div id ="mytable" class ="display"> 
+    
+</div> 
+
+<div id="ApplicantDiv" name="DetailsDiv" align="center"> 
+
+</div> 
+
+<div id ="ShowError" class ="display"> 
+    
+</div> 

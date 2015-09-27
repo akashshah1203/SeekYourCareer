@@ -1,0 +1,90 @@
+﻿@model SeekYourCareer.ViewModels.SelTCanViewModel
+
+@{
+    ViewBag.Title = "Shortlisted Training Applicants - Representative";
+}
+
+<script src="http://ajapx.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+    function GetApplicants(wsId) {
+        $('#mytable').empty();
+        $('#DetailsDiv').empty();
+        if (wsId == '') {
+            $('#mytable').empty();
+            $('#DetailsDiv').empty();
+            alert('Select Workshop Id');
+        }
+        else {
+            var url = "/WRep/SelectedWSApplicants/";
+
+            $.ajax({
+                url: url,
+                data: { wid: wsId },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    if (data.WSSelectedApps.length == 0)
+                        $('#mytable').html("<br/><br/>No records to display");
+                    else {
+                        var trhtml = "<table><tr><th>Applicant Id</th><th>Workshop Offer Id</th><th>Application Date</th></tr>";
+
+                        for (var i = 0; i < data.WSSelectedApps.length; i++) {
+
+                            trhtml += "<tr> <td>" + data.WSSelectedApps[i].ApplicantId + "</td> <td> " + data.WSSelectedApps[i].WorkshopId + "</td> <td> " + data.WSSelectedApps[i].AppDate + "</td> <td> <input type=\"button\" value=\"Details\" onclick=\"GetDetails('" + data.WSSelectedApps[i].Name + "','" + data.WSSelectedApps[i].Age + "','" + data.WSSelectedApps[i].Address + "','" + data.WSSelectedApps[i].ContactNo + "','" + data.WSSelectedApps[i].EmailId + "')\" /> </td> </tr>";
+
+                        }
+
+                        //$('#mytable tbody > tr').remove();
+                        $('#mytable').html(trhtml);
+                    }
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
+                }
+            });
+
+        }
+    }
+
+    function TestFn(temp,nemp)
+    {
+        
+        alert(nemp);
+    }
+
+    function GetDetails1(a) {
+
+        alert(a);
+    }
+
+    function GetDetails(a,b,c,d,e) {
+        
+        details = "<table><tr><td align=\"left\"><b>Name</b></td><td>:</td><td align=\"left\">" + a + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Age</b></td><td>:</td><td align=\"left\">" + b + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Address</b></td><td>:</td><td align=\"left\">" + c + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Phone No</b></td><td>:</td><td align=\"left\">" + d + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Email Id</b></td><td>:</td><td align=\"left\">" + e + "</td></tr></table>"
+        document.getElementById("DetailsDiv").innerHTML = details;
+    }
+</script> 
+
+
+<h2>VIEW SHORTLISTED CANDIDATES</h2>
+
+<div>
+    <p>Workshop Id</p> 
+    
+    @Html.DropDownList("ddlworkshop", new SelectList(@ViewBag.WorkshopIdL), "--Select--", new { @id = "ddlworkshop", @style = "width:200px;" , @onchange = "javascript:GetApplicants(this.value);" }) 
+      
+ </div>
+ 
+  <div id ="mytable" class ="display"> 
+ 
+  </div> 
+ 
+
+
+
+<div id="DetailsDiv" name="DetailsDiv" align="center"> 
+</div> 

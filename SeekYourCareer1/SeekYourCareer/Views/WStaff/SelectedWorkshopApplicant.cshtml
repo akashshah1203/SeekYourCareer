@@ -1,0 +1,126 @@
+﻿@model SeekYourCareer.ViewModels.SelTCanViewModel
+
+@{
+    ViewBag.Title = "Shortlisted Workshop Applicants - Staff";
+}
+
+<script src="http://ajapx.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+    function GetWorkshopId(companyname) {
+        $('#SelectStream').empty();
+        $('#mytable').empty();
+        $('#DetailsDiv').empty();
+        if (companyname == '') {
+            alert('Select Company Name');
+            $('#SelectStream').empty();
+            $('#mytable').empty();
+            $('#DetailsDiv').empty();
+        }
+        else {
+        
+            var url = "/WStaff/SelectedWorkshopIds/";
+
+            $.ajax({
+                url: url,
+                data: { companyName: companyname },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+        
+                    if (data.length == 0)
+                        $('#mytable').html("<br/><br/>No records to display");
+                    else {
+                        var trhtml;
+                        trhtml = '<br/>Workshop Id <br/><br/><select name="DD" id="selectData" onchange="GetApplicants()">';
+                        trhtml += '<option value="">' + '--Select--' + '</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                        }
+                        trhtml += "</select>";
+
+
+                        $('#SelectStream').append(trhtml);
+                        //$('body').on('change', '#selectData', GetApplicants);
+                    }
+                },
+                error: function (reponse) {
+                    alert("Error");
+                    alert("error : " + reponse);
+                }
+            });
+        }
+    }
+
+    function GetApplicants() {
+        $('#mytable').empty();
+        $('#DetailsDiv').empty();
+        workshopId = document.getElementById("selectData").value;
+        if (workshopId == '') {
+            $('#mytable').empty();
+            $('#DetailsDiv').empty();
+            
+            alert('Select Workshop Id');
+        }
+        else {
+            var url = "/WStaff/WorkshopApplicantDetails/";
+
+            $.ajax({
+                url: url,
+                data: { workshopId: workshopId },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+
+                    var trhtml = "<table><tr><th>Applicant Id</th><th>Workshop Offer Id</th><th>Application Date</th></tr>";
+
+                    for (var i = 0; i < data.WSSelectedApps.length; i++) {
+
+                        trhtml += "<tr> <td>" + data.WSSelectedApps[i].ApplicantId + "</td> <td> " + data.WSSelectedApps[i].WorkshopId + "</td> <td> " + data.WSSelectedApps[i].AppDate + "</td> <td> <input type=\"button\" value=\"Details\" onclick=\"GetDetails('" + data.WSSelectedApps[i].Name + "','" + data.WSSelectedApps[i].Age + "','" + data.WSSelectedApps[i].Address + "','" + data.WSSelectedApps[i].ContactNo + "','" + data.WSSelectedApps[i].EmailId + "')\" /> </td> </tr>";
+
+                    }
+
+                    //$('#mytable tbody > tr').remove();
+                    $('#mytable').html(trhtml);
+
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
+                }
+            });
+
+        }
+    }
+
+    function GetDetails(a,b,c,d,e) {
+        
+        details = "<table><tr><td align=\"left\"><b>Name</b></td><td>:</td><td align=\"left\">" + a + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Age</b></td><td>:</td><td align=\"left\">" + b + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Address</b></td><td>:</td><td align=\"left\">" + c + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Phone No</b></td><td>:</td><td align=\"left\">" + d + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Email Id</b></td><td>:</td><td align=\"left\">" + e + "</td></tr></table>"
+        document.getElementById("DetailsDiv").innerHTML = details;
+    }
+</script> 
+
+
+<h2>VIEW SHORTLISTED CANDIDATES</h2>
+
+<div>
+    <p>Company</p> 
+    
+    @Html.DropDownList("ddlcompany", new SelectList(@ViewBag.WorkshopCompanies), "--Select--", new { @id = "ddlcompany", @style = "width:200px;" , @onchange = "javascript:GetWorkshopId(this.value);" }) 
+      
+ </div>
+ 
+<div id ="SelectStream" class ="display"> 
+ 
+ </div> 
+ 
+<div id ="mytable" class ="display"> 
+ 
+</div> 
+ 
+<div id="DetailsDiv" name="DetailsDiv" align="center"> 
+
+</div> 

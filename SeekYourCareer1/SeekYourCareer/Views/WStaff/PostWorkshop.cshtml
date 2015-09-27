@@ -1,0 +1,166 @@
+﻿@model SeekYourCareer.Models.Workshop
+
+@{
+    ViewBag.Title = "View Workshop Applicants - Staff";
+}
+
+<script src="http://ajapx.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+    function GetDomains(company) {
+        $('#SelectDomain').empty();
+        $('#mytable').empty();
+        $('#ApplicantDiv').empty();
+        $('#SelectWorkshop').empty();
+        if (company == '') {
+            $('#SelectDomain').empty();
+            $('#mytable').empty();
+            $('#ApplicantDiv').empty();
+            $('#SelectWorkshop').empty();
+            alert('Select Company');
+        }
+        else {
+            var url = "/WStaff/PostWorkshopDD";
+
+            $.ajax({
+                url: url,
+                data: { cname: company },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    if (data.length == 0) {
+                        $('#ApplicantDiv').empty();
+                        $('#SelectWorkshop').empty();
+                        $('#ApplicantDiv').html("No workshop yet to be approved for this company");
+                    }
+                    else {
+                        var trhtml;
+                        trhtml = '<br/>Domain<br/><br/><select name="DD" id="selectData" onchange="GetWorkshopOffers()">';
+                        trhtml += '<option value="">' + '--Select--' + '</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                        }
+                        trhtml += "</select>";
+
+
+                        $('#SelectDomain').append(trhtml);
+                        //$('body').on('change', '#selectData', GetWorkshopIDs);
+                    }
+                },
+                error: function (reponse) {
+                    alert("Error");
+                    alert("error : " + reponse);
+                }
+            });
+        }
+    }
+
+    function GetWorkshopOffers() {
+        
+        $('#ApplicantDiv').empty();
+        $('#mytable').empty();
+        Domain = document.getElementById("selectData").value;
+        companyName = document.getElementById("ddlcompany").value;
+        if (Domain == '') {
+            $('#ApplicantDiv').empty();
+            $('#mytable').empty();
+            alert('Select Domain');
+        }
+        else {
+            var url = "/WStaff/PostWorkshopM/";
+
+            $.ajax({
+                url: url,
+                data: { domain: Domain, companyName: companyName },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    if (data.WorkshopDetail.length == 0) {
+        
+                        $('#ApplicantDiv').html("No records to display");
+                    }
+                    else {
+                        var trhtml = "<table><tr><th>Workshop Location</th><th>Starting Date</th><th>End Date</th><th>No of seats</th><th>Min Graduation %</th><th>Min PostGrad %</th><th>Min Experience</th><th>Select Workshop</th><th>Reject Workshop</th></tr>";
+
+                        for (var i = 0; i < data.WorkshopDetail.length; i++) {
+
+                            trhtml += "<tr> <td> " + data.WorkshopDetail[i].Location + "</td> <td> " + new Date(parseInt((data.WorkshopDetail[i].FromDate).substr(6))) + "</td> <td> " + new Date(parseInt((data.WorkshopDetail[i].ToDate).substr(6))) + "</td> <td> " + data.WorkshopDetail[i].NoOfSeats + "</td> <td> " + data.WorkshopDetail[i].MinGradPct + "</td> <td> " + data.WorkshopDetail[i].MinPGPct + "</td> <td> " + data.WorkshopDetail[i].MinExperience + "</td> <td> <input type=\"button\" value=\"Select\" onclick=\"Select('" + data.WorkshopDetail[i].WorkshopId + "')\" /> </td> <td> <input type=\"button\" value=\"Reject\" onclick=\"Reject('" + data.WorkshopDetail[i].WorkshopId + "')\" /> </td></tr>";
+                        }
+                        
+
+                        $('#ApplicantDiv').html(trhtml);
+                    }
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
+                }
+            });
+        }
+    }
+
+    function Select(offerId) {
+        alert("Selected");
+        var url = "/WStaff/PostWorkshopOffer/";
+        $.ajax({
+            url: url,
+            data: { workshopId: offerId },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+
+                GetWorkshopOffers();
+
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+    }
+
+    function Reject(offerId) {
+        alert("Rejected");
+        var url = "/WStaff/RejectWorkshopOffer/";
+        $.ajax({
+            url: url,
+            data: { workshopId: offerId },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+
+                GetWorkshopOffers();
+
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+    }
+
+</script> 
+
+
+<h2>POST WORKSHOP OFFERS</h2>
+
+<div>
+    <p>Company</p> 
+    
+    @Html.DropDownList("ddlcompany", new SelectList(@ViewBag.WSCompanyNames), "--Select--", new { @id = "ddlcompany", @style = "width:200px;" , @onchange = "javascript:GetDomains(this.value);" }) 
+</div>
+
+<div id="SelectDomain" class="editor-field">
+     
+</div>
+ 
+<div id="SelectWorkshop" class="editor-field">
+     
+</div>
+
+<div id ="mytable" class ="display"> 
+    
+</div> 
+
+<div id="ApplicantDiv" name="DetailsDiv" align="center"> 
+
+</div> 

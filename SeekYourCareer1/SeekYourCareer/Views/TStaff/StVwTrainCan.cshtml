@@ -1,0 +1,147 @@
+﻿@model SeekYourCareer.Models.Training
+
+@{
+    ViewBag.Title = "View Training Applicants - Representative";
+}
+
+<script src="http://ajapx.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+    function GetTrainIDs(companyname) {
+        if (companyname == '') {
+            $('#SelectStream').empty();
+            $('#mytable').empty();
+            $('#DetailsDiv').empty();
+            alert('Select Company');
+        }
+        else {
+            var url = "/TStaff/StVwTrainCanDD";
+
+            $.ajax({
+                url: url,
+                data: { cname: companyname },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+
+                    var trhtml;
+                    trhtml = '<br/>Training Id <br/><br/><select name="DD" id="selectData" onchange="GetTraining()">';
+                    trhtml += '<option value="">' + '--Select--' + '</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    }
+                    trhtml += "</select>";
+
+
+                    $('#SelectStream').html(trhtml);
+                    //$('body').on('change', '#selectData', GetTraining);
+                },
+                error: function (reponse) {
+                    alert("Error");
+                    alert("error : " + reponse);
+                }
+            });
+        }
+    }
+
+    function GetTraining() {
+        trainId = document.getElementById("selectData").value;
+        if (trainId == '') {
+            $('#mytable').empty();
+            $('#DetailsDiv').empty();
+            $('#DetailsDiv').html("No records to display");
+        }
+        else {
+
+            var url = "/TStaff/StVwTrainCanM/";
+
+            $.ajax({
+                url: url,
+                data: { tid: trainId },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    var trhtml;
+                    trhtml = "<table><tr><td align=\"left\"><b>Location</b></td><td>:</td><td align=\"left\">" + data.Location + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Domain</b></td><td>:</td><td align=\"left\">" + data.Domain + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Graduation</b></td><td>:</td><td align=\"left\">" + data.Graduation + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Postgraduation</b></td><td>:</td><td align=\"left\">" + data.PG + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Past Experience</b></td><td>:</td><td align=\"left\">" + data.PastExp + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Starting Date</b></td><td>:</td><td align=\"left\">" + new Date(parseInt((data.StartingDate).substr(6))) + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Duration in Days</b></td><td>:</td><td align=\"left\">" + data.Duration + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Description</b></td><td>:</td><td align=\"left\">" + data.TrainingDesc + "</td></tr></table>"
+
+                    trhtml += "<input type=\"button\" value=\"View\" onclick= \"ViewApplicants('" + trainId + "')\"/>";
+                    $('#mytable').html(trhtml);
+
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
+                }
+            });
+
+        }
+    }
+    
+       function ViewApplicants(trainId) {
+           
+        var url = "/TStaff/StVwTrainApplicants/";
+        
+        $.ajax({
+            url: url,
+            data: { tid: trainId },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                if (data.TrainApplicants.length == 0)
+                    $('#DetailsDiv').html("No records to display");
+                else {
+                    var trhtml = "<table><tr><th>Applicant Id</th><th>Name</th><th>Date of Application</th><th>SSC Percentage</th><th>HSC Percentage</th><th>Graduation Percentage</th><th>Postgraduation Percentage</th><th>Experience in months</th></tr>";
+
+                    for (var i = 0; i < data.TrainApplicants.length; i++) {
+
+                        trhtml += "<tr> <td>" + data.TrainApplicants[i].ApplicantId + "</td> <td>" + data.TrainApplicants[i].Name + "</td> <td>" + data.TrainApplicants[i].AppDate + "</td> <td> " + data.TrainApplicants[i].SSCPercent + "</td> <td> " + data.TrainApplicants[i].HSCPercent + "</td> <td> " + data.TrainApplicants[i].GradPercent + "</td> <td> " + data.TrainApplicants[i].PGPercent + "</td> <td> " + data.TrainApplicants[i].Experience + "</td> </tr>";
+                    }
+
+
+                    $('#DetailsDiv').html(trhtml);
+                }
+
+            },
+            error: function (reponse) {
+
+                alert("error : " + reponse);
+            }
+        });
+    }
+
+       function Select() {
+           alert("Selected");
+       }
+
+       function Reject() {
+           alert("Rejected");
+       }
+</script> 
+
+
+<h2>VIEW TRAINING APPLICANTS</h2>
+
+<div>
+    <p>Company</p> 
+    @Html.DropDownList("ddlcompany", new SelectList(@ViewBag.CompanyNameL), "--Select--", new { @id = "ddlcompany", @style = "width:200px;" , @onchange = "javascript:GetTrainIDs(this.value);" }) 
+</div>
+ 
+ <div id="SelectStream" class="editor-field">
+     
+</div>
+
+  <div id ="mytable" class ="display"> 
+      
+
+  </div> 
+
+
+
+<div id="DetailsDiv" name="DetailsDiv" align="center"> 
+</div> 

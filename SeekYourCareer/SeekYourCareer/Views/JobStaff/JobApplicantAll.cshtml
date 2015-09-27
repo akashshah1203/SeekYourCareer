@@ -1,0 +1,198 @@
+﻿@{
+    ViewBag.Title = "JobApplicantAll";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+    var JOfferId;
+    function GetDomains(company) {
+        $('#SelectJob').empty();
+        $('#SelectDomain').empty();
+        $('#mytable').empty();
+        $('#ApplicantDiv').empty();
+        if (company == '') {
+            Alert.render('Select Company!')
+            $('#SelectDomain').empty();
+        }
+        else {
+            var url = "/JobStaff/JobStreamCodes/";
+
+            $.ajax({
+                url: url,
+                data: { companyName: company },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+
+                    var trhtml;
+                    trhtml = '<br/>Stream Code <br/><br/><select name="DD" id="selectData" class="search_categories" onchange="GetJobIDs()">';
+                    trhtml += '<option value="">' + '--Select--' + '</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    }
+                    trhtml += "</select>";
+
+                    $('#SelectDomain').html(trhtml);
+                    //$('body').on('change', '#selectData', GetJobIDs);
+                },
+                error: function (reponse) {
+                    alert("Error");
+                    alert("error : " + reponse);
+                }
+            });
+        }
+    }
+
+    function GetJobIDs() {
+        $('#SelectJob').empty();
+        $('#mytable').empty();
+        $('#ApplicantDiv').empty();
+        Domain = document.getElementById("selectData").value;
+        if (Domain == '') {
+            alert('Select Stream Code');
+            $('#SelectJob').empty();
+        }
+        else {
+            var url = "/JobStaff/JobIdList/";
+
+            $.ajax({
+                url: url,
+                data: { streamCode: Domain },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+
+                    var trhtml;
+                    trhtml = '<br/>Select Job Offer Id <br/><br/><select name="DD" id="selectData1" class="search_categories" onchange="Caller()">';
+                    trhtml += '<option value="">' + '--Select--' + '</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    }
+                    trhtml += "</select>";
+
+                    trhtml += "<br/><br/><input type=\"button\" class=\"button\" style=\"border: 2px solid orange \" value=\"View Job Details\" onclick= \"GetJobPreReq()\"/>";
+                    $('#SelectJob').append(trhtml);
+                    //$('body').on('change', '#selectData', Caller);
+
+                },
+                error: function (reponse) {
+                    alert("Error");
+                    alert("error : " + reponse);
+                }
+            });
+        }
+    }
+
+    function Caller() {
+        jid = document.getElementById("selectData1").value;
+        JOfferId = jid;
+        $('#mytable').empty();
+        $('#ApplicantDiv').empty();
+        ViewApplicants(jid);
+    }
+
+    function GetJobPreReq() {
+        if (JOfferId == '') {
+            alert('Select Job Offer Id');
+            $('#ApplicantDiv').empty();
+            $('#mytable').empty();
+        }
+        else {
+            var url = "/JobStaff/ViewJobPrerequisite/";
+
+            $.ajax({
+                url: url,
+                data: { jobId: JOfferId },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    var trhtml;
+                    trhtml = "<table class=\"CSSInfoTable\"><tr><td align=\"left\"><b>Min SSC Percentage</b></td><td align=\"left\">" + data.MinSSCPercent + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Min HSC Percentage</b></td><td align=\"left\">" + data.MinHSCPercent + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Min Graduation Average</b></td><td align=\"left\">" + data.MinGradAvg + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Min Post Graduation Average</b></td><td align=\"left\">" + data.MinPGAvg + "</td></tr>"
+                    trhtml += "<tr><td align=\"left\"><b>Experience</b></td><td align=\"left\">" + data.Experience + "</td></tr></table>"
+
+                    $('#mytable').html(trhtml);
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
+                }
+            });
+        }
+    }
+    
+    function ViewApplicants(jobId) {
+        if (jobId == '') {
+            alert('Select Job Id');
+            $('#mytable').empty();
+            $('#ApplicantDiv').empty();
+        }
+        else {
+            var url = "/JobStaff/JobApplicantDetail/";
+
+            $.ajax({
+                url: url,
+                data: { jobId: jobId },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    if (data.JobApplicants.length == 0)
+                        $('#ApplicantDiv').html("No records to display");
+                    else {
+                        var trhtml = "<table class=\"CSSTableGenerator\"><tr><th>Name</th><th>SSC Percentage</th><th>HSC Percentage</th><th>PG Percentage</th><th>Graduation Percentage</th><th>Experience</th></tr>";
+                        for (var i = 0; i < data.JobApplicants.length; i++) {
+
+                            trhtml += "<tr> <td> " + data.JobApplicants[i].Name + "</td> <td> " + data.JobApplicants[i].SSCPercent + "</td> <td> " + data.JobApplicants[i].HSCPercent + "</td> <td> " + data.JobApplicants[i].GradPercent + "</td> <td> " + data.JobApplicants[i].PGPercent + "</td> <td> " + data.JobApplicants[i].HaveWorkExp + "</td> </tr>";
+                        }
+
+                        trhtml += "</table>";
+                        $('#ApplicantDiv').html(trhtml);
+                    }
+                },
+                error: function (reponse) {
+
+                    alert("error : " + reponse);
+                }
+            });
+        }
+    }
+
+       
+</script> 
+
+
+<h2>VIEW JOB APPLICANTS</h2>
+
+<div>
+    <p>Company</p> 
+    
+    @Html.DropDownList("ddlcompany", new SelectList(@ViewBag.JobCompanyNameL), "--Select--", new { @id = "ddlcompany", @class="search_categories", @style = "width:200px;" , @onchange = "javascript:GetDomains(this.value);" }) 
+</div>
+
+<div id="SelectDomain" class="editor-field">
+     
+</div>
+ 
+<div id="SelectJob" class="editor-field">
+     
+</div>
+
+<div id ="mytable" class ="display"> 
+    
+</div> 
+
+<div id="ApplicantDiv" name="DetailsDiv" align="center"> 
+
+</div> 
+
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+  <div>
+    <div id="dialogboxhead"></div>
+    <div id="dialogboxbody"></div>
+    <div id="dialogboxfoot"></div>
+  </div>
+</div>

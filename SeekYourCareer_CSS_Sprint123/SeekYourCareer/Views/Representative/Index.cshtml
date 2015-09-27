@@ -1,0 +1,74 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+@section scripts
+{
+    <script type="text/javascript" src="~/Scripts/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+}
+<h2>Representative Home</h2>
+<script>
+    //$(document).ready(function () {
+    function fun() {
+
+        $(function () {
+            $('#topNav li').each(function () {
+                if ($(this).find("ul").length > 0) {
+                    //show subnav on hover
+                    $(this).mouseenter(function () {
+                        $(this).find("ul").stop(true, true).slideDown();
+                    });
+
+                    //hide submenus on exit
+                    $(this).mouseleave(function () {
+                        $(this).find("ul").stop(true, true).slideUp();
+                    });
+
+                    $(this).find("ul").mousemove(function () {
+                        $(this).stop(true, true).show();
+                    });
+                }
+            });
+        });
+        //Your code that references jQuery
+    };
+</script>
+
+<nav id="topNav" onmouseover="fun()" style="position:center">
+    <ul>
+        @*<li>@Html.ActionLink("Home", "Index", "Admin")</li>*@
+        
+        
+        <li>
+            <a href="#">Job</a>
+            <ul>
+                <li><a href="/JRep/RVwJobApp">View Job Applicants</a></li>
+                <li><a href="/JRep/RSelJobCan">View Shortlisted Job Candidates</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">Workshop</a>
+            <ul>
+                <li><a href="/WRep/RVwWSApp">View Workshop Applicants</a></li>
+                <li><a href="/WRep/SelectedWorkshopApp">View Shortlisted Workshop Applicant</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">Training</a>
+            <ul>
+                <li><a href="/TRep/RVwTrainCan">View Training Applicants</a></li>
+                <li><a href="/Staff/RSelTrainCan">View Shortlisted Training Candidates</a></li>
+            </ul>
+        </li>
+        
+        <li>
+            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+            {
+                @Html.AntiForgeryToken()
+                <a href="javascript:document.getElementById('logoutForm').submit()">Logout</a>
+            }
+    </li>
+    </ul>
+</nav>
+
+

@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html lang=''>
+<head>
+   <meta charset='utf-8'>
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="~/Content/styles.css">
+   <link rel="stylesheet" href="~/Content/Site.css"> 
+   <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+   <script src="~/Content/script.js"></script>
+   <title>@ViewBag.Title</title>
+    @RenderSection("head", false)
+</head>
+<body style="background-color:#2980b9">
+    <div id="Header" style="background-color:#000000; width: 100%; height: 150px;">
+        <div style="position:fixed; width:200px; height:150px;">
+        <img src="~/Content/images/Icon1.jpg" alt="Icon1">
+        </div>
+        <div style="position:fixed; left:800px; align-content:center; height:150px">
+        
+        </div>
+        <div style="position:fixed; left:1550px; width:200px; height:150px">
+        <img src="~/Content/images/Icon2.png" alt="Icon2" style="width:350px;height:150px;">
+        </div>
+    </div>
+    <div style="position:fixed; text-align:right; top:150px; width:100%; height:30px; background-color:#808080">
+        Welcome @Session["UserName"]
+    </div>
+    
+    <div id="middle" style="width: 100%; position:fixed; top:180px;">
+        <div id='cssmenu' style="width: 300px; height: 80%;  float:left">
+            <ul>
+                    <li class='active'><a href='/Home/Index'><span>Home</span></a></li>
+                    <li class='has-sub'><a href='#'><span>Job</span></a>
+                <ul>
+                    <li><a href='/JobStaff/JobApplicantAll'><span>View Job Applications</span></a></li>
+                    <li class='last'><a href='/JobStaff/JobCandidateAll'><span>View Shortlisted Job Applications</span></a></li>
+                </ul>
+                </li>
+                <li class='has-sub'><a href='#'><span>Workshop</span></a>
+                <ul>
+                    <li><a href='/WorkshopStaff/PostWorkshop'><span>Post Workshop</span></a></li>
+                    <li><a href='/WorkshopStaff/WorkshopApplicantAll'><span>View Workshop Applications</span></a></li>
+                    <li class='last'><a href='/WorkshopStaff/WorkshopCandidateAll'><span>View Shortlisted Workshop Applications</span></a></li>
+                </ul>
+                </li>
+                <li class='has-sub'><a href='#'><span>Training</span></a>
+                <ul>
+                    <li><a href='/TrainingStaff/TrainingApplicantAll'><span>View Training Applications</span></a></li>
+                    <li class='last'><a href='/TrainingStaff/TrainingCandidateAll'><span>View Shortlisted Training Applications</span></a></li>
+                </ul>
+                </li>
+                <li class='active'><a href='/Account/LogOff'><span>Logout</span></a></li>
+
+            </ul>
+        </div>
+        <div style="position:fixed; left:310px; width:1575px; height: 740px;  float:left; border:1px solid #a1a1a1; padding:10px 10px; border-radius:25px; overflow-y:scroll">
+            @RenderBody()
+        </div>
+    </div>
+    <div id="footer" style="position:fixed; height:50px; bottom:0px; left:0px; right:0px; margin-bottom:0px; vertical-align:bottom">
+        &#169 SeekYourCareer.com 2015
+    </div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+﻿@model SeekYourCareer.Models.LoginPage
+
+@{
+    ViewBag.Title = "Login";
+}
+<style>
+    .editor-field input[type="radio"] 
+    {
+        width:50px;
+    }
+    </style>
+<h2>Login</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>LoginPage</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.TypeOfUser)
+        </div>
+        <div class="editor-field">
+            @Html.RadioButtonFor(model => model.TypeOfUser, "Admin",new { @checked = "checked" }) Admin
+            @Html.RadioButtonFor(model => model.TypeOfUser, "Applicant") Applicant
+            @Html.RadioButtonFor(model => model.TypeOfUser, "Representative") Representative
+            @Html.ValidationMessageFor(model => model.TypeOfUser)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.UserName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.UserName)
+            @Html.ValidationMessageFor(model => model.UserName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Password)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Password)
+            @Html.ValidationMessageFor(model => model.Password)
+        </div>
+
+        <p>
+            <input type="submit" value="Login" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
