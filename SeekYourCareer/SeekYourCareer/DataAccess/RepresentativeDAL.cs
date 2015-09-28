@@ -183,7 +183,7 @@ namespace SeekYourCareer.DataAccess
                 + "Integrated Security=True";
 
             string queryString =
-                "SELECT ApplicantId, UserID, Name, TrainingId, convert(varchar, AppDate), CorrAddress, CorrContact, SelectionStatus from dbo.TrainingAppln WHERE TrainingId = @filtervalue;";
+                "SELECT ApplicantId, UserID, Name, TrainingId, convert(varchar, AppDate), CorrAddress, CorrContact, SelectionStatus from dbo.TrainingAppln WHERE SelectionStatus ='Selected' AND TrainingId = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {

@@ -17,7 +17,7 @@
             $('#mytable').empty();
             $('#ApplicantDiv').empty();
             $('#SelectWorkshop').empty();
-            $.msgbox("Select Company!");
+            Alert.render("Select Company!");
         }
         else {
             var url = "/WorkshopStaff/PostWorkshopDetail";
@@ -35,7 +35,7 @@
                     }
                     else {
                         var trhtml;
-                        trhtml = '<br/>Domain<br/><br/><select name="DD" id="selectData" onchange="GetWorkshopOffers()">';
+                        trhtml = '<br/>Domain<br/><br/><select name="DD" id="selectData" class="search_categories" onchange="GetWorkshopOffers()">';
                         trhtml += '<option value="">' + '--Select--' + '</option>';
                         for (var i = 0; i < data.length; i++) {
                             trhtml += '<option value="' + data[i] + '">' + data[i] + '</option>';
@@ -48,8 +48,8 @@
                     }
                 },
                 error: function (reponse) {
-                    alert("Error");
-                    alert("error : " + reponse);
+                    Alert.render("Error");
+                    Alert.render("error : " + reponse);
                 }
             });
         }
@@ -64,7 +64,7 @@
         if (Domain == '') {
             $('#ApplicantDiv').empty();
             $('#mytable').empty();
-            alert('Select Domain');
+            Alert.render('Select Domain');
         }
         else {
             var url = "/WorkshopStaff/PostWorkshopMaster/";
@@ -80,11 +80,11 @@
                         $('#ApplicantDiv').html("No records to display");
                     }
                     else {
-                        var trhtml = "<table><tr><th>Workshop Location</th><th>Starting Date</th><th>End Date</th><th>No of seats</th><th>Min Graduation %</th><th>Min PostGrad %</th><th>Min Experience</th><th>Select Workshop</th><th>Reject Workshop</th></tr>";
+                        var trhtml = "<table class=\"CSSTableGenerator\"><tr><th>Workshop Location</th><th>Starting Date</th><th>End Date</th><th>No of seats</th><th>Min Graduation %</th><th>Min PostGrad %</th><th>Min Experience</th><th>Select Workshop</th><th>Reject Workshop</th></tr>";
 
                         for (var i = 0; i < data.WorkshopDetail.length; i++) {
 
-                            trhtml += "<tr> <td> " + data.WorkshopDetail[i].Location + "</td> <td> " + new Date(parseInt((data.WorkshopDetail[i].FromDate).substr(6))) + "</td> <td> " + new Date(parseInt((data.WorkshopDetail[i].ToDate).substr(6))) + "</td> <td> " + data.WorkshopDetail[i].NoOfSeats + "</td> <td> " + data.WorkshopDetail[i].MinGradPct + "</td> <td> " + data.WorkshopDetail[i].MinPGPct + "</td> <td> " + data.WorkshopDetail[i].MinExperience + "</td> <td> <input type=\"button\" class=\"button\" value=\"Select\" onclick=\"Select('" + data.WorkshopDetail[i].WorkshopId + "')\" /> </td> <td> <input type=\"button\" value=\"Reject\" onclick=\"Reject('" + data.WorkshopDetail[i].WorkshopId + "')\" /> </td></tr>";
+                            trhtml += "<tr> <td> " + data.WorkshopDetail[i].Location + "</td> <td> " + new Date(parseInt((data.WorkshopDetail[i].FromDate).substr(6))) + "</td> <td> " + new Date(parseInt((data.WorkshopDetail[i].ToDate).substr(6))) + "</td> <td> " + data.WorkshopDetail[i].NoOfSeats + "</td> <td> " + data.WorkshopDetail[i].MinGradPct + "</td> <td> " + data.WorkshopDetail[i].MinPGPct + "</td> <td> " + data.WorkshopDetail[i].MinExperience + "</td> <td> <input type=\"button\" class=\"button\" style=\"border: 2px solid orange \" value=\"Select\" onclick=\"Select('" + data.WorkshopDetail[i].WorkshopId + "')\" /> </td> <td> <input type=\"button\" class=\"button\" style=\"border: 2px solid orange \" value=\"Reject\" onclick=\"Reject('" + data.WorkshopDetail[i].WorkshopId + "')\" /> </td></tr>";
                         }
                         
 
@@ -93,14 +93,14 @@
                 },
                 error: function (reponse) {
 
-                    alert("error : " + reponse);
+                    Alert.render("error : " + reponse);
                 }
             });
         }
     }
 
     function Select(offerId) {
-        alert("Selected");
+        Alert.render("Selected");
         var url = "/WorkshopStaff/PostWorkshopOffer/";
         $.ajax({
             url: url,
@@ -114,13 +114,13 @@
             },
             error: function (reponse) {
 
-                alert("error : " + reponse);
+                Alert.render("error : " + reponse);
             }
         });
     }
 
     function Reject(offerId) {
-        alert("Rejected");
+        Alert.render("Rejected");
         var url = "/WorkshopStaff/RejectWorkshopOffer/";
         $.ajax({
             url: url,
@@ -134,7 +134,7 @@
             },
             error: function (reponse) {
 
-                alert("error : " + reponse);
+                Alert.render("error : " + reponse);
             }
         });
     }
@@ -147,7 +147,7 @@
 <div>
     <p>Company</p> 
     
-    @Html.DropDownList("ddlcompany", new SelectList(@ViewBag.WSCompanyNames), "--Select--", new { @id = "ddlcompany", @style = "width:200px;" , @onchange = "javascript:GetDomains(this.value);" }) 
+    @Html.DropDownList("ddlcompany", new SelectList(@ViewBag.WSCompanyNames), "--Select--", new {@class="search_categories", @id = "ddlcompany", @style = "width:200px;" , @onchange = "javascript:GetDomains(this.value);" }) 
 </div>
 
 <div id="SelectDomain" class="editor-field">
@@ -166,10 +166,11 @@
 
 </div> 
 
-<div id="popup1" class="overlay">
-	<div class="popup">
-		<div class="content">
-			Candidate is selected and record updated in database. <a class="close" href="#">Close</a>
-		</div>
-	</div>
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+  <div>
+    <div id="dialogboxhead"></div>
+    <div id="dialogboxbody"></div>
+    <div id="dialogboxfoot"></div>
+  </div>
 </div>

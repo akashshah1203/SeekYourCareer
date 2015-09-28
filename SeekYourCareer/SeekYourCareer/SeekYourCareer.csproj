@@ -271,10 +271,22 @@
     <Compile Include="ViewModels\WSSelectedAppsVM.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\images\career.jpg" />
+    <Content Include="Content\images\careers1.jpg" />
+    <Content Include="Content\images\careersuccess.jpg" />
+    <Content Include="Content\images\desktop.jpg" />
+    <Content Include="Content\images\featured36.jpg" />
+    <Content Include="Content\images\FotorCreated.jpg" />
+    <Content Include="Content\images\FotorCreated1.jpg" />
+    <Content Include="Content\images\Header1.jpg" />
+    <Content Include="Content\images\Header1_1.jpg" />
+    <Content Include="Content\images\Header1_2.jpg" />
     <Content Include="Content\images\Icon1.jpg" />
     <Content Include="Content\images\Icon2.png" />
     <Content Include="Content\images\icon_minus.png" />
     <Content Include="Content\images\icon_plus.png" />
+    <Content Include="Content\images\job_site_header.jpg" />
+    <Content Include="Content\images\Logo1.jpg" />
     <Content Include="Content\images\pattern.png" />
     <Content Include="Content\script.js" />
     <Content Include="Content\styles.css" />

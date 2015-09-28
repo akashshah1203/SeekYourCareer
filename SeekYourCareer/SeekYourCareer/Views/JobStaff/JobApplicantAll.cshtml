@@ -37,8 +37,8 @@
                     //$('body').on('change', '#selectData', GetJobIDs);
                 },
                 error: function (reponse) {
-                    alert("Error");
-                    alert("error : " + reponse);
+                    Alert.render("Error");
+                    Alert.render("error : " + reponse);
                 }
             });
         }
@@ -50,7 +50,7 @@
         $('#ApplicantDiv').empty();
         Domain = document.getElementById("selectData").value;
         if (Domain == '') {
-            alert('Select Stream Code');
+            Alert.render('Select Stream Code');
             $('#SelectJob').empty();
         }
         else {
@@ -77,8 +77,8 @@
 
                 },
                 error: function (reponse) {
-                    alert("Error");
-                    alert("error : " + reponse);
+                    Alert.render("Error");
+                    Alert.render("error : " + reponse);
                 }
             });
         }
@@ -94,7 +94,7 @@
 
     function GetJobPreReq() {
         if (JOfferId == '') {
-            alert('Select Job Offer Id');
+            Alert.render('Select Job Offer Id');
             $('#ApplicantDiv').empty();
             $('#mytable').empty();
         }
@@ -118,7 +118,7 @@
                 },
                 error: function (reponse) {
 
-                    alert("error : " + reponse);
+                    Alert.render("error : " + reponse);
                 }
             });
         }
@@ -126,7 +126,7 @@
     
     function ViewApplicants(jobId) {
         if (jobId == '') {
-            alert('Select Job Id');
+            Alert.render('Select Job Id');
             $('#mytable').empty();
             $('#ApplicantDiv').empty();
         }
@@ -154,7 +154,7 @@
                 },
                 error: function (reponse) {
 
-                    alert("error : " + reponse);
+                    Alert.render("error : " + reponse);
                 }
             });
         }

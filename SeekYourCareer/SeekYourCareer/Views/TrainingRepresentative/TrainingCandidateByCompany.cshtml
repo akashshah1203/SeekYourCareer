@@ -24,7 +24,7 @@
                     if (data.TrainApplications.length == 0)
                         $('#mytable').html("No records to display");
                     else {
-                        var trhtml = "<table class=\"CSSTableGenerator\"><tr><th>Applicant Id</th><th>Name</th></tr>";
+                        var trhtml = "<table class=\"CSSTableGenerator\"><tr><th>Applicant Id</th><th>Name</th><th></th></tr>";
 
                         for (var i = 0; i < data.TrainApplications.length; i++) {
 
@@ -46,12 +46,12 @@
 
     function GetDetails(a,b,c,d,e,f) {
         
-        details = "<table class=\"CSSInfoTable\"><tr><td align=\"left\"><b>Applicant Id</b></td><td>:</td><td align=\"left\">" + a + "</td></tr>"
-        details += "<tr><td align=\"left\"><b>Training Offer Id</b></td><td>:</td><td align=\"left\">" + b + "</td></tr>"
-        details += "<tr><td align=\"left\"><b>Date of Application</b></td><td>:</td><td align=\"left\">" + c + "</td></tr>"
-        details += "<tr><td align=\"left\"><b>Correspondence Address</b></td><td>:</td><td align=\"left\">" + d + "</td></tr>"
-        details += "<tr><td align=\"left\"><b>Phone Number</b></td><td>:</td><td align=\"left\">" + e + "</td></tr>"
-        details += "<tr><td align=\"left\"><b>Approval Status</b></td><td>:</td><td align=\"left\">" + f + "</td></tr></table>"
+        details = "<table class=\"CSSInfoTable\"><tr><td align=\"left\"><b>Applicant Id</b></td><td align=\"left\">" + a + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Training Offer Id</b></td><td align=\"left\">" + b + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Date of Application</b></td><td align=\"left\">" + c + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Correspondence Address</b></td><td align=\"left\">" + d + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Phone Number</b></td><td align=\"left\">" + e + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Approval Status</b></td><td align=\"left\">" + f + "</td></tr></table>"
         document.getElementById("DetailsDiv").innerHTML = details;
     }
 </script> 

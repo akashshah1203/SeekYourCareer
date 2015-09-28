@@ -14,12 +14,12 @@
         $('#DetailsDiv').empty();
       
         if (repId == '') {
-            Alert.render('Select Training Id');
+            
             $('#mytable').empty();
             $('#DetailsDiv').empty();
             $("#ddltrainid").find('option').remove().end();
             $("#ddltrainid").append("<option value = '0' >" + "--Select--" + "</option>");
-            //$("#ddltrainid").text("--Select--");
+            Alert.render('Select Training Id');
         }
         else {
             var url = "/TrainingStaff/TrainingIdList/";
@@ -65,7 +65,7 @@
                     if (data.TrainApplications.length == 0)
                         $('#mytable').html("No records to display");
                     else {
-                        var trhtml = "<table class=\"CSSTableGenerator\"><tr><th>Applicant Id</th><th>Name</th></tr>";
+                        var trhtml = "<table class=\"CSSTableGenerator\"><tr><th>Applicant Id</th><th>Name</th><th></th></tr>";
 
                         for (var i = 0; i < data.TrainApplications.length; i++) {
 
@@ -87,43 +87,29 @@
 
     function GetDetails(a,b,c,d,e,f) {
         
-        details = "<table class=\"CSSInfoTable\"><tr><td align=\"left\"><b>Applicant Id</b></td><td>:</td><td align=\"left\">" + a + "</td></tr>"
-        details += "<tr><td align=\"left\"><b>Training Offer Id</b></td><td>:</td><td align=\"left\">" + b + "</td></tr>"
-        details += "<tr><td align=\"left\"><b>Date of Application</b></td><td>:</td><td align=\"left\">" + c + "</td></tr>"
-        details += "<tr><td align=\"left\"><b>Correspondence Address</b></td><td>:</td><td align=\"left\">" + d + "</td></tr>"
-        details += "<tr><td align=\"left\"><b>Phone Number</b></td><td>:</td><td align=\"left\">" + e + "</td></tr>"
-        details += "<tr><td align=\"left\"><b>Approval Status</b></td><td>:</td><td align=\"left\">" + f + "</td></tr></table>"
+        details = "<table class=\"CSSInfoTable\"><tr><td align=\"left\"><b>Applicant Id</b></td><td align=\"left\">" + a + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Training Offer Id</b></td><td align=\"left\">" + b + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Date of Application</b></td><td align=\"left\">" + c + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Correspondence Address</b></td><td align=\"left\">" + d + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Phone Number</b></td><td align=\"left\">" + e + "</td></tr>"
+        details += "<tr><td align=\"left\"><b>Approval Status</b></td><td align=\"left\">" + f + "</td></tr></table>"
         document.getElementById("DetailsDiv").innerHTML = details;
     }
 </script> 
 
 <h2>Shortlisted Training Candidates</h2>
 
-<div>
-        
+     
     <p>Select Company</p>
      @Html.DropDownList("ddlcompany", new SelectList(Model.CompanyModel,"CompanyName","CompanyName"), "--Select--", new { @class="search_categories", @id = "ddlcompany", @style = "width:200px;" , @onchange = "javascript:GetTrainingIds(this.value);" }) 
     
     <p>Training Id</p> 
     @Html.DropDownList("ddltrainid", new SelectList(Model.TrainingModel,"RepId","TrainingId"), "--Select--", new { @class="search_categories",  @id = "ddltrainid", @style = "width:200px;" , @onchange = "javascript:GetApplicants(this.value);" }) 
       
- <br /> 
-     <br /> 
- 
- 
-  <table id ="mytable" class ="display"> 
-      <thead> 
-          <tr>
-           </tr> 
-      </thead> 
-      <tbody> 
- 
- 
- 
- 
-      </tbody> 
 
-  </table> 
+ 
+  <div id ="mytable" class ="display"> 
+       
  </div> 
 
 
