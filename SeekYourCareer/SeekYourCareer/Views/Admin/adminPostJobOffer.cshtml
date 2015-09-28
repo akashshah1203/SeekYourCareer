@@ -24,8 +24,8 @@
 
         var url = "/Admin/adminPostJobStream";
         if (companyname == "") {
-            str = "Select a Company Name From The List!!!!!!";
-            $("#errormessage").append(str);
+            Alert.render("Select a Company Name From The List!!!!!!");
+            
         }
         else {
 
@@ -49,7 +49,7 @@
                 },
                 error: function (reponse) {
 
-                    alert("error : " + reponse);
+                    Alert.render("error : " + reponse);
                 }
             });
         }
@@ -68,9 +68,9 @@
             success: function (data) {
 
                 if (data == "") {
-                    str = "Currently No Jobs Availabe For The Current Selection !!!!!";
+                    Alert.render("Currently No Jobs Availabe For The Current Selection !!!!!");
                     $("#errormessage").html("");
-                    $("#errormessage").append(str);
+                    
                 }
                 else {
                     $("#partialview").html(data);
@@ -78,9 +78,9 @@
 
             },
             error: function (reponse) {
-                alert(" not success");
+                Alert.render(" not success");
 
-                alert("error : " + reponse);
+                Alert.render("error : " + reponse);
             }
         });
     }
@@ -99,16 +99,24 @@
       
 </div>
 
-
+<br />
 <div id="SelectStreams" class="editor-field">
      
 </div>
-
+<br />
 <div id="partialview">
 
 
 </div>
-
+<br />
 <div id="errormessage" style="font-size:40px ; color:darkblue">
 
+</div>
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+  <div>
+    <div id="dialogboxhead"></div>
+    <div id="dialogboxbody"></div>
+    <div id="dialogboxfoot"></div>
+  </div>
 </div>

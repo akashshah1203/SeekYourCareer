@@ -19,7 +19,7 @@
             $('#DetailsDiv').empty();
             $("#ddltrainid").find('option').remove().end();
             $("#ddltrainid").append("<option value = '0' >" + "--Select--" + "</option>");
-            Alert.render('Select Training Id');
+            Alert.render('Select Company');
         }
         else {
             var url = "/TrainingStaff/TrainingIdList/";
@@ -49,9 +49,9 @@
         $('#mytable').empty();
         $('#DetailsDiv').empty();
         if(trainingId == '') {
-            Alert.render('Select TrainingId');
             $('#mytable').empty();
             $('#DetailsDiv').empty();
+            Alert.render('Select TrainingId');
         }
         else {
             var url = "/TrainingStaff/TrainingCandidates/";
@@ -65,7 +65,7 @@
                     if (data.TrainApplications.length == 0)
                         $('#mytable').html("No records to display");
                     else {
-                        var trhtml = "<table class=\"CSSTableGenerator\"><tr><th>Applicant Id</th><th>Name</th><th></th></tr>";
+                        var trhtml = "<br/><table class=\"CSSTableGenerator\"><tr><th>Applicant Id</th><th>Name</th><th></th></tr>";
 
                         for (var i = 0; i < data.TrainApplications.length; i++) {
 
@@ -116,3 +116,12 @@
 
 <div id="DetailsDiv" name="DetailsDiv" align="center"> 
 </div> 
+
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+  <div>
+    <div id="dialogboxhead"></div>
+    <div id="dialogboxbody"></div>
+    <div id="dialogboxfoot"></div>
+  </div>
+</div>

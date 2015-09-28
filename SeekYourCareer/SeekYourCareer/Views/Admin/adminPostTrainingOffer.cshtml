@@ -10,12 +10,13 @@
         $("#SelectStreams").html("");
         $("#partialview").html("");
         $("#errormessage").html("");
-        $('#partialviewdetails').html("");
+        $('.partialviewdetails').html("");
+
+
 
         var url = "/Admin/adminPostJobStream";
         if (companyname == "") {
-            str = "Select a Company Name From The List!!!!!!";
-            $("#errormessage").append(str);
+            Alert.render("Select a Company Name From The List!!!!!!");
             $('#partialview').html("");
 
         }
@@ -61,9 +62,8 @@
                 success: function (data) {
 
                     if (data == "") {
-                        str = "Currently No Trainings Availabe For The Current Selection !!!!!";
                         $("#errormessage").html("");
-                        $("#errormessage").append(str);
+                        Alert.render("Currently No Trainings Availabe For The Current Selection !!!!!");
                     }
                     else {
                         $("#partialview").html(data);
@@ -71,9 +71,9 @@
 
                 },
                 error: function (reponse) {
-                    alert(" not success");
+                    Alert.render(" not success");
 
-                    alert("error : " + reponse);
+                    Alert.render("error : " + reponse);
                 }
             });
         
@@ -103,4 +103,13 @@
 
 <div id="errormessage" style="font-size:40px ; color:darkblue">
 
+</div>
+
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+  <div>
+    <div id="dialogboxhead"></div>
+    <div id="dialogboxbody"></div>
+    <div id="dialogboxfoot"></div>
+  </div>
 </div>

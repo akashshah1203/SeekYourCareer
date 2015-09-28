@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/LoginLayout.cshtml";
 }
 <style>
     .editor-field input[type="radio"] 
@@ -17,17 +18,18 @@
 
     <fieldset>
         <legend>LoginPage</legend>
-
+        <br />
         <div class="editor-label">
             @Html.LabelFor(model => model.TypeOfUser)
         </div>
+        <br />
         <div class="editor-field">
              @Html.RadioButtonFor(model => model.TypeOfUser, "Admin",new { @checked = "checked" }) Admin
             @Html.RadioButtonFor(model => model.TypeOfUser, "Applicant") Applicant
             @Html.RadioButtonFor(model => model.TypeOfUser, "Representative") Representative
             @Html.ValidationMessageFor(model => model.TypeOfUser)
         </div>
-
+        <br />
         <div class="editor-label">
             @Html.LabelFor(model => model.UserName)
         </div>
@@ -45,12 +47,13 @@
         </div>
 
         <p>
-            <input type="submit" value="Login" />
+            <input type="submit" value="Login" />      <input type="button" value="Register" onclick="location.href='@Url.Action("Register","Account")'"/>
         </p>
+       
+       
+       
     </fieldset>
 }
 
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+
