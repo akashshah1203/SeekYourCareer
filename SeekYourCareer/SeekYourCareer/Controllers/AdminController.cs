@@ -218,15 +218,15 @@ namespace SeekYourCareer.Controllers
         //------------------------------------------------------------------------------------------------------
         public ActionResult adminPostTrainingOffer()
         {
-            //string type = (string)Session["TypeOfUser"];
-            //if (type == null)
-            //{
-            //    return RedirectToAction("Index", "Home");
-            //}
-            //else if (type.CompareTo("Admin") != 0)
-            //{
-            //    return RedirectToAction("Index", "Home");
-            //}
+            string type = (string)Session["TypeOfUser"];
+            if (type == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else if (type.CompareTo("Admin") != 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             List<string> CompanyNames = new List<string>();
             CompanyNames = new DataAccess.StaffDAL().postTrainingCompany();
 

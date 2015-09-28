@@ -410,7 +410,6 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\ManagePassword.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Admin\addNewRepresentative1.cshtml" />
     <Content Include="Views\Admin\successNewRepresentative.cshtml" />
     <Content Include="Views\Admin\adminPostJobOffer.cshtml" />
     <Content Include="Views\Admin\partialJobOfferTable.cshtml" />
@@ -420,9 +419,9 @@
     <Content Include="Views\Admin\adminTrainingOfferDetails.cshtml" />
     <Content Include="Views\Admin\adminTrainingOfferTable.cshtml" />
     <Content Include="Views\Admin\adminPostTrainingOffer.cshtml" />
-    <Content Include="Views\Admin\addNewRepresentative.cshtml" />
     <Content Include="Views\Shared\RepresentativeLayout.cshtml" />
     <Content Include="Views\Shared\ApplicantLayout.cshtml" />
+    <Content Include="Views\Admin\addNewRepresentative.cshtml" />
     <Content Include="Views\Shared\LoginLayout.cshtml" />
     <Content Include="Views\Shared\RegisterLayout.cshtml" />
   </ItemGroup>
