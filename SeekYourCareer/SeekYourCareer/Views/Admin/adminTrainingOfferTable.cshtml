@@ -87,19 +87,19 @@
 <table class="CSSTableGenerator">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.trainingId)
+            Training Id
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.location)
+            Location
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.startDate)
+            Start Date
         </th>
         <th>Details</th>
         <th>Post</th>
         <th>Reject</th>
     </tr>
-
+    
     @foreach (var item in Model)
     {
         <tr id="@item.trainingId">
@@ -122,6 +122,7 @@
                 <button id="RejectButton" class="@item.trainingId" onclick="javascript: RejectButton('@item.trainingId')">Reject</button>
             </td>
         </tr>
+    
     }
 
 </table>
@@ -130,7 +131,7 @@
 </div>
 
 <div class="DetailSection" hidden>
-    <p>Are You Sure ???????</p>
+    <p>Are You Sure ?</p>
     <table>
         <tr>
             <td>
