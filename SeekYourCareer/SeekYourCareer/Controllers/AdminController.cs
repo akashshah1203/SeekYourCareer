@@ -150,7 +150,7 @@ namespace SeekYourCareer.Controllers
             }
             else
             {
-                ViewBag.message = "Successfull in adding the representative ....<br/><br/>RepresentativeId = " + value;
+                ViewBag.message = "Successfull in adding the representative .... RepresentativeId = " + value;
             }
             return View("successNewRepresentative");
         }
