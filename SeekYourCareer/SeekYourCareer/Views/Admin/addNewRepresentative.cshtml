@@ -1,10 +1,12 @@
 ﻿@model SeekYourCareer.Models.AddNewRepresentative
 
 @{
-    ViewBag.Title = "addNewRepresentative";
+    ViewBag.Title = "addNewRep";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
+    
 }
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+
 <style type="text/css">
 .form-style-5{
     max-width: 500px;
@@ -94,8 +96,6 @@
 }
 </style>
 
-
-
 <script>
     function checkIfAllNo()
     {
@@ -117,19 +117,21 @@
 
 <h2 style="text-align:center">Add A New Representative</h2>
 
+
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
-<div class="form-style-5">
 
+<div class="form-style-5">
     <fieldset>
-        <legend>Add New Representative</legend>
+         <legend>Add New Representative</legend>
          <br />
         <br />
         
         <h2><span class="number">1</span>Account Details</h2>
         <br />
         <br />
+            
         <div class="editor-label">
             @Html.LabelFor(model => model.Password)
         </div>
@@ -145,7 +147,6 @@
             @Html.EditorFor(model => model.ConfirmPassword)
             @Html.ValidationMessageFor(model => model.ConfirmPassword)
         </div>
-
         <br />
         <br />
         
@@ -185,19 +186,18 @@
             @Html.EditorFor(model => model.EmailId)
             @Html.ValidationMessageFor(model => model.EmailId)
         </div>
-        <br />
+         <br />
         <br />
 
         <br />
         <br />
         <h2><span class="number">3</span>Company Offerings</h2>
         <br />
-        
         <div class="editor-label">
             @Html.LabelFor(model => model.Training)
         </div>
         <div class="editor-field">
-            @Html.RadioButtonFor(model => model.Training, true) Yes
+           @Html.RadioButtonFor(model => model.Training, true) Yes
             @Html.RadioButtonFor(model => model.Training, false) No
             @Html.ValidationMessageFor(model => model.Training)
         </div>
@@ -215,7 +215,7 @@
             @Html.LabelFor(model => model.Job)
         </div>
         <div class="editor-field">
-            @Html.RadioButtonFor(model => model.Job, true) Yes
+           @Html.RadioButtonFor(model => model.Job, true) Yes
             @Html.RadioButtonFor(model => model.Job, false) No
             @Html.ValidationMessageFor(model => model.Job)
         </div>
@@ -231,10 +231,11 @@
 
        <p>
             <input type="submit" class="button" value="Register" style="text-align:center" onclick="return checkIfAllNo()"/>
-            <input type="button" class="button" onclick="location.href= '@Url.Action("SearchForTraining", "Applicant")'"  value="Cancel"/>
+            <input type="button" class="button" onclick="location.href= '@Url.Action("SearchForTraining", "Applicant")    '"  value="Cancel"/>
         </p>
     </fieldset>
 </div>
 }
-
-
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
