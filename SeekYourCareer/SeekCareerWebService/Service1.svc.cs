@@ -41,6 +41,9 @@ namespace SeekCareerWebService
                         foundRecord = true;
                     sqlDBConnection.Close();
 
+                    if (userName == "")
+                        foundRecord = true;
+
                     object jsonObject = new { available = (!foundRecord) };
                     var json = new JavaScriptSerializer().Serialize(jsonObject);
                     return json.ToString();

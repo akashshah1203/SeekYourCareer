@@ -17,12 +17,12 @@
             success: function (data) {
                 //window.location.assign("/Applicant/Index");
                 //alert("in here");
-                $(".partialviewdetails").show();
+                $(".partialviewdetail").show();
 
-                $(".partialviewdetails").html("");
+                $(".partialviewdetail").html("");
                 //console.log(data);
                 //alert(data);
-                $(".partialviewdetails").html(data);
+                $(".partialviewdetail").html(data);
 
             },
             error: function (reponse) {
@@ -35,13 +35,13 @@
     function PostButton(trainidhere) {
         trainid = trainidhere;
 
-        $(".partialviewdetails").hide();
+        $(".partialviewdetail").hide();
         $(".DetailSection").show();
         acceptancehere = "Approved";
     }
     function RejectButton(trainidhere) {
         trainid = trainidhere;
-        $(".partialviewdetails").hide();
+        $(".partialviewdetail").hide();
         $(".DetailSection").show();
         acceptancehere = "Rejected";
     }
@@ -126,7 +126,7 @@
 
 </table>
 
-<div class="partialviewdetails">
+<div class="partialviewdetail">
 </div>
 
 <div class="DetailSection" hidden>

@@ -22,9 +22,10 @@ namespace SeekYourCareer.DataAccess
             connectionString = ConfigurationManager.ConnectionStrings["ConnectToDb"].ToString();
             return connectionString;
         }
+
         public int ApproveWorkshop(int workshopId)
         {
-            string connectionString = "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;" + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString = "Update WorkshopDetails SET StaffApproval='Approved' where WorkshopId=@offer";
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -40,7 +41,7 @@ namespace SeekYourCareer.DataAccess
 
         public int RejectWorkshop(int workshopId)
         {
-            string connectionString = "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;" + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString = "Update WorkshopDetails SET StaffApproval='Rejected' where WorkshopId=@offer";
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -57,9 +58,7 @@ namespace SeekYourCareer.DataAccess
         public List<int> WorkshopIdList(string companyName)
         {
             List<int> WorkshopIds = new List<int>();
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString =
                 "SELECT B.WorkshopId from dbo.WorkshopDetails A, dbo.WorkshopAppln B, dbo.RepDetails C WHERE A.WorkshopId = B.WorkshopId AND A.RepId = C.RepID AND B.Status = 'Selected' AND C.CompanyName = @filtervalue;";
@@ -85,9 +84,7 @@ namespace SeekYourCareer.DataAccess
             WSSelectedAppsVM selwsapps = new WSSelectedAppsVM();
             selwsapps.WSSelectedApps = new List<WSSelectedApp>();
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString =
                 "SELECT A.ApplicantId, A.WorkshopId, convert(varchar, A.AppDate), B.Name, CONVERT(int, ROUND(DATEDIFF(hour,B.DOB,GETDATE())/8766.0,0)), B.Address, B.ContactNumber, B.EmailID from dbo.WorkshopAppln A, dbo.UserDetails B WHERE A.UserId = B.UserID and A.Status = 'Selected' and A.WorkshopId = @filtervalue;";
@@ -123,9 +120,7 @@ namespace SeekYourCareer.DataAccess
         {
             List<string> companynames = new List<string>();
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString =
                 "SELECT CompanyName from dbo.RepDetails;";
@@ -149,9 +144,7 @@ namespace SeekYourCareer.DataAccess
         {
             List<string> StreamCodes = new List<string>();
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString =
                 "SELECT distinct A.StreamCode from dbo.JobDetails A, dbo.RepDetails B WHERE A.RepId = B.RepID AND B.CompanyName=@filtervalue;";
@@ -176,9 +169,7 @@ namespace SeekYourCareer.DataAccess
         {
             List<string> JIDs = new List<string>();
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString =
                 "SELECT JobId from dbo.JobDetails WHERE StreamCode = @filtervalue;";
@@ -203,9 +194,7 @@ namespace SeekYourCareer.DataAccess
         {
             JobPrerequisite prereq = new JobPrerequisite();
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString =
                 "SELECT MinSSCPercent, MinHSCPercent, MinGradAvg, MinPGAvg, Experience from dbo.JobDetails WHERE JobId = @filtervalue;";
@@ -235,9 +224,7 @@ namespace SeekYourCareer.DataAccess
             JobApplicantViewModel JobApps = new JobApplicantViewModel();
             JobApps.JobApplicants = new List<JobApplicant>();
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString =
                 "SELECT A.UserID, A.ApplicantId, B.Name, B.SSCPercent, B.HSCPercent, B.GradPercent, B.PGPercent, B.HaveWorkExp from dbo.JobApplications A, dbo.UserDetails B WHERE A.Status = 'Pending' AND A.UserID = B.UserID AND A.JobId = @filtervalue;";
@@ -272,9 +259,7 @@ namespace SeekYourCareer.DataAccess
         {
             List<string> TrainIds = new List<string>();
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString =
                 "SELECT A.TrainingID from dbo.TrainingDetails A, dbo.RepDetails B WHERE A.RepId = B.RepID AND B.CompanyName = @filtervalue;";
@@ -299,9 +284,7 @@ namespace SeekYourCareer.DataAccess
         {
             Training traindetails = new Training();
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString =
                 "SELECT * from dbo.TrainingDetails WHERE TrainingID = @filtervalue;";
@@ -338,9 +321,7 @@ namespace SeekYourCareer.DataAccess
             TrainApplicantsViewModel TrainApps = new TrainApplicantsViewModel();
             TrainApps.TrainApplicants = new List<TrainApplicant>();
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString =
                 "SELECT A.ApplicantId, A.Name, convert(varchar, A.AppDate), B.SSCPercent, B.HSCPercent, B.GradPercent, B.PGPercent, B.WorkExpYears from dbo.TrainingAppln A, dbo.UserDetails B WHERE A.UserID = B.UserID AND A.TrainingId = @filtervalue;";
@@ -374,9 +355,7 @@ namespace SeekYourCareer.DataAccess
         {
             List<string> JobIds = new List<string>();
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString =
                 "SELECT distinct A.JobId from dbo.JobApplications A, dbo.JobDetails B, dbo.RepDetails C WHERE A.JobId = B.JobId AND B.RepId = C.RepID AND C.CompanyName=@filtervalue;";
@@ -401,12 +380,10 @@ namespace SeekYourCareer.DataAccess
             SelJCanViewModel jobapplns = new SelJCanViewModel();
             jobapplns.JobApplications = new List<SelJobApplicants>();
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString =
-                "SELECT A.ApplicantId, A.UserID, A.JobId, convert(varchar, A.AppDate), A.Correspondance, A.Status, B.Name, CONVERT(int, ROUND(DATEDIFF(hour,B.DOB,GETDATE())/8766.0,0)), B.ContactNumber, B.EmailID from dbo.JobApplications A, dbo.UserDetails B WHERE A.UserID = B.UserID and A.JobId = @filtervalue;";
+                "SELECT A.ApplicantId, A.UserID, A.JobId, convert(varchar, A.AppDate), A.Correspondance, A.Status, B.Name, CONVERT(int, ROUND(DATEDIFF(hour,B.DOB,GETDATE())/8766.0,0)), B.ContactNumber, B.EmailID from dbo.JobApplications A, dbo.UserDetails B WHERE A.Status = 'Selected' AND A.UserID = B.UserID and A.JobId = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -440,9 +417,7 @@ namespace SeekYourCareer.DataAccess
         {
             List<string> Domains = new List<string>();
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString =
                 "SELECT distinct A.Domain from dbo.WorkshopDetails A, dbo.RepDetails B WHERE A.RepId = B.RepID AND B.CompanyName = @filtervalue;";
@@ -466,9 +441,7 @@ namespace SeekYourCareer.DataAccess
         {
             List<string> WIDs = new List<string>();
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString =
                 "SELECT A.WorkshopId from dbo.WorkshopDetails A, dbo.WorkshopAppln B, dbo.RepDetails C WHERE A.WorkshopId = B.WorkshopId AND A.RepId = C.RepID AND B.Status = 'Pending' AND A.Domain = @filtervalue AND C.CompanyName=@filter;";
@@ -494,9 +467,7 @@ namespace SeekYourCareer.DataAccess
         {
             WSPrerequisite prereq = new WSPrerequisite();
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString =
                 "SELECT A.WorkshopId, A.MinGradPct, A.MinPGPct, A.MinExperience from dbo.WorkshopDetails A WHERE A.WorkshopId = @filtervalue;";
@@ -525,9 +496,7 @@ namespace SeekYourCareer.DataAccess
             WSPendAppViewModel WSPendApps = new WSPendAppViewModel();
             WSPendApps.PendingApps = new List<WSPendingApp>();
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString =
                 "SELECT A.UserId, B.Name, B.GradPercent, B.PGPercent, B.WorkExpYears from dbo.WorkshopAppln A, dbo.UserDetails B WHERE A.UserId = B.UserID AND A.WorkshopId = @filtervalue;";
@@ -558,9 +527,7 @@ namespace SeekYourCareer.DataAccess
         public List<Company> CompanyNamesWithRepID()
         {
             List<Company> companynames = new List<Company>();
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString =
                 "SELECT RepId, CompanyName from dbo.RepDetails;";
@@ -587,9 +554,7 @@ namespace SeekYourCareer.DataAccess
         {
             List<TrainingL> trainings = new List<TrainingL>();
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString = "SELECT distinct A.TrainingId, B.RepId from dbo.TrainingAppln A, dbo.TrainingDetails B, dbo.RepDetails C WHERE A.TrainingId = B.TrainingID AND B.RepId = C.RepID AND C.CompanyName=@filtervalue";
             
@@ -618,12 +583,10 @@ namespace SeekYourCareer.DataAccess
             SelTCanViewModel trainingapplns = new SelTCanViewModel();
             trainingapplns.TrainApplications = new List<TrainApplication>();
 
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString =
-                "SELECT ApplicantId, UserID, Name, TrainingId, AppDate, CorrAddress, CorrContact, SelectionStatus  from dbo.TrainingAppln WHERE TrainingId = @filtervalue;";
+                "SELECT ApplicantId, UserID, Name, TrainingId, AppDate, CorrAddress, CorrContact, SelectionStatus  from dbo.TrainingAppln WHERE SelectionStatus = 'Selected' AND TrainingId = @filtervalue;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -656,9 +619,7 @@ namespace SeekYourCareer.DataAccess
         {
             WorkshopViewModel wsoffers = new WorkshopViewModel();
             wsoffers.WorkshopDetail = new List<Workshop>();
-            string connectionString =
-                "Data Source=(localdb)\\Projects;Initial Catalog=SeekYCareer;"
-                + "Integrated Security=True";
+            string connectionString = Connstr();
 
             string queryString =
                 "SELECT A.WorkshopId, A.RepId, A.Domain, A.FromDate, A.ToDate, A.NoOfSeats, A.MinGradPct, A.MinPGPct, A.WorkshopDesc, A.StaffApproval, A.Location, A.MinExperience from dbo.WorkshopDetails A, dbo.RepDetails B WHERE A.RepId = B.RepID AND B.CompanyName=@filter AND StaffApproval = 'Pending' AND Domain = @filtervalue AND A.FromDate>getdate() AND A.ToDate>getdate()";

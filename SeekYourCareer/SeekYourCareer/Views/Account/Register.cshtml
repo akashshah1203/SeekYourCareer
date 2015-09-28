@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/RegisterLayout.cshtml";
 }
 
 
@@ -23,19 +24,19 @@
 
                 if (retval["available"] == false)
                 {
-                    alert("Username Not Available.")
+                    Alert.render("Username Not Available.")
                     //document.getElementById("Register").disabled = true;
                     $("#Register").attr("disabled",true);
                 }
                 else {
                     document.getElementById("Register").disabled = false;
                     $("#Register").attr("disabled", false);
-                    alert("Username Available.")
+                    Alert.render("Username Available.")
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 debugger;
-                alert("Service Error");
+                Alert.render("Service Error");
             }
         });
     }
@@ -272,6 +273,11 @@
 </div>
 }
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+  <div>
+    <div id="dialogboxhead"></div>
+    <div id="dialogboxbody"></div>
+    <div id="dialogboxfoot"></div>
+  </div>
+</div>
