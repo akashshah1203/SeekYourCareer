@@ -46,14 +46,14 @@
         var verify = checkPublishDate();
         alert(verify);
         if (verify == false) {
-            var str = "Please enter Date in the future";
-            $("#errors").html(str);
-            alert(str);
+            var str = "Please enter End Date in the future as compared to the starting date";
+            //$("#errors").html(str);
+            Alert.render(str);
 
         }
         else
         {
-            alert("successfully added job");
+            Alert.render("Successfully added Workshop");
         }
         return verify;
     }
@@ -255,6 +255,14 @@
 </div>  
 
 
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+  <div>
+    <div id="dialogboxhead"></div>
+    <div id="dialogboxbody"></div>
+    <div id="dialogboxfoot"></div>
+  </div>
+</div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

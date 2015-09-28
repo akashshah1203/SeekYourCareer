@@ -165,7 +165,7 @@ namespace SeekYourCareer.Controllers
         {
             int id=(int)Session["UserID"];
             int val=new DataAccess.RepresentativeDAL().addJobOffer(obj,id);
-            return View("Index");
+            return View("SuccessPage");
         }
 
         public ActionResult addWorkshopTODb()
@@ -202,7 +202,7 @@ namespace SeekYourCareer.Controllers
         {
             int id = (int)Session["UserID"];
             int val = new DataAccess.RepresentativeDAL().addWorkshopOffer(obj, id);
-            return View("Index");
+            return View("SuccessPage");
         }
 
         public ActionResult addTrainingTODb()
@@ -242,7 +242,7 @@ namespace SeekYourCareer.Controllers
             obj.Company = comp;
             int val = new DataAccess.RepresentativeDAL().addTrainingOffer(obj, id);
 
-            return View("Index");
+            return View("SuccessPage");
         }
     
     }

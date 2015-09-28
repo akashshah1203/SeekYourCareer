@@ -174,7 +174,8 @@ namespace SeekYourCareer.Controllers
                 string usertype=(string)Session["TypeOfUser"];
                 bool val = new DataAccess.DataObj().ChangePassword(username, model.OldPassword, model.NewPassword,usertype);
                 if (val == false)
-                { 
+                {
+                    return View("ErrorChangePassword");
                     //go to error page
                 }
             }
