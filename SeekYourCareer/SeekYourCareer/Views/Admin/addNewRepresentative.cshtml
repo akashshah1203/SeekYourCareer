@@ -106,7 +106,10 @@
         var job=$("#Training:checked").val();
         var intern=$("#Training:checked").val();
         if(train==result && work==result && job==result && intern==result)
+        {
+            Alert.render("Kindly select atleast one of the training types .....");
             return false;
+        }
         return true;
     }
 
