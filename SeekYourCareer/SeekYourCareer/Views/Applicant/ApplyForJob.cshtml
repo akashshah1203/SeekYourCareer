@@ -21,22 +21,21 @@
         $('#correspAddr').html("");
         $('#addbutton').html("");
 
-
-        var url = "/Applicant/ApplyForJob";
         if (companyname == "")
         {
-            str = "Select a Company Name From The List!!!!!!";
-            $("#errormessage").html("");
+            Alert.render("Select a Company Name From The List");
+            //str = "Select a Company Name From The List!!!!!!";
+            
             $("#SelectStream").html("");
             $('#showtable').html("");
             $('#correspAddr').html("");
             $('#addbutton').html("");
-           
-            $("#errormessage").append(str);
+            
         }
         else
         {
             $("#errormessage").html("");
+            var url = "/Applicant/ApplyForJob";
 
             $.ajax({
                 url: url,
@@ -69,7 +68,6 @@
         //alert(stream);
 
         var url = "/Applicant/ApplyForJob1";
-        $("#errormessage").html("");
         $('#showtable').html("");
         $('#correspAddr').html("");
         $('#addbutton').html("");
@@ -144,6 +142,7 @@
         }
         else if ($("input[type=checkbox]:checked").length == 1) {
             //alert("in fnc");
+            alert("Congratulations !!!!   You Have Successfully Applied For The Job.....");
             Alert.render("Congratulations !!!!   You Have Successfully Applied For The Job.....");
             return true;
         }
@@ -190,6 +189,9 @@
     <div id="errormessage" @*style="font-size:40px ; color:darkblue"*@>
 
     </div>
+
+
+
 </form> 
 <div id="dialogoverlay"></div>
 <div id="dialogbox">
@@ -199,3 +201,7 @@
     <div id="dialogboxfoot"></div>
   </div>
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

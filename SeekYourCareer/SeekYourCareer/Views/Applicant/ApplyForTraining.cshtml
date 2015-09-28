@@ -105,6 +105,8 @@
             //alert("not checked");
             $("input[name='CorrespondAddr']").attr("disabled", false);
             $("input[name='CorrespondAddr']").val("");
+            $("#Corraddr").css("background-color","white");
+            $("#Corrcontact").css("background-color","white");
         }
     }
     
@@ -146,9 +148,8 @@
                 {
                     var str="CONGRATULATIONS!!!  You have successfully Applied for the training !!!!!";
                     $("#message").html("");
-                    $("#message").html(str);
                     $("#ApplyButton").remove();
-                    Alert.render(str);
+                    alert(str);
                     window.location.assign("/Applicant/Index");
 
                 },
