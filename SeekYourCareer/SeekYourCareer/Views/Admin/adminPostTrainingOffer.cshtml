@@ -5,55 +5,72 @@
 
 
 <script>
-    function CompanySelect(companyname)//comes here after selecting a company name from the dropdown
-    {
-        $("#SelectStreams").html("");
-        $("#partialview").html("");
-        $("#errormessage").html("");
-        $('.partialviewdetails').html("");
+    //function CompanySelect(companyname)//comes here after selecting a company name from the dropdown
+    //{
+    //    $("#SelectStreams").html("");
+    //    $("#partialview").html("");
+        
+    //    $('#partialviewdetails').html("");
+        
+    //    var url = "/Admin/adminPostJobStream";
+    //    if (companyname == "") {
+    //        Alert.render("Select a Company Name From The List!!!!!!");
+    //        $("#SelectStreams").empty();
+    //        $("#partialview").empty();
 
+    //        $('#partialviewdetails').empty();
 
+    //    }
+    //    else {
 
-        var url = "/Admin/adminPostJobStream";
-        if (companyname == "") {
-            Alert.render("Select a Company Name From The List!!!!!!");
-            $('#partialview').html("");
+    //        $.ajax({
+    //            url: url,
+    //            data: { company: companyname },
+    //            cache: false,
+    //            type: "POST",
+    //            success: function (data) {
+    //                //console.log(data);
+    //                var html;
+    //                html = "Streams:  ";
+    //                for (var i = 0; i < data.length; i++) {
+    //                    html += "<input class=\"streamcheckbox\" id=\"checkB\" type=\"radio\" onclick=\"jobTable('" + data[i] + "','" + companyname + "')\" name=\"stream\" value=\"" + data[i] + "\">" + data[i];
 
-        }
-        else {
+    //                }
+    //                //alert("appending");
+    //                $('#SelectStreams').html("");
+    //                $('#SelectStreams').append(html);
 
-            $.ajax({
-                url: url,
-                data: { company: companyname },
-                cache: false,
-                type: "POST",
-                success: function (data) {
-                    //console.log(data);
-                    var html;
-                    html = "Streams:  ";
-                    for (var i = 0; i < data.length; i++) {
-                        html += "<input class=\"streamcheckbox\" id=\"checkB\" type=\"radio\" onclick=\"jobTable('" + data[i] + "','" + companyname + "')\" name=\"stream\" value=\"" + data[i] + "\">" + data[i];
+    //            },
+    //            error: function (reponse) {
 
-                    }
-                    //alert("appending");
-                    $('#SelectStreams').html("");
-                    $('#SelectStreams').append(html);
+    //                alert("error : " + reponse);
+    //            }
+    //        });
+    //    }
 
-                },
-                error: function (reponse) {
-
-                    alert("error : " + reponse);
-                }
-            });
-        }
-
-    }
+    //}
 
     function CompanySelect(companyname)//comes here after selecting the radio button
     {
         //alert("in domain-table");
         var url = "/Admin/adminTrainingOfferTable";
-        
+        $("#SelectStreams").html("");
+        $("#partialview").html("");
+
+        $('#partialviewdetails').html("");
+
+        if (companyname == "") {
+            Alert.render("Select a Company Name From The List!!!!!!");
+            $("#SelectStreams").empty();
+            $("#partialview").empty();
+
+            $('#partialviewdetails').empty();
+
+        }
+        else {
+            var url = "/Admin/adminTrainingOfferTable";
+
+
             $.ajax({
                 url: url,
                 data: { company: companyname },
@@ -76,8 +93,9 @@
                     Alert.render("error : " + reponse);
                 }
             });
-        
-      }
+
+        }
+    }
 </script>
 
 
@@ -91,16 +109,15 @@
     @Html.DropDownList("CompanyName", new SelectList(@ViewBag.List), "--Select--", new { @id = "CompanyName", @style = "width:200px;" , @onchange = "javascript:CompanySelect(this.value);",@class="search_categories" }) 
       
 </div>
-
-<div id="partialview">
-
+<br />
+<div id="partialview" align="center">
+    
+</div>
+<br />
+<div class="partialviewdetails" align="center">
 
 </div>
-
-<div class="partialviewdetails" >
-
-</div>
-
+<br />
 <div id="errormessage" style="font-size:40px ; color:darkblue">
 
 </div>

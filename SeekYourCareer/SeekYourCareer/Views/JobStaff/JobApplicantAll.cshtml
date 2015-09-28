@@ -71,7 +71,7 @@
                     }
                     trhtml += "</select>";
 
-                    trhtml += "<br/><br/><input type=\"button\" class=\"button\" style=\"border: 2px solid orange \" value=\"View Job Details\" onclick= \"GetJobPreReq()\"/>";
+                    trhtml += "<br/><br/><div align=\"center\"><input type=\"button\" class=\"button\" style=\"border: 2px solid orange \" value=\"View Job Details\" onclick= \"GetJobPreReq()\"/></div>";
                     $('#SelectJob').append(trhtml);
                     //$('body').on('change', '#selectData', Caller);
 
@@ -108,11 +108,11 @@
                 type: "POST",
                 success: function (data) {
                     var trhtml;
-                    trhtml = "<table class=\"CSSInfoTable\"><tr><td align=\"left\"><b>Min SSC Percentage</b></td><td align=\"left\">" + data.MinSSCPercent + "</td></tr>"
+                    trhtml = "<div align=\"center\"><table class=\"CSSInfoTable\"><tr><td align=\"left\"><b>Min SSC Percentage</b></td><td align=\"left\">" + data.MinSSCPercent + "</td></tr>"
                     trhtml += "<tr><td align=\"left\"><b>Min HSC Percentage</b></td><td align=\"left\">" + data.MinHSCPercent + "</td></tr>"
                     trhtml += "<tr><td align=\"left\"><b>Min Graduation Average</b></td><td align=\"left\">" + data.MinGradAvg + "</td></tr>"
                     trhtml += "<tr><td align=\"left\"><b>Min Post Graduation Average</b></td><td align=\"left\">" + data.MinPGAvg + "</td></tr>"
-                    trhtml += "<tr><td align=\"left\"><b>Experience</b></td><td align=\"left\">" + data.Experience + "</td></tr></table>"
+                    trhtml += "<tr><td align=\"left\"><b>Experience</b></td><td align=\"left\">" + data.Experience + "</td></tr></table></div>"
 
                     $('#mytable').html(trhtml);
                 },
