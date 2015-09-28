@@ -31,11 +31,11 @@
     {
         var dat = $("#startDate");
         var verify = checkPublishDate();
-        alert(verify);
+        
         if (verify == false) {
             var str = "Please enter Date in the future";
-            $("#errors").html(str);
-            alert(str);
+            Alert.render(str);
+        
 
         }
         else
@@ -242,6 +242,16 @@
 <div id="errors">
 
 </div>
+
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+  <div>
+    <div id="dialogboxhead"></div>
+    <div id="dialogboxbody"></div>
+    <div id="dialogboxfoot"></div>
+  </div>
+</div>
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

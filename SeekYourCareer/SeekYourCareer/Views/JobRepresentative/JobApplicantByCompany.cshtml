@@ -88,11 +88,11 @@
             
             success: function (data) {
                 
-                trhtml = "<table class=\"CSSInfoTable\"><tr><td align=\"left\"><b>Min SSC Percentage</b></td><td align=\"left\">" + data.MinSSCPercent + "</td></tr>"
+                trhtml = "<div align=\"center\"><table class=\"CSSInfoTable\"><tr><td align=\"left\"><b>Min SSC Percentage</b></td><td align=\"left\">" + data.MinSSCPercent + "</td></tr>"
                 trhtml += "<tr><td align=\"left\"><b>Min HSC Percentage</b></td><td align=\"left\">" + data.MinHSCPercent + "</td></tr>"
                 trhtml += "<tr><td align=\"left\"><b>Min Graduation Average</b></td><td align=\"left\">" + data.MinGradAvg + "</td></tr>"
                 trhtml += "<tr><td align=\"left\"><b>Min Post Graduation Average</b></td><td align=\"left\">" + data.MinPGAvg + "</td></tr>"
-                trhtml += "<tr><td align=\"left\"><b>Experience</b></td><td align=\"left\">" + data.Experience + "</td></tr></table>"
+                trhtml += "<tr><td align=\"left\"><b>Experience</b></td><td align=\"left\">" + data.Experience + "</td></tr></table></div>"
 
                 $('#mytable').append(trhtml);
             },

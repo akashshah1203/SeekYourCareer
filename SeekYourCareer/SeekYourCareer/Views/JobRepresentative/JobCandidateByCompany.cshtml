@@ -9,6 +9,7 @@
 <script>
     function GetApplicants(jobId) {
         $('#DetailsDiv').empty();
+        $('#mytable').empty();
         if (jobId == '') {
             Alert.render('Select Job Id');
             $('#DetailsDiv').empty();
@@ -28,7 +29,7 @@
                         $('#mytable').html(trhtml);
                     }
                     else {
-                        var trhtml = "<table class=\"CSSTableGenerator\"><tr><th>Application Id</th><th>User Id</th><th>Job Offer Id</th><th>Applied Date</th><th>Correspondance Address</th><th>Approval Status</th><th></th></tr>";
+                        var trhtml = "<br/><table class=\"CSSTableGenerator\"><tr><th>Application Id</th><th>User Id</th><th>Job Offer Id</th><th>Applied Date</th><th>Correspondance Address</th><th>Approval Status</th><th></th></tr>";
 
                         for (var i = 0; i < data.JobApplications.length; i++) {
 
@@ -78,3 +79,12 @@
 
 <div id="DetailsDiv" name="DetailsDiv" align="center"> 
 </div> 
+
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+  <div>
+    <div id="dialogboxhead"></div>
+    <div id="dialogboxbody"></div>
+    <div id="dialogboxfoot"></div>
+  </div>
+</div>

@@ -12,8 +12,13 @@
         $('#mytable').empty();
         $('#ApplicantDev').empty();
         $('#ShowError').empty();
-        if (Domain == '')
+        if (Domain == '') {
+            $('#SelectWorkshop').empty();
+            $('#mytable').empty();
+            $('#ApplicantDiv').empty();
+            $('#ShowError').empty();
             Alert.render('Select Domain');
+        }
         else {
             var url = "/WorkshopRepresentative/WorkshopApplicantIdList";
 
@@ -113,7 +118,7 @@
                     if (data.PendingApps.length == 0)
                         $('#ShowError').html("<br/><br/>No records to display");
                     else {
-                        var trhtml = "<table class=\"CSSTableGenerator\"><tr><th>User Name</th><th>Graduation %</th><th>Post Graduation %</th><th>Experience</th><th>Select Applicants</th><th>Reject Applicants</th></tr>";
+                        var trhtml = "<br/><table class=\"CSSTableGenerator\"><tr><th>User Name</th><th>Graduation %</th><th>Post Graduation %</th><th>Experience</th><th>Select Applicants</th><th>Reject Applicants</th></tr>";
 
                         for (var i = 0; i < data.PendingApps.length; i++) {
 
@@ -187,7 +192,7 @@
      
 </div>
 
-<div id ="mytable" class ="display"> 
+<div id ="mytable" align="center" class ="display"> 
     
 </div> 
 
